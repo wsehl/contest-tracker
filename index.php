@@ -6,6 +6,8 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
   $log = 1;
 }
 
+$title = "Главная";
+
 require_once "components/header.php";
 
 ?>

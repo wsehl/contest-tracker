@@ -7,6 +7,7 @@ if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
 } else {
     $log = 0;
 }
+$title = "Регистрация";
 require_once "components/header.php";
 require_once "core/config.php";
 $username = $password = $confirm_password = "";
