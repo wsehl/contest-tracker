@@ -1,10 +1,8 @@
 <?php
 session_start();
-if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
-    $log = 0;
-} else {
-    $log = 1;
-}
+isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true ? '' : header("location: index.php");
+
+$title = "Профиль";
 require_once "components/header.php";
 ?>
 

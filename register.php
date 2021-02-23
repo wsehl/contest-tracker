@@ -1,14 +1,10 @@
 <?php
 session_start();
-if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
-    $log = 1;
-    header("location: index.php");
-    exit;
-} else {
-    $log = 0;
-}
+isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true ? header("location: profile.php") : '';
+
 $title = "Регистрация";
 require_once "components/header.php";
+
 require_once "core/config.php";
 $username = $password = $confirm_password = "";
 $username_err = $password_err = $confirm_password_err = $red_error = "";
@@ -71,12 +67,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <section class="hero">
     <div class="hero-body">
         <div class="container">
-            <div class="container">
-                <div class="columns is-centered">
-                    <div class="column is-one-third">
+            <div class="columns is-centered">
+                <div class="column is-two-thirds-tablet is-half-desktop is-one-third-widescreen is-one-third-fullhd">
+                    <div class="box is-shadowless">
+                        <h1 class="title is-size-4 has-text-centered">Регистрация</h1>
                         <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
                             <div class="field">
-                                <label class="label">Логин</label>
                                 <div class="control has-icons-left has-icons-right">
                                     <input class="<?php echo $red_error && $username_err ? 'input is-danger' : 'input' ?>" type="text" placeholder="Логин" name="username" value="<?php echo $username; ?>">
                                     <span class="icon is-small is-left">
@@ -86,7 +82,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 <span class="help is-danger"><?php echo $username_err; ?></span>
                             </div>
                             <div class="field">
-                                <label class="label">Пароль</label>
                                 <div class="control has-icons-left has-icons-right">
                                     <input class="<?php echo $red_error && $password_err ? 'input is-danger' : 'input' ?>" type="password" placeholder="Пароль" name="password" value="<?php echo $password; ?>">
                                     <span class="icon is-small is-left">
@@ -96,7 +91,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 <span class="help is-danger"><?php echo $password_err; ?></span>
                             </div>
                             <div class="field">
-                                <label class="label">Подтверждение пароля</label>
                                 <div class="control has-icons-left has-icons-right">
                                     <input class="<?php echo $red_error && $confirm_password_err ? 'input is-danger' : 'input' ?>" type="password" placeholder="Подтвержение пароля" name="confirm_password" value="<?php echo $confirm_password; ?>">
                                     <span class="icon is-small is-left">
@@ -111,6 +105,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <p>Уже есть аккаунт? <a href="login.php">Войти</a></p>
                         </form>
                     </div>
+
                 </div>
             </div>
         </div>
