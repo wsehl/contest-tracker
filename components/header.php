@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title> <?php echo $title; ?></title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.2/css/bulma.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/bulmaswatch/materia/bulmaswatch.min.css">
     <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
     <link rel="stylesheet" href="css/style.css" />
     <link rel="apple-touch-icon" sizes="180x180" href="media/apple-touch-icon.png">
@@ -18,10 +18,15 @@
 </head>
 
 <body>
-    <nav id="navbar" class="navbar is-spaced">
+    <nav id="navbar" class="navbar">
         <div class="container">
             <div class="navbar-brand">
-                <a class="navbar-item" href="index.php">Contest Tracker</a>
+                <a class="navbar-item" href="index.php">
+
+                    <img src="./media/logo.svg" alt="Bulma: Free, open source, and modern CSS framework based on Flexbox" width="235" height="28">
+
+                </a>
+
                 <div id="navbarBurger" class="navbar-burger burger" data-target="navMenuDocumentation">
                     <span></span><span></span><span></span>
                 </div>
@@ -36,19 +41,18 @@
                 <div class="navbar-end">
                     <div class="navbar-item">
                         <div class="buttons">
-                            <?php
-                            if ($log == 0) {
-                            ?>
-                                <a href="login.php" class="button">Войти</a>
+                            <?php if (!isset($_SESSION["role"])) { ?>
+                            <?php } else if ($_SESSION["role"] == "Admin") { ?>
+                                <a href="admin.php" class="button is-outlined">Админ панель</a>
+                            <?php } ?>
+
+                            <?php if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) { ?>
+                                <a href="login.php" class="button is-outlined">Войти</a>
                                 <a href="register.php" class="button is-info">Регистрация</a>
-                            <?php
-                            } else if ($log == 1) {
-                            ?>
-                                <a href="welcome.php" class="button">Профиль</a>
+                            <?php } else { ?>
+                                <a href="profile.php" class="button">Профиль</a>
                                 <a href="logout.php" class="button is-danger">Выйти</a>
-                            <?php
-                            }
-                            ?>
+                            <?php } ?>
                         </div>
                     </div>
                 </div>
