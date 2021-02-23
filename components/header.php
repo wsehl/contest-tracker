@@ -5,8 +5,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title> <?php echo $title; ?></title>
-    <link rel="stylesheet" href="https://unpkg.com/bulmaswatch/materia/bulmaswatch.min.css">
-    <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+    <link rel="stylesheet" href="./css/bulmaswatch.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/js/all.min.js" integrity="sha512-UwcC/iaz5ziHX7V6LjSKaXgCuRRqbTp1QHpbOJ4l1nw2/boCfZ2KlFIqBUA/uRVF0onbREnY9do8rM/uT/ilqw==" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="css/style.css" />
     <link rel="apple-touch-icon" sizes="180x180" href="media/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="media/favicon-32x32.png">
@@ -22,22 +22,20 @@
         <div class="container">
             <div class="navbar-brand">
                 <a class="navbar-item" href="index.php">
-
                     <img src="./media/logo.svg" alt="Bulma: Free, open source, and modern CSS framework based on Flexbox" width="235" height="28">
-
                 </a>
-
                 <div id="navbarBurger" class="navbar-burger burger" data-target="navMenuDocumentation">
                     <span></span><span></span><span></span>
                 </div>
             </div>
             <div id="navMenuDocumentation" class="navbar-menu">
-                <!-- 
+
                 <div class="navbar-start">
-                    <a class="navbar-item" href="about.php"><span>About</span></a>
-                    <a class="navbar-item" href="contact.php"><span>Contacts</span></a>
+                    <a class="navbar-item" href="about.php">
+                        О нас
+                    </a>
                 </div>
-                -->
+
                 <div class="navbar-end">
                     <div class="navbar-item">
                         <div class="buttons">

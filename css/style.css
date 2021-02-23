@@ -25,7 +25,8 @@
 
 .button:active,
 .button.is-info:active,
-.button.is-white:active {
+.button.is-white:active,
+.button.is-danger:active {
   box-shadow: none;
 }
 

@@ -6,19 +6,13 @@ $title = "Профиль";
 require_once "components/header.php";
 ?>
 
-<div class="container">
-    <section class="hero is-large">
-        <div class="hero-body">
-            <div class="columns">
-                <div class="column"></div>
-                <div class="column">
-                    <h1 class="title">Добро пожаловать, <b><?php echo htmlspecialchars($_SESSION["username"]); ?></b>!</h1>
-                    <progress class="progress is-small is-light" max="100">15%</progress>
-                </div>
-                <div class="column"></div>
-            </div>
+<section class="hero">
+    <div class="hero-body">
+        <div class="container">
+            <h1 class="title">Добро пожаловать, <b><?php echo htmlspecialchars($_SESSION["username"]); ?></b>!</h1>
+            <a href="update_password.php">Поменять пароль</a>
         </div>
-    </section>
-</div>
+    </div>
+</section>
 
 <?php require_once "components/footer.php"; ?>

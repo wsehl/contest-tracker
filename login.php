@@ -20,11 +20,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     } else {
         $password = trim($_POST["password"]);
     }
-    if (trim($_POST["username"]) == "admin" && trim($_POST["password"]) == "admin") {
-        header("location: admin.php");
-        session_start();
-        $_SESSION["admin"] = true;
-    }
     if (empty($username_err) && empty($password_err)) {
         $sql = "SELECT id, username, password, role FROM users WHERE username = ?";
         if ($stmt = mysqli_prepare($link, $sql)) {

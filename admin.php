@@ -15,11 +15,11 @@ if (isset($_GET['del'])) {
     if ($id == $row["id"]) {
         $_SESSION = array();
         session_destroy();
-        header("location: index.php");
+        header("location: admin.php");
         exit;
     } else {
         mysqli_query($link, "DELETE FROM users WHERE id='$id'");
-        header('location: index.php');
+        header('location: admin.php');
     }
 }
 if (isset($_GET['logout'])) {
@@ -93,7 +93,7 @@ if (isset($_GET['logout'])) {
                                     <td><?php echo $row['role']; ?></td>
                                     <td><?php echo $row['created_at']; ?></td>
                                     <td>
-                                        <a class="button is-danger is-small" href="index.php?del=<?php echo $row['id']; ?>">
+                                        <a class="button is-danger is-small" href="admin.php?del=<?php echo $row['id']; ?>" onClick="return confirm('Вы действительно хотите удалить эту запись?');">
                                             <i class="far fa-trash-alt"></i>
                                         </a>
                                     </td>
