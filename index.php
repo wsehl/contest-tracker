@@ -35,7 +35,7 @@ require_once "components/header.php";
                 </div>
             </div>
             <hr>
-            <h1 class="title is-4">Автор</h1>
+            <h1 class="title is-4">Автор: Александр Тюльков</h1>
             <h1 class="subtitle is-4">Почта: windesehl@gmail.com</h1>
         </div>
     </div>
