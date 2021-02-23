@@ -6,12 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Contests Tracker</title>
     <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.2/css/bulma.min.css">
+    <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
     <link rel="stylesheet" href="css/style.css" />
 </head>
 
 <body>
-    <nav id="navbar" class="bd-navbar navbar is-spaced is-fixed-top">
+    <nav id="navbar" class="navbar is-spaced">
         <div class="container">
             <div class="navbar-brand">
                 <a class="navbar-item" href="index.php">Contest Tracker</a>
@@ -33,7 +34,7 @@
                             if ($log == 0) {
                             ?>
                                 <a href="login.php" class="button">Войти</a>
-                                <a href="register.php" class="button is-info"><strong>Регистрация</strong></a>
+                                <a href="register.php" class="button is-info">Регистрация</a>
                             <?php
                             } else if ($log == 1) {
                             ?>

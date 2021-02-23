@@ -10,7 +10,7 @@ if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
 require_once "components/header.php";
 require_once "core/config.php";
 $username = $password = "";
-$username_err = $password_err = "";
+$username_err = $password_err = $red_error = "";
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (empty(trim($_POST["username"]))) {
         $username_err = "Пожалуйста, введите имя полльзователя.";
@@ -55,36 +55,45 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         mysqli_stmt_close($stmt);
     }
     mysqli_close($link);
+    $username_err || $password_err ? $red_error = "is-danger" : $red_error = '';
 }
 ?>
 
-<div class="container">
-    <section class="hero is-large">
-        <div class="hero-body">
-            <div class="columns">
-                <div class="column"></div>
-                <div class="column">
+<section class="hero">
+    <div class="hero-body">
+        <div class="container">
+            <div class="columns is-centered">
+                <div class="column is-one-third">
                     <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
                         <div class="field">
                             <label class="label">Логин</label>
-                            <input class="input" type="text" name="username" value="<?php echo $username; ?>">
+                            <div class="control has-icons-left has-icons-right">
+                                <input class="<?php echo $red_error && $username_err ? 'input is-danger' : 'input' ?>" type="text" placeholder="Логин" name="username" value="<?php echo $username; ?>">
+                                <span class="icon is-small is-left">
+                                    <i class="fas fa-user"></i>
+                                </span>
+                            </div>
                             <span class="help is-danger"><?php echo $username_err; ?></span>
                         </div>
                         <div class="field">
                             <label class="label">Пароль</label>
-                            <input class="input" type="password" name="password">
+                            <div class="control has-icons-left has-icons-right">
+                                <input class="<?php echo $red_error && $username_err ? 'input is-danger' : 'input' ?>" type="password" placeholder="Пароль" name="password">
+                                <span class="icon is-small is-left">
+                                    <i class="fas fa-lock"></i>
+                                </span>
+                            </div>
                             <span class="help is-danger"><?php echo $password_err; ?></span>
                         </div>
                         <div class="field">
-                            <input class="button is-link" type="submit" value="Войти">
+                            <input class="button is-link is-fullwidth" type="submit" value="Войти">
                         </div>
                         <p>Нет аккаунта? <a href="register.php">Зарагестрироваться</a></p>
                     </form>
                 </div>
-                <div class="column"></div>
             </div>
         </div>
-    </section>
-</div>
+    </div>
+</section>
 
 <?php require_once "components/footer.php"; ?>
