@@ -15,6 +15,11 @@
     <link rel="mask-icon" href="media/safari-pinned-tab.svg" color="#5bbad5">
     <meta name="msapplication-TileColor" content="#ffffff">
     <meta name="theme-color" content="#ffffff">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/1.8.6/showdown.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.0.0/animate.min.css">
+    <script src="https://unpkg.com/bulma-toast@2.2.0/dist/bulma-toast.min.js"></script>
+
 </head>
 
 <body>

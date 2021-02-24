@@ -21,7 +21,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     } else {
         $new_password = trim($_POST["new_password"]);
     }
-    if (empty($new_password_err) && empty($password_err) && $password != $new_password) {
+    if (empty($new_password_err) && empty($password_err)) {
         $checkPass = "SELECT id, username, password, role FROM users WHERE username = ?";
         if ($stmt = mysqli_prepare($link, $checkPass)) {
             mysqli_stmt_bind_param($stmt, "s", $param_username);
@@ -40,19 +40,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
         }
         if (empty($password_not_same)) {
-            $sql = "UPDATE users SET password = ? WHERE username = '$username'";
-            if ($stmt = mysqli_prepare($link, $sql)) {
-                mysqli_stmt_bind_param($stmt, "s", $param_password);
-                $param_password = password_hash($new_password, PASSWORD_DEFAULT);
-
-                if (mysqli_stmt_execute($stmt)) {
-                    echo '<div class="notification is-success">Пароль успешно заменён</div>';
+            if ($password != $new_password) {
+                $sql = "UPDATE users SET password = ? WHERE username = '$username'";
+                if ($stmt = mysqli_prepare($link, $sql)) {
+                    mysqli_stmt_bind_param($stmt, "s", $param_password);
+                    $param_password = password_hash($new_password, PASSWORD_DEFAULT);
+                    if (mysqli_stmt_execute($stmt)) {
+                        echo '<div class="notification is-success"><button class="delete"></button>Пароль успешно заменён</div>';
+                    } else {
+                        echo '<div class="notification is-danger"><button class="delete"></button>Что-то пошло не так</div>';
+                    }
                 } else {
-                    echo "Что-то пошло не так";
+                    echo '<div class="notification is-danger"><button class="delete"></button>Что-то пошло не так</div>';
                 }
+            } else {
+                echo '<div class="notification is-danger"><button class="delete"></button>Пароли не могут совпадать</div>';
             }
         } else {
-            echo '<div class="notification is-danger">Старый пароль не верен</div>';
+            echo '<div class="notification is-danger"><button class="delete"></button>Старый пароль не верен</div>';
         }
         mysqli_stmt_close($stmt);
     }
