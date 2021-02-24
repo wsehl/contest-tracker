@@ -39,8 +39,25 @@ if (isset($_GET['logout'])) {
                     <form method="post">
                         <nav class="panel" style="box-shadow: 0 0em 0em;">
                             <div class="field has-addons">
+                                <script>
+                                    $(document).ready(function() {
+                                        $("#search").keyup(function() {
+                                            $.ajax({
+                                                url: './functions/search.php',
+                                                type: 'post',
+                                                data: {
+                                                    search: $(this).val(),
+
+                                                },
+                                                success: function(result) {
+                                                    $('#result').html(result);
+                                                }
+                                            });
+                                        });
+                                    });
+                                </script>
                                 <div class="control is-expanded">
-                                    <input type="text" class="input" placeholder="Search" name="search" autocomplete="off">
+                                    <input type="text" id="search" class="input" placeholder="Search" name="search" autocomplete="off">
                                 </div>
                                 <div class="control">
                                     <button class="button is-white" style="height: 40px!important;" type="submit" name="submit">
@@ -53,24 +70,8 @@ if (isset($_GET['logout'])) {
                                     </button>
                                 </div>
                             </div>
-                            <?php
-                            if (isset($_POST['submit'])) {
-                                $searchValue = $_POST['search'];
-                                if (empty(trim($_POST["search"]))) {
-                                    header('location: admin.php');
-                                }
-                                $sql = "SELECT * FROM users WHERE username LIKE '%$searchValue%'";
-                                $resulta = $link->query($sql);
-                                while ($row = $resulta->fetch_assoc()) {
-                                    echo "<br>";
-                                    echo $row['id'] . " ";
-                                    echo $row['username'] . " ";
-                                    echo $row['role'] . " ";
-                                    echo $row['created_at'] . " ";
-                                    echo "</a>";
-                                }
-                            }
-                            ?>
+
+                            <span id="result"></span>
                         </nav>
                     </form>
                     <br>
