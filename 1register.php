@@ -6,7 +6,7 @@ $title = "Регистрация";
 require_once "components/header.php";
 
 require_once "core/config.php";
-$username = $email = $password = $confirm_password = "";
+$username = $password = $email = $confirm_password = "";
 $username_err = $email_err = $password_err = $confirm_password_err = $red_error = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -19,31 +19,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $param_username = trim($_POST["username"]);
             if (mysqli_stmt_execute($stmt)) {
                 mysqli_stmt_store_result($stmt);
-                if (mysqli_stmt_num_rows($stmt)) {
+                if (mysqli_stmt_num_rows($stmt) == 1) {
                     $username_err = "Аккаунт с таким логином уже есть";
                 } else {
                     $username = trim($_POST["username"]);
-                }
-            } else {
-                echo "Что-то пошло не так";
-            }
-        }
-        mysqli_stmt_close($stmt);
-    }
-
-    if (empty(trim($_POST["email"]))) {
-        $email_err = "Пожалуйста, введите почту.";
-    } else {
-        $sql = "SELECT id FROM users WHERE email = ?";
-        if ($stmt = mysqli_prepare($link, $sql)) {
-            mysqli_stmt_bind_param($stmt, "s", $param_email);
-            $param_email = trim($_POST["email"]);
-            if (mysqli_stmt_execute($stmt)) {
-                mysqli_stmt_store_result($stmt);
-                if (mysqli_stmt_num_rows($stmt)) {
-                    $email_err = "Аккаунт с такой почтой уже есть";
-                } else {
-                    $email = trim($_POST["email"]);
                 }
             } else {
                 echo "Что-то пошло не так";
@@ -58,6 +37,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $password_err = "В пароле должно быть больше 3 символов";
     } else {
         $password = trim($_POST["password"]);
+    }
+
+    if (empty(trim($_POST["email"]))) {
+        $email_err = "Пожалуйста, введите email.";
+    } else {
+        $email = trim($_POST["email"]);
     }
 
     if (empty(trim($_POST["confirm_password"]))) {
@@ -84,9 +69,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
         mysqli_stmt_close($stmt);
     }
-    
     mysqli_close($link);
-    $username_err || $email_err || $password_err || $confirm_password_err ? $red_error = "is-danger" : $red_error = '';
+    $username_err || $password_err || $email_err || $confirm_password_err ? $red_error = "is-danger" : $red_error = '';
 }
 ?>
 
@@ -107,15 +91,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 </div>
                                 <span class="help is-danger"><?php echo $username_err; ?></span>
                             </div>
+
                             <div class="field">
                                 <div class="control has-icons-left has-icons-right">
-                                    <input class="<?php echo $red_error && $email_err ? 'input is-danger' : 'input' ?>" type="email" placeholder="Email" name="email" value="<?php echo $email; ?>">
+                                    <input class="<?php echo $red_error && $username_err ? 'input is-danger' : 'input' ?>" type="email" placeholder="Email" name="email" value="<?php echo $email; ?>">
                                     <span class="icon is-small is-left">
                                         <i class="fas fa-envelope"></i>
                                     </span>
                                 </div>
                                 <span class="help is-danger"><?php echo $email_err; ?></span>
                             </div>
+
+
                             <div class="field">
                                 <div class="control has-icons-left has-icons-right">
                                     <input class="<?php echo $red_error && $password_err ? 'input is-danger' : 'input' ?>" type="password" placeholder="Пароль" name="password" value="<?php echo $password; ?>">
