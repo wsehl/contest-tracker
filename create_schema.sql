@@ -48,12 +48,13 @@ CREATE TABLE `Winners` (
 );
 
 CREATE TABLE `Users` (
-	`userID` int NOT NULL AUTO_INCREMENT,
-	`username` varchar(255) NOT NULL,
-	`password` varchar(255) NOT NULL,
-	`email` varchar(255) NOT NULL,
-	`role` int(5) NOT NULL,
-	PRIMARY KEY (`userID`)
+  `id` int(11) NOT NULL,
+  `username` varchar(50) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `created_at` datetime DEFAULT current_timestamp(),
+  `role` enum('User','Admin','Teacher','Curator') DEFAULT 'User',
+  `email` varchar(255) DEFAULT NULL,
+	PRIMARY KEY (`id`)
 );
 
 CREATE TABLE `Subjects` (
