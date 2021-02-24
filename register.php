@@ -6,10 +6,17 @@ $title = "Регистрация";
 require_once "components/header.php";
 
 require_once "core/config.php";
-$username = $password = $confirm_password = "";
-$username_err = $password_err = $confirm_password_err = $red_error = "";
+$username = $password = $email = $confirm_password = ""; 
+$username_err = $email_err = $password_err = $confirm_password_err = $red_error = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
+    if (empty(trim($_POST["email"]))) {
+        $email_err = "Пожалуйста, введите email.";
+    } else {
+        $email = trim($_POST["email"]);
+    }
+
     if (empty(trim($_POST["username"]))) {
         $username_err = "Пожалуйста, введите имя полльзователя.";
     } else {
@@ -46,10 +53,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }
     if (empty($username_err) && empty($password_err) && empty($confirm_password_err)) {
-        $sql = "INSERT INTO users (username, password) VALUES (?, ?)";
+        $sql = "INSERT INTO users (username, password, email) VALUES (?, ?, ?)";
         if ($stmt = mysqli_prepare($link, $sql)) {
-            mysqli_stmt_bind_param($stmt, "ss", $param_username, $param_password);
+            mysqli_stmt_bind_param($stmt, "sss", $param_username, $param_password, $param_email);
             $param_username = $username;
+            $param_email = $email;
             $param_password = password_hash($password, PASSWORD_DEFAULT);
             if (mysqli_stmt_execute($stmt)) {
                 header("location: login.php");
@@ -81,6 +89,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 </div>
                                 <span class="help is-danger"><?php echo $username_err; ?></span>
                             </div>
+
+                            <div class="field">
+                                <div class="control has-icons-left has-icons-right">
+                                    <input class="<?php echo $red_error && $username_err ? 'input is-danger' : 'input' ?>" type="email" placeholder="Email" name="email" value="<?php echo $email; ?>">
+                                    <span class="icon is-small is-left">
+                                        <i class="fas fa-envelope"></i>
+                                    </span>
+                                </div>
+                                <span class="help is-danger"><?php echo $email_err; ?></span>
+                            </div>
+
+
                             <div class="field">
                                 <div class="control has-icons-left has-icons-right">
                                     <input class="<?php echo $red_error && $password_err ? 'input is-danger' : 'input' ?>" type="password" placeholder="Пароль" name="password" value="<?php echo $password; ?>">
