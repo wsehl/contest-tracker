@@ -1,2 +1,2 @@
 # contest-tracker
-school project
+Coursework for 11-12 grade
