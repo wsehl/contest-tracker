@@ -1,13 +1,10 @@
 <template>
   <div id="nav">
-    <router-link to="/">Home</router-link> |
+    <router-link to="/">Home</router-link>
     <router-link to="/login">Login</router-link>
+    <router-link to="/sign-up">Register</router-link>
   </div>
-  <router-view v-slot="{ Component }">
-    <keep-alive>
-      <component :is="Component" />
-    </keep-alive>
-  </router-view>
+  <router-view />
 </template>
 
 <script>

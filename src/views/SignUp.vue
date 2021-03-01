@@ -1,11 +1,16 @@
-// src/views/Login.vue
+// src/views/SignUp.vue
 
 <template>
   <div>
-    <h1>Login</h1>
+    <h1>Sign Up</h1>
     <input type="text" placeholder="Username" v-model="username" />
     <input type="text" placeholder="Password" v-model="password" />
-    <input type="button" @click="login" value="Login" />
+    <input
+      type="text"
+      placeholder="Password (repeat)"
+      v-model="password_repeat"
+    />
+    <input type="button" @click="signUp" value="Sign Up" />
     <p v-if="msg">{{ msg }}</p>
   </div>
 </template>
@@ -17,24 +22,20 @@ export default {
     return {
       username: "",
       password: "",
+      password_repeat: "",
       msg: "",
     };
   },
   methods: {
-    async login() {
+    async signUp() {
       try {
         const credentials = {
           username: this.username,
           password: this.password,
+          password_repeat: this.password_repeat,
         };
-        const response = await AuthService.login(credentials);
+        const response = await AuthService.signUp(credentials);
         this.msg = response.msg;
-
-        const token = response.token;
-        const user = response.user;
-
-        this.$store.dispatch("login", { token, user });
-
         this.$router.push("/");
       } catch (error) {
         this.msg = error.response.data.msg;
