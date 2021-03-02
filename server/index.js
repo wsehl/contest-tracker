@@ -8,20 +8,9 @@ require("dotenv");
 const db = mysql.createConnection(process.env.DATABASE_URL);
 module.exports = db;
 
-const whitelist = [process.env.FRONTEND_URL];
-const corsOptions = {
-  origin: function(origin, callback) {
-    if (whitelist.indexOf(origin) !== -1) {
-      callback(null, true);
-    } else {
-      callback(new Error("Not allowed by CORS"));
-    }
-  },
-};
-
 const PORT = process.env.PORT || 3000;
 app.use(bodyParser.json());
-app.use(cors(corsOptions));
+app.use(cors());
 
 const router = require("./router");
 app.use("/api", router);
