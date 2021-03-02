@@ -1,7 +1,5 @@
 import axios from "axios";
-require("dotenv");
-
-let url = process.env.BACKEND_URL || "http://localhost:5000/api/";
+let url = process.env.VUE_APP_BACKEND_URL || "http://localhost:3000/api/";
 
 export default {
   login(credentials) {
