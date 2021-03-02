@@ -1,5 +1,8 @@
 import axios from "axios";
-const url = "http://localhost:5000/api/";
+require("dotenv");
+
+let url = process.env.BACKEND_URL || "http://localhost:5000/api/";
+
 export default {
   login(credentials) {
     return axios
