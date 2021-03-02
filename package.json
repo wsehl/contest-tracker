@@ -6,7 +6,7 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "server": "node index.js --prefix server",
+    "server": "nodemon index.js --prefix ./server",
     "dev": "concurrently \"yarn serve\" \"yarn server\""
   },
   "dependencies": {
