@@ -4,8 +4,17 @@ const router = express.Router();
 const bcrypt = require("bcryptjs");
 const uuid = require("uuid");
 const jwt = require("jsonwebtoken");
-const db = require("../lib/db.js");
 const userMiddleware = require("../middleware/users.js");
+const mysql = require("mysql");
+require("dotenv").config();
+
+const db = mysql.createConnection({
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  database: process.env.DB_NAME,
+  password: process.env.DB_PASS,
+});
+db.connect();
 
 router.post("/sign-up", userMiddleware.validateRegister, (req, res, next) => {
   db.query(
