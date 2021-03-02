@@ -4,7 +4,7 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 require("dotenv").config();
 
-const whitelist = [process.env.LOCAL_URL, process.env.PRODUCTION_URL];
+const whitelist = [process.env.FRONTEND_URL];
 const corsOptions = {
   origin: function(origin, callback) {
     if (whitelist.indexOf(origin) !== -1) {
