@@ -8,7 +8,8 @@
     "lint": "vue-cli-service lint",
     "server": "nodemon index.js --prefix server/",
     "dev": "concurrently \"yarn serve\" \"yarn server\"",
-    "heroku": "cd server/ && nodemon index.js"
+    "heroku": "cd server/ && nodemon index.js",
+    "horokudev": "concurrently \"npm run serve\" \"npm run server\""
   },
   "dependencies": {
     "axios": "^0.21.1",
