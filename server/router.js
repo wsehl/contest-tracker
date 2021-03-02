@@ -7,12 +7,7 @@ const userMiddleware = require("./middleware/users.js");
 const mysql = require("mysql");
 require("dotenv").config();
 
-const db = mysql.createConnection({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  database: process.env.DB_NAME,
-  password: process.env.DB_PASS,
-});
+const db = mysql.createConnection(process.env.CLEARDB_DATABASE_URL);
 db.connect();
 
 router.post("/sign-up", userMiddleware.validateRegister, (req, res, next) => {
