@@ -3,7 +3,7 @@ const app = express();
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const mysql = require("mysql");
-require('dotenv')
+require("dotenv");
 
 const db = mysql.createConnection(process.env.DATABASE_URL);
 module.exports = db;
@@ -19,7 +19,7 @@ const corsOptions = {
   },
 };
 
-const PORT = process.env.PORT || 3000;
+const PORT = 5000;
 app.use(bodyParser.json());
 app.use(cors(corsOptions));
 

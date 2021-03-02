@@ -1,1 +1,1 @@
-web: npm run horokudev
+web: npm run heroku

@@ -26,3 +26,4 @@ yarn.lock
 *.lock
 yarn.lock
 *.lock
+package-lock.json

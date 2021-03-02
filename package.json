@@ -8,26 +8,26 @@
     "lint": "vue-cli-service lint",
     "server": "nodemon index.js --prefix server/",
     "dev": "concurrently \"yarn serve\" \"yarn server\"",
-    "heroku": "cd server/ && nodemon index.js",
-    "horokudev": "concurrently \"npm run serve\" \"npm run server\""
+    "heroku": "cd server/ && node index.js",
+    "herokudev": "concurrently \"npm run serve\" \"npm run server\""
   },
   "dependencies": {
     "axios": "^0.21.1",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
+    "concurrently": "^6.0.0",
     "core-js": "^3.6.5",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "jsonwebtoken": "^8.5.1",
     "mysql": "^2.18.1",
+    "nodemon": "^2.0.7",
     "uuid": "^8.3.2",
     "vue": "^3.0.0",
     "vue-router": "^4.0.0-0",
     "vuex": "^4.0.0-0",
-    "vuex-persistedstate": "^4.0.0-beta.3",
-    "nodemon": "^2.0.7",
-    "concurrently": "^6.0.0"
+    "vuex-persistedstate": "^4.0.0-beta.3"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",
