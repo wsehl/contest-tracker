@@ -1,3 +1,9 @@
+</main>
+<script src="js/swup.min.js"></script>
+<script>
+    const swup = new Swup();
+</script>
+
 <script>
     $(document).ready(function() {
         $(".navbar-burger").click(function() {

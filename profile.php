@@ -10,7 +10,7 @@ require_once "components/header.php";
     <div class="hero-body">
         <div class="container">
             <h1 class="title">Добро пожаловать, <b><?php echo htmlspecialchars($_SESSION["username"]); ?></b>!</h1>
-            <a href="update_password.php">Поменять пароль</a>
+            <a href="/update_password.php">Поменять пароль</a>
         </div>
     </div>
 </section>

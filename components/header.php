@@ -22,7 +22,7 @@
     <nav id="navbar" class="navbar">
         <div class="container">
             <div class="navbar-brand">
-                <a class="navbar-item" href="index.php">
+                <a class="navbar-item" href="/index.php">
                     <img src="./media/logo.svg" alt="Bulma: Free, open source, and modern CSS framework based on Flexbox" width="235" height="28">
                 </a>
                 <div id="navbarBurger" class="navbar-burger burger" data-target="navMenuDocumentation">
@@ -32,7 +32,7 @@
             <div id="navMenuDocumentation" class="navbar-menu">
 
                 <div class="navbar-start">
-                    <a class="navbar-item" href="about.php">
+                    <a class="navbar-item" href="/about.php">
                         О нас
                     </a>
                 </div>
@@ -42,14 +42,14 @@
                         <div class="buttons">
                             <?php if (!isset($_SESSION["role"])) { ?>
                             <?php } else if ($_SESSION["role"] == "Admin") { ?>
-                                <a href="admin.php" class="button is-outlined">Админ панель</a>
+                                <a href="/admin.php" class="button is-outlined">Админ панель</a>
                             <?php } ?>
 
                             <?php if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) { ?>
-                                <a href="login.php" class="button is-outlined">Войти</a>
-                                <a href="register.php" class="button is-info">Регистрация</a>
+                                <a href="/login.php" class="button is-outlined">Войти</a>
+                                <a href="/register.php" class="button is-info">Регистрация</a>
                             <?php } else { ?>
-                                <a href="profile.php" class="button">Профиль</a>
+                                <a href="/profile.php" class="button">Профиль</a>
                                 <a href="logout.php" class="button is-danger">Выйти</a>
                             <?php } ?>
                         </div>
@@ -58,3 +58,4 @@
             </div>
         </div>
     </nav>
+    <main id="swup" class="transition-fade">
