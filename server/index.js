@@ -2,7 +2,11 @@ const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
 const cors = require("cors");
-require("dotenv").config();
+const mysql = require("mysql");
+require('dotenv')
+
+const db = mysql.createConnection(process.env.DATABASE_URL);
+module.exports = db;
 
 const whitelist = [process.env.FRONTEND_URL];
 const corsOptions = {
