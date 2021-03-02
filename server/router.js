@@ -4,10 +4,7 @@ const bcrypt = require("bcryptjs");
 const uuid = require("uuid");
 const jwt = require("jsonwebtoken");
 const userMiddleware = require("./middleware/users.js");
-const mysql = require("mysql");
-require("dotenv").config();
-
-const db = mysql.createConnection(process.env.DATABASE_URL);
+const db = require("./index");
 db.connect();
 
 router.post("/sign-up", userMiddleware.validateRegister, (req, res, next) => {
