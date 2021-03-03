@@ -2,15 +2,14 @@
 session_start();
 isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true ? '' : header("location: profile.php");
 
-$title = "Смена пароля";
+$title = "Password upadte";
 require_once "components/header.php";
 
-require_once "core/config.php";
-$password = $new_password = "";
-$new_password_err = $password_err = $red_error = $password_not_same = "";
-$username = $_SESSION["username"];
+$password = $new_password = $new_password_err = $password_err = $red_error = $password_not_same = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    require_once "core/config.php";
+    $username = $_SESSION["username"];
     if (empty(trim($_POST["password"]))) {
         $password_err = "Пожалуйста, введите пароль.";
     } else {
@@ -74,7 +73,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <div class="column is-two-thirds-tablet is-half-desktop is-one-third-widescreen is-one-third-fullhd">
                     <div class="box is-shadowless pb-4">
                         <h1 class="title is-size-4 has-text-centered">Смена пароля</h1>
-                        <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
+                        <form action="password_update" method="post">
                             <div class="field">
                                 <div class="control has-icons-left has-icons-right">
                                     <input class="<?php echo $red_error && $password_err || $red_error && $new_password_err ? 'input is-danger' : 'input' ?>" type="password" placeholder="Старый пароль" name="password">

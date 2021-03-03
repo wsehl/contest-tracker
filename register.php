@@ -2,14 +2,13 @@
 session_start();
 isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true ? header("location: profile.php") : '';
 
-$title = "Регистрация";
+$title = "Registration";
 require_once "components/header.php";
 
-require_once "core/config.php";
-$username = $email = $password = $confirm_password = "";
-$username_err = $email_err = $password_err = $confirm_password_err = $red_error = "";
+$username_err = $email_err = $password_err = $confirm_password_err = $red_error = $username = $email = $password = $confirm_password = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    require_once "core/config.php";
     if (empty(trim($_POST["username"]))) {
         $username_err = "Пожалуйста, введите имя полльзователя.";
     } else {
@@ -84,7 +83,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
         mysqli_stmt_close($stmt);
     }
-    
+
     mysqli_close($link);
     $username_err || $email_err || $password_err || $confirm_password_err ? $red_error = "is-danger" : $red_error = '';
 }
@@ -97,7 +96,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <div class="column is-two-thirds-tablet is-half-desktop is-one-third-widescreen is-one-third-fullhd">
                     <div class="box is-shadowless">
                         <h1 class="title is-size-4 has-text-centered">Регистрация</h1>
-                        <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
+                        <form action="register" method="post">
                             <div class="field">
                                 <div class="control has-icons-left has-icons-right">
                                     <input class="<?php echo $red_error && $username_err ? 'input is-danger' : 'input' ?>" type="text" placeholder="Логин" name="username" value="<?php echo $username; ?>">
@@ -137,7 +136,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <div class="field">
                                 <input class="button is-link is-fullwidth" type="submit" value="Зарегистрироваться">
                             </div>
-                            <p>Уже есть аккаунт? <a href="./login.php">Войти</a></p>
+                            <p>Уже есть аккаунт? <a href="./login">Войти</a></p>
                         </form>
                     </div>
 

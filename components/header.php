@@ -38,15 +38,15 @@
                         <div class="buttons">
                             <?php if (!isset($_SESSION["role"])) { ?>
                             <?php } else if ($_SESSION["role"] == "Admin") { ?>
-                                <a href="./admin" class="button is-outlined">Админ панель</a>
+                                <a href="./admin" class="button is-outlined">Admin panel</a>
                             <?php } ?>
 
                             <?php if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) { ?>
-                                <a href="./login" class="button is-outlined">Войти</a>
-                                <a href="./register" class="button is-info">Регистрация</a>
+                                <a href="./login" class="button is-outlined">Login</a>
+                                <a href="./register" class="button is-info">Sign up</a>
                             <?php } else { ?>
-                                <a href="./profile" class="button">Профиль</a>
-                                <a href="logout" class="button is-danger">Выйти</a>
+                                <a href="./profile" class="button">Profile</a>
+                                <a href="logout" class="button is-danger">Logout</a>
                             <?php } ?>
                         </div>
                     </div>

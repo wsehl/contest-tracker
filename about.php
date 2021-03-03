@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-$title = "О нас";
+$title = "About us";
 require_once "components/header.php";
 ?>
 

@@ -1,9 +1,11 @@
 <?php
 session_start();
 
-$title = "Главная";
+$title = "Home";
 require_once "components/header.php";
 ?>
+
+<?php echo '<script type="text/JavaScript">swup.loadPage({url: `./about`});</script>'; ?>
 
 <section class="hero">
     <div class="hero-body">

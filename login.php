@@ -2,14 +2,13 @@
 session_start();
 isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true ? header("location: profile.php") : '';
 
-$title = "Авторизация";
+$title = "Login";
 require_once "components/header.php";
 
-require_once "core/config.php";
-$username = $password = "";
-$username_err = $password_err = $red_error = "";
+$username = $password = $username_err = $password_err = $red_error = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    require_once "core/config.php";
     if (empty(trim($_POST["username"]))) {
         $username_err = "Пожалуйста, введите имя полльзователя.";
     } else {
@@ -36,7 +35,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             $_SESSION["id"] = $id;
                             $_SESSION["username"] = $username;
                             $_SESSION["role"] = $role;
-                            header("location: profile.php");
+                            header("location: profile");
                         } else {
                             $password_err = "Неверный пароль.";
                         }
@@ -60,7 +59,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <div class="column is-two-thirds-tablet is-half-desktop is-one-third-widescreen is-one-third-fullhd">
                     <div class="box is-shadowless pb-4">
                         <h1 class="title is-size-4 has-text-centered">Авторизация</h1>
-                        <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
+                        <form action="login" method="post">
                             <div class="field">
                                 <div class="control has-icons-left has-icons-right">
                                     <input class="<?php echo $red_error && $username_err ? 'input is-danger' : 'input' ?>" type="text" placeholder="Логин" name="username" value="<?php echo $username; ?>">
@@ -83,7 +82,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <div class="field">
                                 <input class="button is-link is-fullwidth" type="submit" value="Войти">
                             </div>
-                            <p>Нет аккаунта? <a href="./register.php">Зарегистрироваться</a></p>
+                            <p>Нет аккаунта? <a href="./register">Зарегистрироваться</a></p>
                         </form>
                     </div>
 

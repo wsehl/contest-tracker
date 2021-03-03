@@ -1,0 +1,13 @@
+﻿RewriteEngine on
+
+# 404 Error
+ErrorDocument 404 '<div style="display:flex;align-items: center;justify-content: center;height: 60vh;"> <div style="text-align: center;"> <h1 style="font-family: Roboto;font-style: normal;font-weight: normal;font-size: 56px;line-height: 42px;color: #646464;">Error 404</h1> <a style="text-decoration: none;font-family: Roboto;font-style: normal;font-weight: normal;font-size: 22px;line-height: 14px;color: #1889E6;" href="./">go to /home page</a> </div></div>'
+
+# Run Php without filename extension
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME}.php -f
+RewriteRule ^(.*)$ $1.php
+
+# Return 404 if original request is .php
+RewriteCond %{THE_REQUEST} "^[^ ]* .*?\.php[? ].*$"
+RewriteRule .* - [L,R=404]
