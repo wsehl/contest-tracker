@@ -40,9 +40,8 @@
                             <?php } else if ($_SESSION["role"] == "Admin") { ?>
                                 <a href="./admin" class="button is-outlined">Admin panel</a>
                             <?php } ?>
-
                             <?php if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) { ?>
-                                <a href="./login" class="button is-outlined">Login</a>
+                                <a href="./login" class="button is-outlined">Log in</a>
                                 <a href="./register" class="button is-info">Sign up</a>
                             <?php } else { ?>
                                 <a href="./profile" class="button">Profile</a>
