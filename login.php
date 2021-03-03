@@ -83,7 +83,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <div class="field">
                                 <input class="button is-link is-fullwidth" type="submit" value="Войти">
                             </div>
-                            <p>Нет аккаунта? <a href="register.php">Зарегистрироваться</a></p>
+                            <p>Нет аккаунта? <a href="./register.php">Зарегистрироваться</a></p>
                         </form>
                     </div>
 

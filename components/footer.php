@@ -1,7 +1,13 @@
 </main>
 <script src="js/swup.min.js"></script>
 <script>
-    const swup = new Swup();
+    const options = {
+        containers: ["#swup"],
+        linkSelector: 'a[href^="' +
+            window.location.origin +
+            '"]:not([data-no-swup]), a[href^="./"]:not([data-no-swup]), a[href^="#"]:not([data-no-swup])'
+    };
+    const swup = new Swup(options);
 </script>
 
 <script>
