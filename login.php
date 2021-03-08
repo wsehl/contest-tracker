@@ -13,7 +13,7 @@ require_once "components/header.php";
                     <div class="box is-shadowless pb-4">
                         <h1 class="title is-size-4 has-text-centered">Login</h1>
                         <div class="alert alert-danger" role="alert" id="error" style="display: none;">...</div>
-                        <form id="login-form" name="login_form" role="form" method="post">
+                        <form id="login-form" onsubmit="return false" name="login_form" role="form" method="post">
                             <div class="field">
                                 <div class="control has-icons-left has-icons-right">
                                     <input class="input" type="text" placeholder="Username" name="username" id="username">
@@ -38,7 +38,6 @@ require_once "components/header.php";
                             <p>Нет аккаунта? <a href="./register">Sign Up</a></p>
                         </form>
                     </div>
-
                 </div>
             </div>
         </div>
