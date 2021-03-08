@@ -12,7 +12,7 @@ require_once "components/header.php";
                 <div class="column is-two-thirds-tablet is-half-desktop is-one-third-widescreen is-one-third-fullhd">
                     <div class="box is-shadowless pb-4">
                         <h1 class="title is-size-4 has-text-centered">Login</h1>
-                        <div class="alert alert-danger" role="alert" id="error" style="display: none;">...</div>
+                        <div class="notification is-danger is-light" role="alert" id="error" style="display: none;"></div>
                         <form id="login-form" onsubmit="return false" name="login_form" role="form" method="post">
                             <div class="field">
                                 <div class="control has-icons-left has-icons-right">
@@ -20,7 +20,6 @@ require_once "components/header.php";
                                     <span class="icon is-small is-left">
                                         <i class="fas fa-user"></i>
                                     </span>
-                                    <span id="check-e"></span>
                                 </div>
                             </div>
                             <br>

@@ -8,9 +8,10 @@ const options = {
 };
 const swup = new Swup(options);
 
-function login() {
+function auth() {
   $(document).ready(function () {
     $("#login-form").validate({
+      errorElement: 'div',
       rules: {
         password: {
           required: true,
@@ -35,17 +36,15 @@ function login() {
         data: data,
         beforeSend: function () {
           $("#error").fadeOut();
-          $("#login_button").html(
-            '<span class="glyphicon glyphicon-transfer"></span> &nbsp; sending ...'
-          );
+          $("#login-submit").addClass("is-loading");
         },
         success: function (response) {
           if ($.trim(response) === "1") {
-            console.log("dddd");
-            $("#login-submit").html("Signing In ...");
-            setTimeout('window.location.href = "index"; ', 2000);
+            $("#login-submit").addClass("is-loading");
+            setTimeout('window.location.href = "./"; ', 2000);
           } else {
             $("#error").fadeIn(1000, function () {
+              $("#login-submit").removeClass("is-loading");
               $("#error").html(response).show();
             });
           }
@@ -56,23 +55,6 @@ function login() {
   });
 }
 
-function displayToast(message, position, type) {
-  bulmaToast.toast({
-    message: message,
-    type: type,
-    position: position.toLowerCase().replace(" ", "-"),
-    dismissible: true,
-    duration: 3000,
-    pauseOnHover: true,
-    animate: {
-      in: "fadeIn",
-      out: "fadeOut",
-    },
-  });
-}
-
-//displayToast("Error", "top-center", "is-danger");
-
 $(document).ready(function () {
   $(".navbar-burger").click(function () {
     $(".navbar-burger").toggleClass("is-active");
@@ -80,8 +62,10 @@ $(document).ready(function () {
   });
 });
 
+init();
+
 function init() {
-  login();
+  auth();
 }
 
 swup.on("contentReplaced", init);

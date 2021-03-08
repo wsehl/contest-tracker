@@ -1,7 +1,6 @@
 <?php
 session_start();
 isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true ? header("location: profile.php") : '';
-
 $title = "Registration";
 require_once "components/header.php";
 
