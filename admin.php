@@ -43,7 +43,7 @@ if (isset($_GET['logout'])) {
                                     $(document).ready(function() {
                                         $("#search").keyup(function() {
                                             $.ajax({
-                                                url: './functions/search.php',
+                                                url: './core/search.php',
                                                 type: 'post',
                                                 data: {
                                                     search: $(this).val(),

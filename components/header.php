@@ -29,7 +29,7 @@
             </div>
             <div id="navMenuDocumentation" class="navbar-menu">
                 <div class="navbar-start">
-                    <a class="navbar-item" href="./about">
+                    <a class="navbar-item" href="./about.php">
                         О нас
                     </a>
                 </div>
@@ -38,14 +38,14 @@
                         <div class="buttons">
                             <?php if (!isset($_SESSION["role"])) { ?>
                             <?php } else if ($_SESSION["role"] == "Admin") { ?>
-                                <a href="./admin" class="button is-outlined">Admin panel</a>
+                                <a href="./admin.php" class="button is-outlined">Admin panel</a>
                             <?php } ?>
                             <?php if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) { ?>
-                                <a href="./login" class="button is-outlined">Log in</a>
-                                <a href="./register" class="button is-info">Sign up</a>
+                                <a href="login.php" class="button is-outlined">Log in</a>
+                                <a href="register.php" class="button is-info">Sign up</a>
                             <?php } else { ?>
-                                <a href="./profile" class="button">Profile</a>
-                                <a href="logout" class="button is-danger">Logout</a>
+                                <a href="./profile.php" class="button">Profile</a>
+                                <a href="core/api.php?action=logout" class="button is-danger">Logout</a>
                             <?php } ?>
                         </div>
                     </div>
