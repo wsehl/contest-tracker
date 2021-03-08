@@ -55,8 +55,24 @@ html.is-leaving .transition-fade {
   border-radius: 5px;
 }
 
-#username-error, #password-error {
+.navbar:not(.is-transparent) {
+  box-shadow: 0 0px 0px 0px rgba(0, 0, 0, 0);
+  border-bottom: 1px solid #ebeaeb;
+}
+
+#username-error,
+#password-error {
   color: #f14668;
   font-size: 0.75rem;
   margin-top: 0.25rem;
+}
+
+.box.index-contest {
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 0px 0px 0px rgba(0, 0, 0, 0);
+  color: #4a4a4a;
+  display: block;
+  padding: 1rem;
+  border: 1px solid #dbdbdb;
 }

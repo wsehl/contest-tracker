@@ -9,7 +9,7 @@ require_once "components/header.php";
     <div class="hero-body">
         <div class="container">
             <h1 class="title">Contest Tracker</h1>
-            <h1 class="subtitle">Будь в курсе всех конкурсов!</h1>
+            <h1 class="subtitle">Be aware of all competitions!</h1>
             <p>
                 This is the online portal of the
                 NIS Pavlodar school for students and teachers dedicated to project contests work

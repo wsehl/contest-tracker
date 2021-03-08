@@ -94,48 +94,44 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <div class="columns is-centered">
                 <div class="column is-two-thirds-tablet is-half-desktop is-one-third-widescreen is-one-third-fullhd">
                     <div class="box is-shadowless">
-                        <h1 class="title is-size-4 has-text-centered">Регистрация</h1>
-                        <form action="register" method="post">
+                        <h1 class="title is-size-4 has-text-centered">Create an Account</h1>
+                        <form onsubmit="return false" role="form" method="post">
                             <div class="field">
                                 <div class="control has-icons-left has-icons-right">
-                                    <input class="<?php echo $red_error && $username_err ? 'input is-danger' : 'input' ?>" type="text" placeholder="Логин" name="username" value="<?php echo $username; ?>">
+                                    <input class="input" type="text" placeholder="Username" name="username">
                                     <span class="icon is-small is-left">
                                         <i class="fas fa-user"></i>
                                     </span>
                                 </div>
-                                <span class="help is-danger"><?php echo $username_err; ?></span>
                             </div>
                             <div class="field">
                                 <div class="control has-icons-left has-icons-right">
-                                    <input class="<?php echo $red_error && $email_err ? 'input is-danger' : 'input' ?>" type="email" placeholder="Email" name="email" value="<?php echo $email; ?>">
+                                    <input class="input" type="email" placeholder="Email" name="email">
                                     <span class="icon is-small is-left">
                                         <i class="fas fa-envelope"></i>
                                     </span>
                                 </div>
-                                <span class="help is-danger"><?php echo $email_err; ?></span>
                             </div>
                             <div class="field">
                                 <div class="control has-icons-left has-icons-right">
-                                    <input class="<?php echo $red_error && $password_err ? 'input is-danger' : 'input' ?>" type="password" placeholder="Пароль" name="password" value="<?php echo $password; ?>">
+                                    <input class="input" type="password" placeholder="Password" name="password">
                                     <span class="icon is-small is-left">
                                         <i class="fas fa-lock"></i>
                                     </span>
                                 </div>
-                                <span class="help is-danger"><?php echo $password_err; ?></span>
                             </div>
                             <div class="field">
                                 <div class="control has-icons-left has-icons-right">
-                                    <input class="<?php echo $red_error && $confirm_password_err ? 'input is-danger' : 'input' ?>" type="password" placeholder="Подтвержение пароля" name="confirm_password" value="<?php echo $confirm_password; ?>">
+                                    <input class="input" type="password" placeholder="Confirm password" name="confirm_password">
                                     <span class="icon is-small is-left">
                                         <i class="fas fa-lock"></i>
                                     </span>
                                 </div>
-                                <span class="help is-danger"><?php echo $confirm_password_err; ?></span>
                             </div>
                             <div class="field">
-                                <input class="button is-link is-fullwidth" type="submit" value="Зарегистрироваться">
+                                <button class="button is-link is-fullwidth" type="submit">Sign Up</button>
                             </div>
-                            <p>Уже есть аккаунт? <a href="./login">Войти</a></p>
+                            <p>Already have an account? <a href="./login">Log in</a></p>
                         </form>
                     </div>
 

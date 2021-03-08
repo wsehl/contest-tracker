@@ -29,8 +29,8 @@
             </div>
             <div id="navMenuDocumentation" class="navbar-menu">
                 <div class="navbar-start">
-                    <a class="navbar-item" href="./about">
-                        О нас
+                    <a class="navbar-item" href="./about" style="font-size: 16px;line-height: 21px;">
+                        About
                     </a>
                 </div>
                 <div class="navbar-end">
@@ -42,7 +42,7 @@
                             <?php } ?>
                             <?php if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) { ?>
                                 <a href="./login" class="button is-outlined">Log in</a>
-                                <a href="./register" class="button is-info">Sign up</a>
+                                <a href="./signup" class="button is-info">Sign up</a>
                             <?php } else { ?>
                                 <a href="./profile" class="button">Profile</a>
                                 <a href="core/api.php?action=logout" class="button is-danger">Logout</a>
