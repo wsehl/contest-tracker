@@ -46,7 +46,7 @@ require_once "components/header.php";
                                     <a class="level-item" href="./password_reset">Forgot password?</a>
                                 </div>
                             </nav>
-                            <p>Have no account yet? <a href="./signup">Create an account</p>
+                            <p>Have no account yet? <a href="./signup">Create an account</a></p>
                         </form>
                     </div>
                 </div>
