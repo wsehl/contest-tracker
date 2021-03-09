@@ -10,26 +10,79 @@ const swup = new Swup(options);
 
 function auth() {
   $(document).ready(function () {
-    $("#login-form").validate({
-      errorElement: 'div',
+    $("#login").validate({
+      errorElement: "p",
       rules: {
-        password: {
+        username: {
           required: true,
         },
-        username: {
+        password: {
           required: true,
         },
       },
       messages: {
-        password: {
-          required: "Please enter your password",
-        },
+        password: "Please enter your password",
         username: "Please enter your login",
       },
       submitHandler: submitForm,
     });
+
+    $("#signup").validate({
+      errorElement: "p",
+      rules: {
+        username: {
+          required: true,
+          minlength: 4,
+          maxlength: 25,
+        },
+        email: {
+          required: true,
+          email: true,
+        },
+        password: {
+          minlength: 8,
+          maxlength: 30,
+          required: true,
+        },
+        confirm_password: {
+          minlength: 8,
+          required: true,
+          equalTo: "#password",
+        },
+      },
+      messages: {
+        username: {
+          required: "Please enter your login",
+          minlength: jQuery.validator.format(
+            "Username is less than {0} characters"
+          ),
+          maxlength: jQuery.validator.format(
+            "Usernames is more than {0} characters"
+          ),
+        },
+        email: {
+          required: "Please enter your email",
+          email: "Please enter a valid email",
+        },
+        password: {
+          required: "Please enter your password",
+          minlength: jQuery.validator.format(
+            "At least {0} characters required"
+          ),
+        },
+        confirm_password: {
+          minlength: jQuery.validator.format(
+            "At least {0} characters required"
+          ),
+          required: "Please enter your confirm password",
+          equalTo: "Passwords do not match. Please try again",
+        },
+      },
+      submitHandler: submitForm,
+    });
+
     function submitForm() {
-      var data = $("#login-form").serialize();
+      var data = $("#login").serialize();
       $.ajax({
         type: "POST",
         url: "core/api.php?action=login",

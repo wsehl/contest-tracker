@@ -4,7 +4,7 @@
 <script src="js/libs/jquery-3.6.0.min.js"></script>
 <script src="js/libs/jquery-validate-1.19.3.min.js"></script>
 <script src="js/libs/swup-2.0.14.min.js"></script>
-<script src="js/index.min.js"></script>
+<script src="js/index.js"></script>
 </body>
 
 </html>

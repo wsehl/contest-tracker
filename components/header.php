@@ -42,7 +42,7 @@
                             <?php } ?>
                             <?php if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) { ?>
                                 <a href="./login" class="button is-outlined">Log in</a>
-                                <a href="./signup" class="button is-info">Sign up</a>
+                                <a href="./signup" class="button is-link">Sign up</a>
                             <?php } else { ?>
                                 <a href="./profile" class="button">Profile</a>
                                 <a href="core/api.php?action=logout" class="button is-danger">Logout</a>

@@ -37,7 +37,7 @@ hr {
 
 .transition-fade {
   opacity: 1;
-  transition: 200ms;
+  transition: 100ms;
 }
 
 html.is-animating .transition-fade {
@@ -61,7 +61,9 @@ html.is-leaving .transition-fade {
 }
 
 #username-error,
-#password-error {
+#password-error,
+#confirm_password-error,
+#email-error {
   color: #f14668;
   font-size: 0.75rem;
   margin-top: 0.25rem;

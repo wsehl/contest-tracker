@@ -1,7 +1,7 @@
 <?php
 session_start();
 isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true ? header("location: profile.php") : '';
-$title = "Registration";
+$title = "Sign up";
 require_once "components/header.php";
 
 $username_err = $email_err = $password_err = $confirm_password_err = $red_error = $username = $email = $password = $confirm_password = "";
@@ -95,10 +95,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <div class="column is-two-thirds-tablet is-half-desktop is-one-third-widescreen is-one-third-fullhd">
                     <div class="box is-shadowless">
                         <h1 class="title is-size-4 has-text-centered">Create an Account</h1>
-                        <form onsubmit="return false" role="form" method="post">
+                        <div class="notification is-danger is-light" role="alert" id="error" style="display: none;"></div>
+                        <form id="signup" onsubmit="return false" role="form" method="post">
                             <div class="field">
                                 <div class="control has-icons-left has-icons-right">
-                                    <input class="input" type="text" placeholder="Username" name="username">
+                                    <input class="input" type="text" placeholder="Username" id="username" name="username" autocomplete="off">
                                     <span class="icon is-small is-left">
                                         <i class="fas fa-user"></i>
                                     </span>
@@ -106,7 +107,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             </div>
                             <div class="field">
                                 <div class="control has-icons-left has-icons-right">
-                                    <input class="input" type="email" placeholder="Email" name="email">
+                                    <input class="input" type="email" placeholder="Email" id="email" name="email" autocomplete="off">
                                     <span class="icon is-small is-left">
                                         <i class="fas fa-envelope"></i>
                                     </span>
@@ -114,7 +115,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             </div>
                             <div class="field">
                                 <div class="control has-icons-left has-icons-right">
-                                    <input class="input" type="password" placeholder="Password" name="password">
+                                    <input class="input" type="password" placeholder="Password" id="password" name="password" autocomplete="off">
                                     <span class="icon is-small is-left">
                                         <i class="fas fa-lock"></i>
                                     </span>
@@ -122,7 +123,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             </div>
                             <div class="field">
                                 <div class="control has-icons-left has-icons-right">
-                                    <input class="input" type="password" placeholder="Confirm password" name="confirm_password">
+                                    <input class="input" type="password" placeholder="Confirm password" id="confirm_password" name="confirm_password" autocomplete="off">
                                     <span class="icon is-small is-left">
                                         <i class="fas fa-lock"></i>
                                     </span>
@@ -134,7 +135,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <p>Already have an account? <a href="./login">Log in</a></p>
                         </form>
                     </div>
-
                 </div>
             </div>
         </div>
