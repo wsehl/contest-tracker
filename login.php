@@ -22,7 +22,6 @@ require_once "components/header.php";
                                     </span>
                                 </div>
                             </div>
-                            <br>
                             <div class="field">
                                 <div class="control has-icons-left has-icons-right">
                                     <input class="input" type="password" placeholder="Passwrod" id="password" name="password" autocomplete="off">
@@ -31,10 +30,23 @@ require_once "components/header.php";
                                     </span>
                                 </div>
                             </div>
-                            <div class="field">
+                            <div class="field mb-4">
                                 <button class="button is-link is-fullwidth" type="submit" name="login-submit" id="login-submit">Log In</button>
                             </div>
-                            <p>Have no account yet? <a href="./signup">Create an account.</p>
+                            <nav class="level">
+                                <div class="level-left">
+                                    <div class="level-item">
+                                        <label class="checkbox">
+                                            <input type="checkbox">
+                                            Remember me
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="level-right">
+                                    <a class="level-item" href="./password_reset">Forgot password?</a>
+                                </div>
+                            </nav>
+                            <p>Have no account yet? <a href="./signup">Create an account</p>
                         </form>
                     </div>
                 </div>

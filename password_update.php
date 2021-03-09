@@ -72,29 +72,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <div class="columns is-centered">
                 <div class="column is-two-thirds-tablet is-half-desktop is-one-third-widescreen is-one-third-fullhd">
                     <div class="box is-shadowless pb-4">
-                        <h1 class="title is-size-4 has-text-centered">Смена пароля</h1>
-                        <form action="password_update" method="post">
+                        <h1 class="title is-size-4 has-text-centered">Chnage password</h1>
+                        <form method="post" onsubmit="return false">
                             <div class="field">
                                 <div class="control has-icons-left has-icons-right">
-                                    <input class="<?php echo $red_error && $password_err || $red_error && $new_password_err ? 'input is-danger' : 'input' ?>" type="password" placeholder="Старый пароль" name="password">
+                                    <input class="input" type="password" placeholder="Old password" name="password">
                                     <span class="icon is-small is-left">
                                         <i class="fas fa-lock"></i>
                                     </span>
                                 </div>
-                                <span class="help is-danger"><?php echo $password_err; ?></span>
                             </div>
-                            <br>
                             <div class="field">
                                 <div class="control has-icons-left has-icons-right">
-                                    <input class="<?php echo $red_error && $password_err || $red_error && $new_password_err ? 'input is-danger' : 'input' ?>" type="password" placeholder="Новый пароль" name="new_password">
+                                    <input class="input" type="password" placeholder="New password" name="new_password">
                                     <span class="icon is-small is-left">
                                         <i class="fas fa-lock"></i>
                                     </span>
                                 </div>
-                                <span class="help is-danger"><?php echo $new_password_err; ?></span>
                             </div>
                             <div class="field">
-                                <input class="button is-link is-fullwidth" type="submit" value="Поменять пароль">
+                                <input class="button is-link is-fullwidth" type="submit" value="Submit">
                             </div>
                         </form>
                     </div>

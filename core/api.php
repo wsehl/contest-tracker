@@ -34,6 +34,16 @@ function login()
                             $_SESSION["id"] = $id;
                             $_SESSION["username"] = $username;
                             $_SESSION["role"] = $role;
+
+                            /*
+                            if (!empty($_POST["remember"])) {
+                                setcookie("member_login", $_POST["member_name"], time() + (10 * 365 * 24 * 60 * 60));
+                            } else {
+                                if (isset($_COOKIE["member_login"])) {
+                                    setcookie("member_login", "");
+                                }
+                            }
+                            */
                         } else {
                             echo "Ohhh ! Wrong Credential.";
                         }

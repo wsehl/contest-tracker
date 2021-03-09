@@ -5,7 +5,7 @@ $title = "About us";
 require_once "components/header.php";
 ?>
 
-<section class="hero">
+<section class="hero" data-page="home-page">
     <div class="hero-body">
         <div class="container">
             <h1 class="title">Contest Tracker</h1>

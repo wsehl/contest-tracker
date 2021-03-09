@@ -12,6 +12,7 @@ function auth() {
   $(document).ready(function () {
     $("#login").validate({
       errorElement: "p",
+      errorClass: "is-danger",
       rules: {
         username: {
           required: true,
@@ -29,6 +30,7 @@ function auth() {
 
     $("#signup").validate({
       errorElement: "p",
+      errorClass: "is-danger",
       rules: {
         username: {
           required: true,
