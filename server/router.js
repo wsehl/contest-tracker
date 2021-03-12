@@ -4,6 +4,7 @@ const bcrypt = require("bcryptjs");
 const uuid = require("uuid");
 const jwt = require("jsonwebtoken");
 const userMiddleware = require("./middleware/users.js");
+require("dotenv").config();
 const db = require("./lib/db.js");
 
 // const mysql = require("mysql");
