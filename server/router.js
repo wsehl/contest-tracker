@@ -4,37 +4,35 @@ const bcrypt = require("bcryptjs");
 const uuid = require("uuid");
 const jwt = require("jsonwebtoken");
 const userMiddleware = require("./middleware/users.js");
-const mysql = require("mysql");
-require("dotenv");
-const db = mysql.createConnection(process.env.DATABASE_URL);
+const db = require("./lib/db.js");
 
-db.connect();
+// const mysql = require("mysql");
 
-function handleDisconnect() {
-  db = mysql.createConnection(process.env.DATABASE_URL);
-  db.connect(function(err) {
-    if (err) {
-      console.log("error when connecting to db:", err);
-      setTimeout(handleDisconnect, 2000);
-    }
-  });
-  db.on("error", function(err) {
-    console.log("db error", err);
-    if (err.code === "PROTOCOL_CONNECTION_LOST") {
-      handleDisconnect();
-    } else {
-      throw err;
-    }
-  });
-}
+// function handleDisconnect() {
+//   db = mysql.createConnection(process.env.DATABASE_URL);
+//   db.connect(function(err) {
+//     if (err) {
+//       console.log("error when connecting to db:", err);
+//       setTimeout(handleDisconnect, 2000);
+//     }
+//   });
+//   db.on("error", function(err) {
+//     console.log("db error", err);
+//     if (err.code === "PROTOCOL_CONNECTION_LOST") {
+//       handleDisconnect();
+//     } else {
+//       throw err;
+//     }
+//   });
+// }
 
-db.on("error", (err) => {
-  if (err.code === "PROTOCOL_CONNECTION_LOST") {
-    handleDisconnect();
-  } else {
-    throw err;
-  }
-});
+// db.on("error", (err) => {
+//   if (err.code === "PROTOCOL_CONNECTION_LOST") {
+//     handleDisconnect();
+//   } else {
+//     throw err;
+//   }
+// });
 
 router.post("/sign-up", userMiddleware.validateRegister, (req, res, next) => {
   db.query(
