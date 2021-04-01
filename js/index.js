@@ -25,8 +25,32 @@ function auth() {
         password: "Please enter your password",
         username: "Please enter your login",
       },
-      submitHandler: submitForm,
+      submitHandler: submitLoginForm,
     });
+    function submitLoginForm() {
+      const data = $("#login").serialize();
+      $.ajax({
+        type: "POST",
+        url: "core/api.php?action=login",
+        data: data,
+        beforeSend: function () {
+          $("#error").fadeOut();
+          $("#login-submit").addClass("is-loading");
+        },
+        success: function (response) {
+          if ($.trim(response) === "200") {
+            $("#login-submit").addClass("is-loading");
+            setTimeout('window.location.href = "./"; ', 2000);
+          } else {
+            $("#error").fadeIn(1000, function () {
+              $("#login-submit").removeClass("is-loading");
+              $("#error").html(response).show();
+            });
+          }
+        },
+      });
+      return false;
+    }
 
     $("#signup").validate({
       errorElement: "p",
@@ -80,26 +104,25 @@ function auth() {
           equalTo: "Passwords do not match. Please try again",
         },
       },
-      submitHandler: submitForm,
+      submitHandler: submitRegisterForm,
     });
-
-    function submitForm() {
-      var data = $("#login").serialize();
+    function submitRegisterForm() {
+      const data = $("#signup").serialize();
       $.ajax({
         type: "POST",
-        url: "core/api.php?action=login",
+        url: "core/api.php?action=signup",
         data: data,
         beforeSend: function () {
           $("#error").fadeOut();
-          $("#login-submit").addClass("is-loading");
+          $("#register-submit").addClass("is-loading");
         },
         success: function (response) {
-          if ($.trim(response) === "1") {
-            $("#login-submit").addClass("is-loading");
-            setTimeout('window.location.href = "./"; ', 2000);
+          if ($.trim(response) === "200") {
+            $("#register-submit").addClass("is-loading");
+            setTimeout('window.location.href = "./login"; ', 2000);
           } else {
             $("#error").fadeIn(1000, function () {
-              $("#login-submit").removeClass("is-loading");
+              $("#register-submit").removeClass("is-loading");
               $("#error").html(response).show();
             });
           }

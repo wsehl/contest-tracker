@@ -2,7 +2,7 @@
 session_start();
 isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true ? '' : header("location: index.php");
 
-$title = "Профиль";
+$title = "Pofile";
 require_once "components/header.php";
 ?>
 
