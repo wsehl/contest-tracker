@@ -37,7 +37,7 @@ require_once "components/header.php";
                                 <div class="level-left">
                                     <div class="level-item">
                                         <label class="checkbox">
-                                            <input type="checkbox">
+                                            <input type="checkbox" id='remember'>
                                             Remember me
                                         </label>
                                     </div>

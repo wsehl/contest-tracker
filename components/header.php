@@ -18,6 +18,7 @@
     <script src="js/libs/bulma-toast-2.2.0.min.js"></script>
     <script src="js/libs/jquery-3.6.0.min.js"></script>
     <script src="js/libs/jquery-validate-1.19.3.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12"></script>
 </head>
 
 <body>
@@ -42,7 +43,7 @@
                         <div class="buttons">
                             <?php if (!isset($_SESSION["role"])) { ?>
                             <?php } else if ($_SESSION["role"] == "Admin") { ?>
-                                <a href="./admin.php" class="button is-outlined">Admin panel</a>
+                                <a href="./admin" class="button is-outlined">Admin panel</a>
                             <?php } ?>
                             <?php if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) { ?>
                                 <a href="./login" class="button is-white">Log in</a>

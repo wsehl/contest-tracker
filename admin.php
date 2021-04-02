@@ -1,33 +1,32 @@
 <?php
 session_start();
 isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true && $_SESSION["role"] === "Admin" ? '' : header("location: index.php");
-
-$title = "Админ панель";
+$title = "Dashboard";
 require_once "components/header.php";
 
-require_once "core/config.php";
+// require_once "core/config.php";
 
-if (isset($_GET['del'])) {
-    $id = $_GET['del'];
-    $email = $_SESSION["email"];
-    $result = mysqli_query($link, "SELECT * from users WHERE email='$email'");
-    $row = mysqli_fetch_array($result);
-    if ($id == $row["id"]) {
-        $_SESSION = array();
-        session_destroy();
-        header("location: admin.php");
-        exit;
-    } else {
-        mysqli_query($link, "DELETE FROM users WHERE id='$id'");
-        header('location: admin.php');
-    }
-}
-if (isset($_GET['logout'])) {
-    $_SESSION = array();
-    session_destroy();
-    header("location: index.php");
-    exit;
-}
+// if (isset($_GET['del'])) {
+//     $id = $_GET['del'];
+//     $email = $_SESSION["email"];
+//     $result = mysqli_query($link, "SELECT * from users WHERE email='$email'");
+//     $row = mysqli_fetch_array($result);
+//     if ($id == $row["id"]) {
+//         $_SESSION = array();
+//         session_destroy();
+//         header("location: admin.php");
+//         exit;
+//     } else {
+//         mysqli_query($link, "DELETE FROM users WHERE id='$id'");
+//         header('location: admin.php');
+//     }
+// }
+// if (isset($_GET['logout'])) {
+//     $_SESSION = array();
+//     session_destroy();
+//     header("location: index.php");
+//     exit;
+// }
 
 ?>
 
@@ -35,7 +34,7 @@ if (isset($_GET['logout'])) {
     <div class="hero-body">
         <div class="container">
             <div class="columns">
-                <div class="column is-12">
+                <!-- <div class="column is-12">
                     <form method="post">
                         <nav class="panel" style="box-shadow: 0 0em 0em;">
                             <div class="field has-addons">
@@ -102,10 +101,32 @@ if (isset($_GET['logout'])) {
                             <?php } ?>
                         </table>
                     </div>
-                </div>
+                </div> -->
+
+
             </div>
         </div>
     </div>
 </section>
+
+<script>
+    $(document).ready(function() {
+        $.ajax({
+            type: "GET",
+            url: "core/api.php?action=dashboard_users",
+            success: function() {
+                alert("done");
+            }
+        });
+    });
+
+    function submitLoginForm() {
+
+
+        return false;
+    }
+</script>
+
+
 
 <?php require_once "components/footer.php"; ?>
