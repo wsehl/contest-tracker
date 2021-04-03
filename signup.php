@@ -1,91 +1,8 @@
 <?php
 session_start();
-isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true ? header("location: profile.php") : '';
+isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true ? header("location: ./profile") : '';
 $title = "Sign up";
 require_once "components/header.php";
-
-$username_err = $email_err = $password_err = $confirm_password_err = $red_error = $username = $email = $password = $confirm_password = "";
-
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    require_once "core/config.php";
-    if (empty(trim($_POST["username"]))) {
-        $username_err = "Пожалуйста, введите имя полльзователя.";
-    } else {
-        $sql = "SELECT id FROM users WHERE username = ?";
-        if ($stmt = mysqli_prepare($link, $sql)) {
-            mysqli_stmt_bind_param($stmt, "s", $param_username);
-            $param_username = trim($_POST["username"]);
-            if (mysqli_stmt_execute($stmt)) {
-                mysqli_stmt_store_result($stmt);
-                if (mysqli_stmt_num_rows($stmt)) {
-                    $username_err = "Аккаунт с таким логином уже есть";
-                } else {
-                    $username = trim($_POST["username"]);
-                }
-            } else {
-                echo "Что-то пошло не так";
-            }
-        }
-        mysqli_stmt_close($stmt);
-    }
-
-    if (empty(trim($_POST["email"]))) {
-        $email_err = "Пожалуйста, введите почту.";
-    } else {
-        $sql = "SELECT id FROM users WHERE email = ?";
-        if ($stmt = mysqli_prepare($link, $sql)) {
-            mysqli_stmt_bind_param($stmt, "s", $param_email);
-            $param_email = trim($_POST["email"]);
-            if (mysqli_stmt_execute($stmt)) {
-                mysqli_stmt_store_result($stmt);
-                if (mysqli_stmt_num_rows($stmt)) {
-                    $email_err = "Аккаунт с такой почтой уже есть";
-                } else {
-                    $email = trim($_POST["email"]);
-                }
-            } else {
-                echo "Что-то пошло не так";
-            }
-        }
-        mysqli_stmt_close($stmt);
-    }
-
-    if (empty(trim($_POST["password"]))) {
-        $password_err = "Введите пароль";
-    } elseif (strlen(trim($_POST["password"])) < 3) {
-        $password_err = "В пароле должно быть больше 3 символов";
-    } else {
-        $password = trim($_POST["password"]);
-    }
-
-    if (empty(trim($_POST["confirm_password"]))) {
-        $confirm_password_err = "Подтвердите пароль";
-    } else {
-        $confirm_password = trim($_POST["confirm_password"]);
-        if (empty($password_err) && ($password != $confirm_password)) {
-            $confirm_password_err = "Пароли не совпадают";
-        }
-    }
-
-    if (empty($username_err) && empty($password_err) && empty($confirm_password_err) && empty($email_err)) {
-        $sql = "INSERT INTO users (username, password, email) VALUES (?, ?, ?)";
-        if ($stmt = mysqli_prepare($link, $sql)) {
-            mysqli_stmt_bind_param($stmt, "sss", $param_username, $param_password, $param_email);
-            $param_username = $username;
-            $param_password = password_hash($password, PASSWORD_DEFAULT);
-            $param_email = $email;
-            if (mysqli_stmt_execute($stmt)) {
-                header("location: login.php");
-            } else {
-                echo "Что-то пошло не так";
-            }
-        }
-        mysqli_stmt_close($stmt);
-    }
-
-    mysqli_close($link);
-    $username_err || $email_err || $password_err || $confirm_password_err ? $red_error = "is-danger" : $red_error = '';
-}
 ?>
 
 <section class="hero">
@@ -142,3 +59,87 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </section>
 
 <?php require_once "components/footer.php"; ?>
+
+<script>
+    $(document).ready(function() {
+        $("#signup").validate({
+            errorElement: "p",
+            errorClass: "is-danger",
+            rules: {
+                username: {
+                    required: true,
+                    minlength: 4,
+                    maxlength: 25,
+                },
+                email: {
+                    required: true,
+                    email: true,
+                },
+                password: {
+                    minlength: 8,
+                    maxlength: 30,
+                    required: true,
+                },
+                confirm_password: {
+                    minlength: 8,
+                    required: true,
+                    equalTo: "#password",
+                },
+            },
+            messages: {
+                username: {
+                    required: "Please enter your login",
+                    minlength: jQuery.validator.format(
+                        "Username is less than {0} characters"
+                    ),
+                    maxlength: jQuery.validator.format(
+                        "Usernames is more than {0} characters"
+                    ),
+                },
+                email: {
+                    required: "Please enter your email",
+                    email: "Please enter a valid email",
+                },
+                password: {
+                    required: "Please enter your password",
+                    minlength: jQuery.validator.format(
+                        "At least {0} characters required"
+                    ),
+                },
+                confirm_password: {
+                    minlength: jQuery.validator.format(
+                        "At least {0} characters required"
+                    ),
+                    required: "Please enter your confirm password",
+                    equalTo: "Passwords do not match. Please try again",
+                },
+            },
+            submitHandler: submitRegisterForm,
+        });
+
+        function submitRegisterForm() {
+            const data = $("#signup").serialize();
+            $.ajax({
+                type: "POST",
+                url: "core/api.php?action=signup",
+                data: data,
+                beforeSend: function() {
+                    $("#error").fadeOut();
+                    $("#register-submit").addClass("is-loading");
+                },
+                success: function(response) {
+                    if ($.trim(response) === "200") {
+                        $("#register-submit").addClass("is-loading");
+                        setTimeout('window.location.href = "./login"; ', 2000);
+                    } else {
+                        $("#error").fadeIn(1000, function() {
+                            $("#register-submit").removeClass("is-loading");
+                            $("#error").html(response).show();
+                        });
+                    }
+                },
+            });
+            return false;
+        }
+    });
+</script>

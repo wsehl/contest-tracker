@@ -13,12 +13,11 @@
     <link rel="mask-icon" href="media/safari-pinned-tab.svg" color="#5bbad5">
     <meta name="msapplication-TileColor" content="#ffffff">
     <meta name="theme-color" content="#ffffff">
-    <script src="js/libs/font-awesome-5.15.2.min.js"></script>
-    <script src="js/libs/swup-2.0.14.min.js"></script>
-    <script src="js/libs/bulma-toast-2.2.0.min.js"></script>
-    <script src="js/libs/jquery-3.6.0.min.js"></script>
-    <script src="js/libs/jquery-validate-1.19.3.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12"></script>
+    <script src="js/libs/font-awesome.min.js"></script>
+    <script src="js/libs/jquery.min.js"></script>
+    <script src="js/libs/jquery-validate.min.js"></script>
+    <script src="js/libs/vue.min.js"></script>
+    <script src="js/libs/axios.min.js"></script>
 </head>
 
 <body>
@@ -58,4 +57,3 @@
             </div>
         </div>
     </nav>
-    <main id="swup" class="transition-fade">

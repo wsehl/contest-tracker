@@ -13,20 +13,25 @@ switch ($action) {
     case 'logout':
         logout();
         break;
-    case 'dashboard_users':
-        dash_users();
+    case 'read':
+        read();
         break;
     default:
         return;
 }
 
-function dash_users()
+function read()
 {
     require_once("config.php");
+    header("Content-type: application/json");
+    $res = array('error' => false);
     $result = $link->query("SELECT * FROM `users`");
     $users  = array();
     while ($row = $result->fetch_assoc()) {
         array_push($users, $row);
     }
-    return $users;
+    $res['users'] = $users;
+    $link->close();
+    echo json_encode($res);
+    die();
 };

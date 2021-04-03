@@ -1,6 +1,6 @@
 <?php
 session_start();
-isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true ? header("location: profile.php") : '';
+isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true ? header("location: ./profile") : '';
 $title = "Log in";
 require_once "components/header.php";
 ?>
@@ -56,3 +56,50 @@ require_once "components/header.php";
 </section>
 
 <?php require_once "components/footer.php"; ?>
+
+<script>
+    $(document).ready(function() {
+        $("#login").validate({
+            errorElement: "p",
+            errorClass: "is-danger",
+            rules: {
+                username: {
+                    required: true,
+                },
+                password: {
+                    required: true,
+                },
+            },
+            messages: {
+                password: "Please enter your password",
+                username: "Please enter your login",
+            },
+            submitHandler: submitLoginForm,
+        });
+
+        function submitLoginForm() {
+            const data = $("#login").serialize();
+            $.ajax({
+                type: "POST",
+                url: "core/api.php?action=login",
+                data: data,
+                beforeSend: function() {
+                    $("#error").fadeOut();
+                    $("#login-submit").addClass("is-loading");
+                },
+                success: function(response) {
+                    if ($.trim(response) === "200") {
+                        $("#login-submit").addClass("is-loading");
+                        setTimeout('window.location.href = "./"; ', 2000);
+                    } else {
+                        $("#error").fadeIn(1000, function() {
+                            $("#login-submit").removeClass("is-loading");
+                            $("#error").html(response).show();
+                        });
+                    }
+                },
+            });
+            return false;
+        }
+    });
+</script>
