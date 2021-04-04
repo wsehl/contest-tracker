@@ -1,4 +1,27 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap");
+.button {
+  border-radius: 7px !important;
+}
+
+.navbar {
+  border-bottom: 1px solid #ebeaeb;
+}
+
+.navbar .navbar-dropdown {
+  border-radius: 6px;
+  border: 1px solid #dbdbdb !important;
+}
+
+#username-error,
+#password-error,
+#password-error,
+#confirm_password-error,
+#email-error {
+  color: #f14668;
+  font-size: 0.75rem;
+  margin-top: 0.25rem;
+}
+
 .spinner {
   -webkit-animation: rotator 1.4s linear infinite;
           animation: rotator 1.4s linear infinite;
@@ -101,38 +124,6 @@
     -webkit-transform: rotate(450deg);
             transform: rotate(450deg);
   }
-}
-
-.button {
-  border-radius: 7px !important;
-}
-
-.navbar {
-  border-bottom: 1px solid #ebeaeb;
-}
-
-.transition-fade {
-  opacity: 1;
-  -webkit-transition: 100ms;
-  transition: 100ms;
-}
-
-#username-error,
-#password-error,
-#password-error,
-#confirm_password-error,
-#email-error {
-  color: #f14668;
-  font-size: 0.75rem;
-  margin-top: 0.25rem;
-}
-
-html.is-animating .transition-fade {
-  opacity: 0;
-}
-
-html.is-leaving .transition-fade {
-  opacity: 0;
 }
 
 /*! bulma.io v0.9.2 | MIT License | github.com/jgthms/bulma */
@@ -6768,7 +6759,7 @@ a.navbar-item:focus, a.navbar-item:focus-within, a.navbar-item:hover, a.navbar-i
 }
 
 .navbar-divider {
-  background-color: transparent;
+  background-color: whitesmoke;
   border: none;
   display: none;
   height: 2px;

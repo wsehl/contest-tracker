@@ -1,6 +1,6 @@
 <?php
 session_start();
-isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true && $_SESSION["role"] === "Admin" ? '' : header("location: index.php");
+isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true && $_SESSION["role"] === "Admin" ? '' : header("location: ./");
 $title = "Dashboard";
 require_once "components/header.php";
 ?>
@@ -20,8 +20,8 @@ require_once "components/header.php";
                                     <th>ID</th>
                                     <th>Username</th>
                                     <th>Email</th>
-                                    <th>Created At</th>
                                     <th>Role</th>
+                                    <th>Created at</th>
                                 </tr>
                             </thead>
                             <tbody class="tbody-custom">
@@ -29,8 +29,8 @@ require_once "components/header.php";
                                     <td>{{user.id}}</td>
                                     <td>{{user.username}}</td>
                                     <td>{{user.email}}</td>
-                                    <td>{{user.created_at}}</td>
                                     <td>{{user.role}}</td>
+                                    <td>{{user.created_at}}</td>
                                 </tr>
                             </tbody>
 

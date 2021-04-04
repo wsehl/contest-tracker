@@ -39,10 +39,31 @@
                 </div>
                 <div class="navbar-end">
                     <div class="navbar-item">
+                        <?php if (isset($_SESSION['loggedin'])) {
+                            echo '<div class="navbar-item has-dropdown is-hoverable">
+										<a class="navbar-link">' . $_SESSION['username'] . '</a>
+											<div class="navbar-dropdown">
+                                                <a href="./profile" class="navbar-item">Profile</a>';
+                            if ($_SESSION["role"] == "Admin") {
+                                echo '<a href="./dashboard" class="navbar-item">Dashboard</a>';
+                            }
+                            echo '<hr class="navbar-divider">
+								<a class="navbar-item" href="core/api.php?action=logout">Logout</a>
+							  </div>
+							</div>';
+                        ?>
+                        <?php } else { ?>
+                            <div class="buttons">
+                                <a href="./login" class="button is-white">Log in</a>
+                                <a href="./signup" class="button is-link">Sign up</a>
+                            </div>
+                        <?php } ?>
+
+                        <!-- 
                         <div class="buttons">
                             <?php if (!isset($_SESSION["role"])) { ?>
                             <?php } else if ($_SESSION["role"] == "Admin") { ?>
-                                <a href="./admin" class="button is-outlined">Admin panel</a>
+                                <a href="./dashboard" class="button is-outlined">Admin panel</a>
                             <?php } ?>
                             <?php if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) { ?>
                                 <a href="./login" class="button is-white">Log in</a>
@@ -51,7 +72,7 @@
                                 <a href="./profile" class="button">Profile</a>
                                 <a href="core/api.php?action=logout" class="button is-danger">Logout</a>
                             <?php } ?>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
             </div>
