@@ -14,6 +14,17 @@ $input-disabled-background-color: transparent;
 $navbar-height: 3.75rem;
 $box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;
 
+.is-active {
+  color: blue;
+}
+.not-active {
+  color: transparent;
+}
+
+.is-full {
+  width: 100% !important;
+}
+
 .button {
   border-radius: 7px !important;
 }

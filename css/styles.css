@@ -1,4 +1,16 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap");
+.is-active {
+  color: blue;
+}
+
+.not-active {
+  color: transparent;
+}
+
+.is-full {
+  width: 100% !important;
+}
+
 .button {
   border-radius: 7px !important;
 }
