@@ -11,6 +11,18 @@ const routes = [
     component: Home,
   },
   {
+    path: "/dashboard",
+    name: "Dashboard",
+    component: () => import("@/layouts/DashboardLayout.vue"),
+    children: [
+      { path: "/dashboard", component: () => import("@/pages/dashboard.vue") },
+      {
+        path: "/dashboard/users",
+        component: () => import("@/pages/users.vue"),
+      },
+    ],
+  },
+  {
     path: "/signup",
     name: "sign-up",
     component: SignUp,
