@@ -1,5 +1,3 @@
-// src/views/Login.vue
-
 <template>
   <div>
     <h1>Login</h1>
@@ -40,6 +38,11 @@ export default {
         this.msg = error.response.data.msg;
       }
     },
+  },
+  created() {
+    if (this.$store.getters.isLoggedIn) {
+      this.$router.push("/");
+    }
   },
 };
 </script>

@@ -55,9 +55,9 @@ router.post("/sign-up", userMiddleware.validateRegister, (req, res, next) => {
           } else {
             // has hashed pw => add to database
             db.query(
-              `INSERT INTO users (id, username, password, registered) VALUES ('${uuid.v4()}', ${db.escape(
+              `INSERT INTO users (id, username, password, registered, role) VALUES ('${uuid.v4()}', ${db.escape(
                 req.body.username
-              )}, ${db.escape(hash)}, now())`,
+              )}, ${db.escape(hash)}, now(), 'User')`,
               (err, result) => {
                 if (err) {
                   throw err;
@@ -110,6 +110,7 @@ router.post("/login", (req, res, next) => {
               {
                 username: result[0].username,
                 userId: result[0].id,
+                role: result[0].role,
               },
               "SECRETKEY",
               {
@@ -134,9 +135,14 @@ router.post("/login", (req, res, next) => {
   );
 });
 
-router.get("/pizza", userMiddleware.isLoggedIn, (req, res, next) => {
+router.get("/user", userMiddleware.isLoggedIn, (req, res, next) => {
   console.log(req.userData);
   res.send("This is the secret content. Only logged in users can see that!");
+});
+
+router.get("/admin", userMiddleware.isAdmin, (req, res, next) => {
+ // console.log(req.userData);
+  res.send("This is the admin content. Only admin in users can see that!");
 });
 
 module.exports = router;
