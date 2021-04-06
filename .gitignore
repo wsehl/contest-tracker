@@ -20,6 +20,5 @@ pnpm-debug.log*
 *.ntvs*
 *.njsproj
 *.sln
-*.sw?
-*.json
+*.sw?   
 *.lock
