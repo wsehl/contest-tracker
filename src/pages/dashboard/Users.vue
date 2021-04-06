@@ -12,6 +12,8 @@
         :grid="mode === 'grid'"
         :filter="filter"
         binary-state-sort
+        dense
+        :pagination="initialPagination"
       >
         <template v-slot:top-right="props">
           <q-btn
@@ -25,36 +27,18 @@
             <q-dialog v-model="show_dialog">
               <q-card>
                 <q-card-section>
-                  <div class="text-h6">Add new item!</div>
+                  <div class="text-h6">User</div>
                 </q-card-section>
                 <q-card-section>
                   <div class="row">
                     <q-input
-                      v-model="editedItem.name"
-                      label="Dessert Name"
+                      v-model="editedItem.username"
+                      label="Username"
                     ></q-input>
-                    <q-input
-                      v-model="editedItem.calories"
-                      label="Calories"
-                    ></q-input>
-                    <q-input v-model="editedItem.fat" label="Fat"></q-input>
-                    <q-input v-model="editedItem.carbs" label="Carbs"></q-input>
-                    <q-input
-                      v-model="editedItem.protein"
-                      label="Protein"
-                    ></q-input>
-                    <q-input
-                      v-model="editedItem.sodium"
-                      label="Sodium"
-                    ></q-input>
-                    <q-input
-                      v-model="editedItem.calcium"
-                      label="Calcium"
-                    ></q-input>
-                    <q-input v-model="editedItem.iron" label="Iron"></q-input>
+                    <q-input v-model="editedItem.email" label="Email"></q-input>
+                    <q-input v-model="editedItem.role" label="Role"></q-input>
                   </div>
                 </q-card-section>
-
                 <q-card-actions align="right">
                   <q-btn
                     flat
@@ -86,7 +70,6 @@
               }}
             </q-tooltip>
           </q-btn>
-
           <q-btn
             flat
             round
@@ -107,14 +90,6 @@
           <q-tr :props="props">
             <q-td key="id" :props="props">
               {{ props.row.id }}
-              <q-popup-edit v-model="props.row.id">
-                <q-input
-                  v-model="props.row.id"
-                  dense
-                  autofocus
-                  counter
-                ></q-input>
-              </q-popup-edit>
             </q-td>
             <q-td key="username" :props="props">
               {{ props.row.username }}
@@ -123,32 +98,32 @@
                 title="Update username"
                 buttons
               >
-                <q-input
-                  type="number"
-                  v-model="props.row.username"
-                  dense
-                  autofocus
-                ></q-input>
+                <q-input v-model="props.row.username" dense autofocus></q-input>
               </q-popup-edit>
             </q-td>
-            <q-td key="carbs" :props="props">
-              {{ props.row.carbs }}
+            <q-td key="email" :props="props">
+              {{ props.row.email }}
               <q-popup-edit
-                v-model="props.row.carbs"
-                title="Update carbs"
+                v-model="props.row.email"
+                title="Update email"
                 buttons
-                persistent
+              >
+                <q-input v-model="props.row.email" dense autofocus></q-input>
+              </q-popup-edit>
+            </q-td>
+            <q-td key="role" :props="props"
+              >{{ props.row.role }}
+              <q-popup-edit
+                v-model="props.row.role"
+                title="Update role"
+                buttons
               >
                 <q-input
-                  type="number"
-                  v-model="props.row.carbs"
+                  v-model="props.row.role"
                   dense
                   autofocus
-                  hint="Use buttons to close"
-                ></q-input>
-              </q-popup-edit>
-            </q-td>
-            <q-td key="role" :props="props">{{ props.row.role }}</q-td>
+                ></q-input> </q-popup-edit
+            ></q-td>
             <q-td key="registered" :props="props">{{
               props.row.registered
             }}</q-td>
@@ -158,21 +133,17 @@
             <q-td key="actions" :props="props">
               <q-btn
                 @click="editItem(props.row)"
-                icon="card_giftcard"
+                icon="far fa-edit"
                 size="sm"
                 no-caps
-                round
                 unelevated
-                outline
               ></q-btn>
               <q-btn
                 @click="deleteItem(props.row)"
-                icon="card_giftcard"
+                icon="far fa-trash-alt"
                 size="sm"
                 no-caps
-                round
                 unelevated
-                outline
               ></q-btn>
             </q-td>
           </q-tr>
@@ -222,25 +193,22 @@ export default {
       separator: "vertical",
       show_dialog: false,
       editedIndex: -1,
+      initialPagination: {
+        rowsPerPage: 15,
+      },
       editedItem: {
         name: "",
-        calories: 0,
-        fat: 0,
-        carbs: 0,
-        protein: 0,
-        sodium: 0,
-        calcium: "0%",
-        iron: "0%",
+        id: "",
+        username: "",
+        email: "",
+        role: "",
       },
       defaultItem: {
         name: "",
-        calories: 0,
-        fat: 0,
-        carbs: 0,
-        protein: 0,
-        sodium: 0,
-        calcium: "0%",
-        iron: "0%",
+        id: "",
+        username: "",
+        email: "",
+        role: "",
       },
       columns: [
         {
@@ -255,6 +223,13 @@ export default {
           name: "username",
           align: "left",
           label: "Username",
+          field: "username",
+          sortable: true,
+        },
+        {
+          name: "email",
+          align: "left",
+          label: "Email",
           field: "username",
           sortable: true,
         },

@@ -7,9 +7,9 @@ export default {
       .post(url + "login/", credentials)
       .then((response) => response.data);
   },
-  signUp(credentials) {
+  signup(credentials) {
     return axios
-      .post(url + "sign-up/", credentials)
+      .post(url + "signup/", credentials)
       .then((response) => response.data);
   },
   getSecretContent() {

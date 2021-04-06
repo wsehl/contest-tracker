@@ -40,7 +40,7 @@
           standout
           use-input
           hide-selected
-          class="GL__toolbar-select"
+          class="bg-grey-4"
           color="black"
           :stack-label="false"
           label="Search or jump to..."
@@ -97,12 +97,15 @@
           <a href="javascript:void(0)" style="color: #4a4a4a">
             Archive
           </a>
+          <a href="javascript:void(0)" style="color: #4a4a4a">
+            About
+          </a>
         </div>
         <q-space />
         <div class="q-pl-sm row items-center no-wrap">
           <template v-if="!user.username">
             <div
-              class="GL__toolbar-link q-pa-sm q-gutter-sm text-body2 text-weight-medium row items-center no-wrap"
+              class="GL__toolbar-link q-py-sm q-px-md q-gutter-md text-body2 text-weight-medium row items-center no-wrap"
             >
               <router-link to="/login" style="color: #4a4a4a"
                 >Login</router-link
@@ -114,21 +117,22 @@
           </template>
           <template v-else>
             <q-btn dense flat no-wrap>
-              <div class="q-body-2">{{ user.username }}</div>
+              <div class="q-body-2" style="text-transform: none;">
+                {{ user.username }}
+              </div>
               <q-icon name="arrow_drop_down" size="16px" />
               <q-menu auto-close>
                 <q-list dense>
-                  <q-item class="GL__menu-link-signed-in">
-                    <q-item-section>
-                      <div>
-                        Signed in as <strong>{{ user.username }}</strong>
-                      </div>
-                    </q-item-section>
-                  </q-item>
-                  <q-separator />
-                  <q-item clickable class="GL__menu-link" to="/dashboard" exact>
-                    <q-item-section>Dashboard</q-item-section>
-                  </q-item>
+                  <template v-if="user.role != 'User'">
+                    <q-item
+                      clickable
+                      class="GL__menu-link"
+                      to="/dashboard"
+                      exact
+                    >
+                      <q-item-section>Dashboard</q-item-section>
+                    </q-item>
+                  </template>
                   <!-- <q-item clickable class="GL__menu-link">
                     <q-item-section>Your profile</q-item-section>
                   </q-item> -->

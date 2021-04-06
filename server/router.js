@@ -36,7 +36,7 @@ const db = require("./lib/db.js");
 //   }
 // });
 
-router.post("/sign-up", userMiddleware.validateRegister, (req, res, next) => {
+router.post("/signup", userMiddleware.validateRegister, (req, res, next) => {
   db.query(
     `SELECT * FROM users WHERE LOWER(username) = LOWER(${db.escape(
       req.body.username
@@ -56,9 +56,11 @@ router.post("/sign-up", userMiddleware.validateRegister, (req, res, next) => {
           } else {
             // has hashed pw => add to database
             db.query(
-              `INSERT INTO users (id, username, password, registered, role) VALUES ('${uuid.v4()}', ${db.escape(
+              `INSERT INTO users (username, password, registered, role, email) VALUES (${db.escape(
                 req.body.username
-              )}, ${db.escape(hash)}, now(), 'User')`,
+              )}, ${db.escape(hash)}, now(), 'User', ${db.escape(
+                req.body.email
+              )})`,
               (err, result) => {
                 if (err) {
                   throw err;

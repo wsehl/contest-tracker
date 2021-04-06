@@ -40,17 +40,20 @@ const routes = [
     path: "/dashboard",
     name: "Dashboard",
     component: () => import("@/layouts/DashboardLayout.vue"),
-    meta: {
-      title: "Dashboard",
-    },
     children: [
       {
         path: "/dashboard",
         component: () => import("@/pages/dashboard/Dash.vue"),
+        meta: {
+          title: "Dashboard",
+        },
       },
       {
         path: "/dashboard/users",
         component: () => import("@/pages/dashboard/Users.vue"),
+        meta: {
+          title: "Dashboard - Users",
+        },
       },
     ],
     beforeEnter(to, from, next) {
