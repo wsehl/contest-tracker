@@ -1,3 +1,4 @@
+/* eslint-disable no-unreachable */
 const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcryptjs");
@@ -141,8 +142,15 @@ router.get("/user", userMiddleware.isLoggedIn, (req, res, next) => {
 });
 
 router.get("/admin", userMiddleware.isAdmin, (req, res, next) => {
- // console.log(req.userData);
   res.send("This is the admin content. Only admin in users can see that!");
+});
+
+router.get("/dashboard/users", userMiddleware.isAdmin, (req, res, next) => {
+  db.query(`SELECT * FROM users`, (err, result) => {
+    return res.status(200).send({
+      data: result,
+    });
+  });
 });
 
 module.exports = router;

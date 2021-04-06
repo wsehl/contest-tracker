@@ -18,4 +18,7 @@ export default {
   getSecretAdminContent() {
     return axios.get(url + "admin/").then((response) => response.data);
   },
+  getUsersTable() {
+    return axios.get(url + "dashboard/users").then((response) => response.data);
+  },
 };

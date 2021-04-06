@@ -2,28 +2,31 @@
   <q-page class="q-pa-sm">
     <q-card>
       <q-table
-        title="Treats"
+        title="Users"
+        class="text-grey-8"
+        :separator="separator"
         :data="data"
+        :hide-header="mode === 'grid'"
         :columns="columns"
-        row-key="name"
+        row-key="username"
+        :grid="mode === 'grid'"
+        :filter="filter"
         binary-state-sort
       >
-        <template v-slot:top>
+        <template v-slot:top-right="props">
           <q-btn
-            dense
-            color="secondary"
-            label="Add Row"
+            unelevated
+            color="primary"
+            label="Add user"
             @click="show_dialog = true"
             no-caps
           ></q-btn>
-
           <div class="q-pa-sm q-gutter-sm">
             <q-dialog v-model="show_dialog">
               <q-card>
                 <q-card-section>
                   <div class="text-h6">Add new item!</div>
                 </q-card-section>
-
                 <q-card-section>
                   <div class="row">
                     <q-input
@@ -64,41 +67,65 @@
               </q-card>
             </q-dialog>
           </div>
+          <q-input outlined dense v-model="filter" placeholder="Search">
+            <template v-slot:append>
+              <q-icon name="search" />
+            </template>
+          </q-input>
+          <q-btn
+            flat
+            round
+            dense
+            :icon="props.inFullscreen ? 'fullscreen_exit' : 'fullscreen'"
+            @click="props.toggleFullscreen"
+            v-if="mode === 'list'"
+          >
+            <q-tooltip :disable="$q.platform.is.mobile" v-close-popup
+              >{{
+                props.inFullscreen ? "Exit Fullscreen" : "Toggle Fullscreen"
+              }}
+            </q-tooltip>
+          </q-btn>
+
+          <q-btn
+            flat
+            round
+            dense
+            :icon="mode === 'grid' ? 'list' : 'grid_on'"
+            @click="
+              mode = mode === 'grid' ? 'list' : 'grid';
+              separator = mode === 'grid' ? 'none' : 'horizontal';
+            "
+            v-if="!props.inFullscreen"
+          >
+            <q-tooltip :disable="$q.platform.is.mobile" v-close-popup
+              >{{ mode === "grid" ? "List" : "Grid" }}
+            </q-tooltip>
+          </q-btn>
         </template>
         <template v-slot:body="props">
           <q-tr :props="props">
-            <q-td key="desc" :props="props">
-              {{ props.row.name }}
-              <q-popup-edit v-model="props.row.name">
+            <q-td key="id" :props="props">
+              {{ props.row.id }}
+              <q-popup-edit v-model="props.row.id">
                 <q-input
-                  v-model="props.row.name"
+                  v-model="props.row.id"
                   dense
                   autofocus
                   counter
                 ></q-input>
               </q-popup-edit>
             </q-td>
-            <q-td key="calories" :props="props">
-              {{ props.row.calories }}
+            <q-td key="username" :props="props">
+              {{ props.row.username }}
               <q-popup-edit
-                v-model="props.row.calories"
-                title="Update calories"
+                v-model="props.row.username"
+                title="Update username"
                 buttons
               >
                 <q-input
                   type="number"
-                  v-model="props.row.calories"
-                  dense
-                  autofocus
-                ></q-input>
-              </q-popup-edit>
-            </q-td>
-            <q-td key="fat" :props="props">
-              <div class="text-pre-wrap">{{ props.row.fat }}</div>
-              <q-popup-edit v-model="props.row.fat">
-                <q-input
-                  type="textarea"
-                  v-model="props.row.fat"
+                  v-model="props.row.username"
                   dense
                   autofocus
                 ></q-input>
@@ -121,24 +148,31 @@
                 ></q-input>
               </q-popup-edit>
             </q-td>
-            <q-td key="protein" :props="props">{{ props.row.protein }}</q-td>
-            <q-td key="sodium" :props="props">{{ props.row.sodium }}</q-td>
-            <q-td key="calcium" :props="props">{{ props.row.calcium }}</q-td>
-            <q-td key="iron" :props="props">{{ props.row.iron }}</q-td>
+            <q-td key="role" :props="props">{{ props.row.role }}</q-td>
+            <q-td key="registered" :props="props">{{
+              props.row.registered
+            }}</q-td>
+            <q-td key="last_login" :props="props">{{
+              props.row.last_login
+            }}</q-td>
             <q-td key="actions" :props="props">
               <q-btn
-                color="blue"
-                label="Update"
                 @click="editItem(props.row)"
+                icon="card_giftcard"
                 size="sm"
                 no-caps
+                round
+                unelevated
+                outline
               ></q-btn>
               <q-btn
-                color="red"
-                label="Delete"
                 @click="deleteItem(props.row)"
+                icon="card_giftcard"
                 size="sm"
                 no-caps
+                round
+                unelevated
+                outline
               ></q-btn>
             </q-td>
           </q-tr>
@@ -149,6 +183,10 @@
 </template>
 
 <script>
+import api from "@/services/api.js";
+// eslint-disable-next-line no-unused-vars
+import { format } from "date-fns";
+
 export default {
   methods: {
     addRow() {
@@ -179,6 +217,9 @@ export default {
   },
   data() {
     return {
+      filter: "",
+      mode: "list",
+      separator: "vertical",
       show_dialog: false,
       editedIndex: -1,
       editedItem: {
@@ -203,44 +244,35 @@ export default {
       },
       columns: [
         {
-          name: "desc",
+          name: "id",
           required: true,
-          label: "Dessert (100g serving)",
+          label: "id",
           align: "left",
-          field: (row) => row.name,
-          format: (val) => `${val}`,
+          field: "id",
           sortable: true,
         },
         {
-          name: "calories",
-          align: "center",
-          label: "Calories",
-          field: "calories",
+          name: "username",
+          align: "left",
+          label: "Username",
+          field: "username",
           sortable: true,
         },
+        { name: "role", label: "Role", field: "role" },
         {
-          name: "fat",
-          label: "Fat (g)",
-          field: "fat",
-          sortable: true,
-          style: "width: 10px",
-        },
-        { name: "carbs", label: "Carbs (g)", field: "carbs" },
-        { name: "protein", label: "Protein (g)", field: "protein" },
-        { name: "sodium", label: "Sodium (mg)", field: "sodium" },
-        {
-          name: "calcium",
-          label: "Calcium (%)",
-          field: "calcium",
-          sortable: true,
-          sort: (a, b) => parseInt(a, 10) - parseInt(b, 10),
+          name: "registered",
+          label: "Registered at",
+          field: "registered",
+          // format: (val) => {
+          //   let result = format(val, "MM/dd/yyyy");
+          //   console.log(val, result);
+          // },
+          // eslint-disable-next-line no-unused-vars
         },
         {
-          name: "iron",
-          label: "Iron (%)",
-          field: "iron",
-          sortable: true,
-          sort: (a, b) => parseInt(a, 10) - parseInt(b, 10),
+          name: "last_login",
+          label: "Last login",
+          field: "last_login",
         },
         {
           name: "actions",
@@ -351,6 +383,15 @@ export default {
         },
       ],
     };
+  },
+  async created() {
+    try {
+      const response = await api.getUsersTable();
+      console.log(response.data);
+      this.data = response.data;
+    } catch (error) {
+      console.log(error.message);
+    }
   },
 };
 </script>

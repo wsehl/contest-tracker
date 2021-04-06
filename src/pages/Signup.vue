@@ -13,7 +13,7 @@
   </div>
 </template>
 <script>
-import AuthService from "@/services/AuthService.js";
+import api from "@/services/api.js";
 
 export default {
   data() {
@@ -32,7 +32,7 @@ export default {
           password: this.password,
           password_repeat: this.password_repeat,
         };
-        const response = await AuthService.signUp(credentials);
+        const response = await api.signUp(credentials);
         this.msg = response.msg;
         this.$router.push("/");
       } catch (error) {
