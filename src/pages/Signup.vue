@@ -77,7 +77,6 @@ export default {
       email: "",
       password: "",
       password_repeat: "",
-      msg: "",
     };
   },
   methods: {
@@ -90,11 +89,10 @@ export default {
           password_repeat: this.password_repeat,
         };
         const response = await api.signup(credentials);
-        this.msg = response.msg;
         this.$q.notify({
           color: "positive",
           position: "bottom-left",
-          message: "Successfully registered",
+          message: response.msg,
           progress: true,
           timeout: 1500,
         });

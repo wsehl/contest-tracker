@@ -11,12 +11,12 @@
           class="q-mr-sm"
         />
         <q-toolbar-title></q-toolbar-title>
-        <q-btn flat round dense icon="fas fa-home" to="/">
+        <q-btn flat round dense icon="home" to="/">
           <q-tooltip :disable="$q.platform.is.mobile" v-close-popup
             >Go to home page</q-tooltip
           >
         </q-btn>
-        <q-btn flat round dense icon="fas fa-sign-out-alt" @click="logout">
+        <q-btn flat round dense icon="logout" @click="logout">
           <q-tooltip :disable="$q.platform.is.mobile" v-close-popup
             >Logout</q-tooltip
           >
@@ -36,7 +36,7 @@
       <q-list>
         <q-item to="/dashboard" active-class="tab-active" exact>
           <q-item-section avatar>
-            <q-icon name="dashboard" class="text-dark" />
+            <q-icon name="space_dashboard" class="text-dark" />
           </q-item-section>
           <q-item-section>
             <q-item-label>Main</q-item-label>

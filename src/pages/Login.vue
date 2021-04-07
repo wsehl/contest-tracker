@@ -48,7 +48,6 @@ export default {
     return {
       username: "",
       password: "",
-      msg: "",
     };
   },
   methods: {
@@ -61,12 +60,10 @@ export default {
         const response = await api.login(credentials);
         const token = response.token;
         const user = response.user;
-
-        this.msg = response.msg;
         this.$q.notify({
           color: "positive",
           position: "bottom-left",
-          message: "Logged in successfully",
+          message: response.msg,
           progress: true,
           timeout: 1500,
         });

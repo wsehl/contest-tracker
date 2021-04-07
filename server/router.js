@@ -69,7 +69,7 @@ router.post("/signup", userMiddleware.validateRegister, (req, res, next) => {
                   });
                 }
                 return res.status(201).send({
-                  msg: "Registered!",
+                  msg: "Successfully registered",
                 });
               }
             );
@@ -124,7 +124,7 @@ router.post("/login", (req, res, next) => {
               `UPDATE users SET last_login = now() WHERE id = '${result[0].id}'`
             );
             return res.status(200).send({
-              msg: "Logged in!",
+              msg: "Logged in successfully",
               token,
               user: result[0],
             });
