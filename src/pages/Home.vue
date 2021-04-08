@@ -1,6 +1,6 @@
 <template>
-  <q-page class="q-pa-lg">
-    <div class="row q-mx-auto justify-center align-center">
+  <q-page>
+    <!-- <div class="row q-mx-auto justify-center align-center">
       <div class="col-12 col-lg-6 self-center">
         <q-card flat class="q-pa-xl">
           <q-card-section class="text-h4">
@@ -22,7 +22,20 @@
           </q-card-section>
         </q-card>
       </div>
+    </div> -->
+    <div class="row">
+      <q-parallax
+        src="https://i3.photo.2gis.com/images/branch/0/30258560049603441_1424.jpg"
+      >
+        <div class="text-h3 text-white text-center">
+          Проектная деятельность НИШ Павлодар
+        </div>
+      </q-parallax>
     </div>
+    <Section img="code.jpg" />
+    <Features :data="features" />
+    <a id="news" />
+    <Newsletter />
   </q-page>
 </template>
 
