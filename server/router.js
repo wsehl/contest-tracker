@@ -47,14 +47,12 @@ router.post("/signup", userMiddleware.validateRegister, (req, res, next) => {
           msg: "This username is already in use!",
         });
       } else {
-        // username is available
         bcrypt.hash(req.body.password, 10, (err, hash) => {
           if (err) {
             return res.status(500).send({
               msg: err,
             });
           } else {
-            // has hashed pw => add to database
             db.query(
               `INSERT INTO users (username, password, registered, role, email) VALUES (${db.escape(
                 req.body.username
@@ -154,5 +152,51 @@ router.get("/dashboard/users", userMiddleware.isAdmin, (req, res, next) => {
     });
   });
 });
+
+router.post(
+  "/dashboard/post/users",
+  userMiddleware.validateRegister,
+  (req, res, next) => {
+    db.query(
+      `SELECT * FROM users WHERE LOWER(username) = LOWER(${db.escape(
+        req.body.username
+      )});`,
+      (err, result) => {
+        if (result.length) {
+          return res.status(409).send({
+            msg: "This username is already in use!",
+          });
+        } else {
+          bcrypt.hash(req.body.password, 10, (err, hash) => {
+            if (err) {
+              return res.status(500).send({
+                msg: err,
+              });
+            } else {
+              db.query(
+                `INSERT INTO users (username, password, registered, role, email) VALUES (${db.escape(
+                  req.body.username
+                )}, ${db.escape(hash)}, now(), ${db.escape(
+                  req.body.role
+                )}, ${db.escape(req.body.email)})`,
+                (err, result) => {
+                  if (err) {
+                    throw err;
+                    return res.status(400).send({
+                      msg: err,
+                    });
+                  }
+                  return res.status(201).send({
+                    msg: "Successfully registered",
+                  });
+                }
+              );
+            }
+          });
+        }
+      }
+    );
+  }
+);
 
 module.exports = router;

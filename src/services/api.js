@@ -21,4 +21,9 @@ export default {
   getUsersTable() {
     return axios.get(url + "dashboard/users").then((response) => response.data);
   },
+  pushToUsersTable(credentials) {
+    return axios
+      .post(url + "dashboard/post/users/", credentials)
+      .then((response) => response.data);
+  },
 };
