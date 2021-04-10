@@ -1,5 +1,5 @@
 import axios from "axios";
-let url = process.env.VUE_APP_BACKEND_URL || "http://localhost:8888/api/";
+const url = process.env.VUE_APP_BACKEND_URL || "http://localhost:8888/api/";
 
 export default {
   login(credentials) {
