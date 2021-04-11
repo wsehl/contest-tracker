@@ -3,20 +3,12 @@
     style="background: #fff; border-bottom: 1px solid #ebeaeb; color: #4a4a4a"
     height-hint="61.59"
   >
-    <q-toolbar class="q-py-sm q-px-md">
+    <q-toolbar class="q-py-md q-px-lg">
       <router-link to="/">
-        <q-btn
-          round
-          dense
-          flat
-          size="19px"
-          color="white"
-          class="q-mr-sm"
-          no-caps
-        >
+        <q-btn round dense flat color="white" no-caps>
           <svg
-            width="32"
-            height="32"
+            width="35"
+            height="35"
             viewBox="0 0 45 45"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
@@ -33,54 +25,58 @@
         </q-btn>
       </router-link>
       <div
-        v-if="$q.screen.gt.sm"
+        v-if="$q.screen.gt.xs"
         class="GL__toolbar-link q-ml-xs q-gutter-md text-body2 text-weight-medium row items-center no-wrap"
       >
-        <a href="javascript:void(0)" style="color: #4a4a4a">
-          Upcoming events
-        </a>
-        <a href="javascript:void(0)" style="color: #4a4a4a">
-          Archive
-        </a>
-        <a href="javascript:void(0)" style="color: #4a4a4a">
+        <router-link to="/about" exact style="color: #4a4a4a">
           About
-        </a>
-        <template v-if="user.role != 'User'">
-          <router-link to="/dashboard" exact style="color: #4a4a4a">
-            Dashboard
-          </router-link>
-        </template>
+        </router-link>
+        <router-link to="/archive" exact style="color: #4a4a4a">
+          Archive
+        </router-link>
+        <router-link to="/events" exact style="color: #4a4a4a">
+          Upcoming events
+        </router-link>
       </div>
       <q-space />
       <div class="q-pl-sm row items-center no-wrap">
-        <template v-if="!user.username">
-          <div
-            class="GL__toolbar-link q-py-sm q-px-md q-gutter-md text-body2 text-weight-medium row items-center no-wrap"
-          >
+        <div
+          class="GL__toolbar-link q-gutter-md text-body2 text-weight-medium row items-center no-wrap"
+        >
+          <template v-if="user.role && user.role != 'User'">
+            <router-link to="/dashboard" exact style="color: #4a4a4a">
+              Dashboard
+            </router-link>
+          </template>
+          <template v-if="!user.username">
             <router-link to="/login" style="color: #4a4a4a">Login</router-link>
             <router-link to="/signup" style="color: #4a4a4a"
               >Sign up</router-link
             >
-          </div>
-        </template>
-        <template v-else>
-          <q-btn dense flat no-wrap>
-            <div class="q-body-2" style="text-transform: none;">
-              {{ user.username }}
-            </div>
-            <q-icon name="arrow_drop_down" size="16px" />
-            <q-menu auto-close>
-              <q-list dense>
-                <q-item clickable class="GL__menu-link">
-                  <q-item-section>Help</q-item-section>
-                </q-item>
-                <q-item clickable class="GL__menu-link" @click="logout">
-                  <q-item-section>Sign out</q-item-section>
-                </q-item>
-              </q-list>
-            </q-menu>
-          </q-btn>
-        </template>
+          </template>
+          <template v-else>
+            <q-btn dense flat no-wrap>
+              <div class="q-body-2" style="text-transform: none;">
+                {{ user.username }}
+              </div>
+              <q-icon name="arrow_drop_down" size="16px" />
+              <q-menu auto-close>
+                <q-list dense>
+                  <q-item clickable class="GL__menu-link">
+                    <q-item-section>Your profile</q-item-section>
+                  </q-item>
+                  <q-separator />
+                  <q-item clickable class="GL__menu-link">
+                    <q-item-section>Help</q-item-section>
+                  </q-item>
+                  <q-item clickable class="GL__menu-link" @click="logout">
+                    <q-item-section>Sign out</q-item-section>
+                  </q-item>
+                </q-list>
+              </q-menu>
+            </q-btn>
+          </template>
+        </div>
       </div>
     </q-toolbar>
   </q-header>
@@ -88,13 +84,9 @@
 
 <script>
 export default {
-  data() {
-    return {};
-  },
   methods: {
     logout() {
       this.$store.dispatch("logout");
-      this.$router.push("/");
     },
   },
   computed: {

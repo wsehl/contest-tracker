@@ -16,35 +16,3 @@ export default {
   },
 };
 </script>
-
-<style lang="sass">
-.GL
-  &__select-GL__menu-link
-    .default-type
-      visibility: hidden
-    &:hover
-      background: #0366d6
-      color: white
-      .q-item__section--side
-        color: white
-      .default-type
-        visibility: visible
-  &__toolbar-link
-    a
-      color: black
-      text-decoration: none
-      &:hover
-        opacity: 0.7
-  &__menu-link:hover
-    background: #0366d6
-    color: white
-  &__menu-link-signed-in,
-  &__menu-link-status
-    &:hover
-      & > div
-        background: white !important
-  &__toolbar-select.q-field--focused
-    width: 450px !important
-    .q-field__append
-      display: none
-</style>
