@@ -24,3 +24,5 @@ pnpm-debug.log*
 *.lock
 server/package-lock.json
 package-lock.json
+.env
+*.rest
