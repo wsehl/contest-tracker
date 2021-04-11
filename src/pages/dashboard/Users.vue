@@ -1,6 +1,6 @@
 <template>
   <q-page class="q-pa-sm">
-    <q-card>
+    <q-card flat bordered>
       <q-table
         title="Users"
         class="text-grey-8"

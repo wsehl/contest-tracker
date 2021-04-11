@@ -155,7 +155,7 @@ router.get("/dashboard/users", userMiddleware.isAdmin, (req, res, next) => {
 
 router.post(
   "/dashboard/post/users",
-  userMiddleware.validateRegister,
+  userMiddleware.validateInsertionViaDashboard,
   (req, res, next) => {
     db.query(
       `SELECT * FROM users WHERE LOWER(username) = LOWER(${db.escape(
@@ -188,12 +188,37 @@ router.post(
                   }
                   return res.status(201).send({
                     msg: "Successfully registered",
+                    status: 201,
                   });
                 }
               );
             }
           });
         }
+      }
+    );
+  }
+);
+
+router.post(
+  "/dashboard/post/organizations",
+  userMiddleware.validateInsertionToOrganizationsViaDashboard,
+  (req, res, next) => {
+    db.query(
+      `INSERT INTO organizations (organization_name) VALUES (${db.escape(
+        req.body.organization_name
+      )})`,
+      (err, result) => {
+        if (err) {
+          throw err;
+          return res.status(400).send({
+            msg: err,
+          });
+        }
+        return res.status(201).send({
+          msg: "Successfully added organization",
+          status: 201,
+        });
       }
     );
   }
