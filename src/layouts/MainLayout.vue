@@ -43,8 +43,6 @@ export default {
     &:hover
       & > div
         background: white !important
-  &__menu-link-status
-    &:hover
   &__toolbar-select.q-field--focused
     width: 450px !important
     .q-field__append
