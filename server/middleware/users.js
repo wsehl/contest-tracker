@@ -21,39 +21,6 @@ module.exports = {
     }
     next();
   },
-  validateInsertionViaDashboard: (req, res, next) => {
-    if (!req.body.username || req.body.username.length < 3) {
-      return res.status(400).send({
-        msg: "Please enter a username with min. 3 chars",
-      });
-    }
-    if (!req.body.email || req.body.email.length < 3) {
-      return res.status(400).send({
-        msg: "Please enter a valid email adress",
-      });
-    }
-    if (!req.body.role) {
-      return res.status(400).send({
-        msg: "Please select a role",
-      });
-    }
-    if (!req.body.password || req.body.password.length < 6) {
-      return res.status(400).send({
-        msg: "Please enter a password with min. 6 chars",
-      });
-    }
-    next();
-  },
-
-  validateInsertionToOrganizationsViaDashboard: (req, res, next) => {
-    if (!req.body.organization_name) {
-      return res.status(400).send({
-        msg: "Please enter a valid organization name",
-      });
-    }
-    next();
-  },
-
   isLoggedIn: (req, res, next) => {
     try {
       const token = req.headers.authorization.split(" ")[1];

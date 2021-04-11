@@ -1,40 +1,23 @@
 /* eslint-disable no-unreachable */
+//const uuid = require("uuid");
+// const mysql = require("mysql");
+require("dotenv").config();
 const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcryptjs");
-const uuid = require("uuid");
 const jwt = require("jsonwebtoken");
 const userMiddleware = require("./middleware/users.js");
-require("dotenv").config();
+const dashboardMiddleware = require("./middleware/dashboard.js");
 const db = require("./lib/db.js");
+db.connect();
 
-// const mysql = require("mysql");
-
-// function handleDisconnect() {
-//   db = mysql.createConnection(process.env.DATABASE_URL);
-//   db.connect(function(err) {
-//     if (err) {
-//       console.log("error when connecting to db:", err);
-//       setTimeout(handleDisconnect, 2000);
-//     }
-//   });
-//   db.on("error", function(err) {
-//     console.log("db error", err);
-//     if (err.code === "PROTOCOL_CONNECTION_LOST") {
-//       handleDisconnect();
-//     } else {
-//       throw err;
-//     }
-//   });
-// }
-
-// db.on("error", (err) => {
-//   if (err.code === "PROTOCOL_CONNECTION_LOST") {
-//     handleDisconnect();
-//   } else {
-//     throw err;
-//   }
-// });
+router.get("/dashboard/users", userMiddleware.isAdmin, (req, res, next) => {
+  db.query(`SELECT * FROM users`, (err, result) => {
+    return res.status(200).send({
+      data: result,
+    });
+  });
+});
 
 router.post("/signup", userMiddleware.validateRegister, (req, res, next) => {
   db.query(
@@ -136,26 +119,9 @@ router.post("/login", (req, res, next) => {
   );
 });
 
-router.get("/user", userMiddleware.isLoggedIn, (req, res, next) => {
-  console.log(req.userData);
-  res.send("This is the secret content. Only logged in users can see that!");
-});
-
-router.get("/admin", userMiddleware.isAdmin, (req, res, next) => {
-  res.send("This is the admin content. Only admin in users can see that!");
-});
-
-router.get("/dashboard/users", userMiddleware.isAdmin, (req, res, next) => {
-  db.query(`SELECT * FROM users`, (err, result) => {
-    return res.status(200).send({
-      data: result,
-    });
-  });
-});
-
 router.post(
   "/dashboard/post/users",
-  userMiddleware.validateInsertionViaDashboard,
+  dashboardMiddleware.validateUsers,
   (req, res, next) => {
     db.query(
       `SELECT * FROM users WHERE LOWER(username) = LOWER(${db.escape(
@@ -202,7 +168,7 @@ router.post(
 
 router.post(
   "/dashboard/post/organizations",
-  userMiddleware.validateInsertionToOrganizationsViaDashboard,
+  dashboardMiddleware.validateOrganizations,
   (req, res, next) => {
     db.query(
       `INSERT INTO organizations (organization_name) VALUES (${db.escape(
@@ -217,6 +183,34 @@ router.post(
         }
         return res.status(201).send({
           msg: "Successfully added organization",
+          status: 201,
+        });
+      }
+    );
+  }
+);
+
+router.post(
+  "/dashboard/post/events",
+  dashboardMiddleware.validateEvents,
+  (req, res, next) => {
+    db.query(
+      `INSERT INTO events (organization_name, event_title, event_description, start_date, end_date) VALUES (${db.escape(
+        req.body.event_organization
+      )},${db.escape(req.body.event_title)},${db.escape(
+        req.body.event_description
+      )},${db.escape(req.body.event_start_date)},${db.escape(
+        req.body.event_end_date
+      )})`,
+      (err, result) => {
+        if (err) {
+          throw err;
+          return res.status(400).send({
+            msg: err,
+          });
+        }
+        return res.status(201).send({
+          msg: "Successfully added event",
           status: 201,
         });
       }

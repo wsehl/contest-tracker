@@ -62,7 +62,12 @@
                     :options="role_options"
                     label="Role"
                   />
-                  <q-input dense outlined label="Password" v-model="password" />
+                  <!-- <q-input dense outlined label="Password" v-model="password" /> -->
+                  <!-- <q-icon
+                    name="swap_vert"
+                    class="cursor-pointer"
+                    @click="updateGeneratedPassword"
+                  /> -->
                   <q-input
                     dense
                     outlined
@@ -71,28 +76,31 @@
                     v-model="generatedPassword"
                     label="Generated password"
                   >
-                    <template v-slot:before>
-                      <q-btn
-                        flat
-                        dense
-                        icon="swap_vert"
-                        class="bg-grey-2 q-pa-xs"
-                        @click="copyGeneratedPassword"
-                      />
-                    </template>
                   </q-input>
                   <q-item>
-                    <q-item-section>
-                      <q-slider
-                        snap
-                        label
-                        :step="12"
-                        :min="0"
-                        :max="48"
-                        :color="strengthColor"
-                        :label-value="strengthLabel"
-                        v-model="strengthLevel"
+                    <q-item-section avatar>
+                      <q-icon
+                        name="swap_vert"
+                        class="cursor-pointer"
+                        @click="updateGeneratedPassword"
                       />
+                    </q-item-section>
+                    <q-item-section>
+                      <div>
+                        <q-badge :color="strengthColor">
+                          Password strength:
+                        </q-badge>
+                        <q-slider
+                          snap
+                          label
+                          :step="12"
+                          :min="0"
+                          :max="48"
+                          :color="strengthColor"
+                          :label-value="strengthLabel"
+                          v-model="strengthLevel"
+                        />
+                      </div>
                     </q-item-section>
                   </q-item>
                 </q-form>
@@ -126,7 +134,7 @@
                   />
                   <q-uploader
                     style="max-width: 300px"
-                    :factory="factoryFn"
+                    :factory="organization_upload"
                     max-files="1"
                     :hide-upload-btn="true"
                     ref="organization_uploader"
@@ -155,9 +163,34 @@
             <q-card>
               <q-card-section>
                 <q-form class="q-gutter-md">
-                  <q-input dense outlined label="Username" v-model="username" />
-                  <q-input dense outlined label="Email" v-model="email" />
-                  <q-input dense outlined label="Role" v-model="role" />
+                  <q-input dense outlined label="Title" v-model="event_title" />
+                  <q-select
+                    dense
+                    outlined
+                    v-model="event_organization"
+                    :options="event_organization_options"
+                    label="Organization"
+                    @filter="event_organizations_filter"
+                    behavior="menu"
+                    use-input
+                    input-debounce="0"
+                  >
+                    <template v-slot:no-option>
+                      <q-item>
+                        <q-item-section class="text-grey">
+                          No results
+                        </q-item-section>
+                      </q-item>
+                    </template>
+                  </q-select>
+                  <q-input
+                    dense
+                    outlined
+                    label="Description"
+                    v-model="event_description"
+                    type="textarea"
+                  />
+                  <q-date v-model="event_range" range />
                 </q-form>
               </q-card-section>
               <q-card-actions class="q-px-md q-mb-md">
@@ -166,7 +199,7 @@
                   size="md"
                   class=""
                   label="Save"
-                  @click="insertTo"
+                  @click="insertTo('events')"
                 />
               </q-card-actions>
             </q-card>
@@ -180,29 +213,51 @@
 <script>
 import api from "@/services/api.js";
 
+const event_organization_options_list = ["NIS", "Another org"];
+
 export default {
   data() {
     return {
-      selectedTable: "users",
+      selectedTable: "events",
       strengthLevel: 24,
 
       username: "",
       email: "",
       role: "",
-      password: "",
       role_options: ["User", "Curator", "Teacher", "Admin"],
 
       organization_name: "",
+
+      event_title: "",
+      event_organization: "",
+      event_description: "",
+      event_organization_options_list,
+      event_organization_options: event_organization_options_list,
+      event_range: { from: "", to: "" },
     };
   },
 
   methods: {
     // eslint-disable-next-line no-unused-vars
-    factoryFn(files) {
+    organization_upload(files) {
       return {
         url: "http://localhost:8888/upload",
         method: "POST",
       };
+    },
+    event_organizations_filter(val, update) {
+      if (val === "") {
+        update(() => {
+          this.event_organization_options = event_organization_options_list;
+        });
+        return;
+      }
+      update(() => {
+        const needle = val.toLowerCase();
+        this.event_organization_options = event_organization_options_list.filter(
+          (v) => v.toLowerCase().indexOf(needle) > -1
+        );
+      });
     },
     setTable(table) {
       this.selectedTable = table;
@@ -215,7 +270,15 @@ export default {
           username: this.username,
           email: this.email,
           role: this.role,
-          password: this.password,
+          password: this.generatedPassword,
+        };
+
+        const event_credentials = {
+          event_organization: this.event_organization,
+          event_title: this.event_title,
+          event_description: this.event_description,
+          event_start_date: this.event_range.from,
+          event_end_date: this.event_range.to,
         };
 
         const organization_credentials = {
@@ -224,6 +287,9 @@ export default {
 
         if (table === "users") credentials = user_credentials;
         if (table === "organizations") credentials = organization_credentials;
+        if (table === "events") credentials = event_credentials;
+
+        console.log(credentials);
 
         const response = await api.insertToTable(credentials, table);
 
@@ -243,10 +309,17 @@ export default {
             this.$refs.organization_uploader.abort();
           }
         } else if (table === "users") {
+          this.updateGeneratedPassword();
           this.username = "";
           this.email = "";
           this.role = "";
           this.password = "";
+        } else if (table === "events") {
+          this.event_title = "";
+          this.event_organization = "";
+          this.event_description = "";
+          this.event_range.from = "";
+          this.event_range.to = "";
         } else {
           return;
         }
@@ -260,8 +333,10 @@ export default {
         });
       }
     },
-    copyGeneratedPassword() {
-      this.password = this.generatedPassword;
+    // needs refactoring
+    updateGeneratedPassword() {
+      this.strengthLevel = this.strengthLevel + 1;
+      this.strengthLevel = this.strengthLevel - 1;
     },
     onRejected() {
       this.$q.notify({
