@@ -9,7 +9,11 @@ const jwt = require("jsonwebtoken");
 const userMiddleware = require("./middleware/users.js");
 const dashboardMiddleware = require("./middleware/dashboard.js");
 const db = require("./lib/db.js");
+const formidable = require("formidable");
+const path = require("path");
+
 db.connect();
+const folder = path.join(__dirname, "files");
 
 router.get("/dashboard/users", userMiddleware.isAdmin, (req, res, next) => {
   db.query(`SELECT * FROM users`, (err, result) => {
@@ -169,12 +173,12 @@ router.post(
 router.post(
   "/dashboard/post/organizations",
   dashboardMiddleware.validateOrganizations,
-  (req, res, next) => {
+  (req, res) => {
     db.query(
       `INSERT INTO organizations (organization_name) VALUES (${db.escape(
         req.body.organization_name
       )})`,
-      (err, result) => {
+      (err) => {
         if (err) {
           throw err;
           return res.status(400).send({
@@ -189,6 +193,18 @@ router.post(
     );
   }
 );
+
+router.post("/dashboard/post/organizations/image", (req, res) => {
+  const form = new formidable.IncomingForm();
+  form.keepExtensions = true;
+  form.uploadDir = folder;
+  form.parse(req, (_, fields, files) => {
+    console.log("\n-----------");
+    console.log("Fields", fields);
+    console.log("Received:", Object.keys(files));
+    res.send("Thank you");
+  });
+});
 
 router.post(
   "/dashboard/post/events",

@@ -241,7 +241,7 @@ export default {
     // eslint-disable-next-line no-unused-vars
     organization_upload(files) {
       return {
-        url: "http://localhost:8888/upload",
+        url: "http://localhost:8888/api/dashboard/post/organizations/image",
         method: "POST",
       };
     },
@@ -290,7 +290,6 @@ export default {
         if (table === "events") credentials = event_credentials;
 
         console.log(credentials);
-
         const response = await api.insertToTable(credentials, table);
 
         this.$q.notify({
@@ -302,12 +301,15 @@ export default {
         });
 
         if (table === "organizations") {
-          this.organization_name = "";
+          console.log(this.$refs.organization_uploader.files);
+
           if (response.status === 201) {
             this.$refs.organization_uploader.upload();
           } else {
             this.$refs.organization_uploader.abort();
           }
+          this.organization_name = "";
+          this.$refs.organization_uploader.reset();
         } else if (table === "users") {
           this.updateGeneratedPassword();
           this.username = "";
