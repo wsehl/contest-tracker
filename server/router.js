@@ -1,20 +1,31 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-unreachable */
-//const uuid = require("uuid");
-// const mysql = require("mysql");
+// const uuid = require("uuid");
 require("dotenv").config();
 const express = require("express");
+const multer = require("multer");
 const router = express.Router();
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const path = require("path");
+const db = require("./lib/db.js");
 const userMiddleware = require("./middleware/users.js");
 const dashboardMiddleware = require("./middleware/dashboard.js");
-const db = require("./lib/db.js");
-const formidable = require("formidable");
-const path = require("path");
 
 db.connect();
+
 const folder = path.join(__dirname, "files");
+const storage = multer.diskStorage({
+  destination: function(req, file, cb) {
+    cb(null, folder);
+  },
+  filename: function(req, file, cb) {
+    let extArray = file.mimetype.split("/");
+    let extension = extArray[extArray.length - 1];
+    cb(null, file.fieldname + "-" + Date.now() + "." + extension);
+  },
+});
+const upload = multer({ storage: storage });
 
 router.get("/dashboard/users", userMiddleware.isAdmin, (req, res, next) => {
   db.query(`SELECT * FROM users`, (err, result) => {
@@ -173,12 +184,13 @@ router.post(
 
 router.post(
   "/dashboard/post/organizations",
+  upload.single("file"),
   dashboardMiddleware.validateOrganizations,
   (req, res) => {
     db.query(
-      `INSERT INTO organizations (organization_name) VALUES (${db.escape(
+      `INSERT INTO organizations (organization_name, organization_image) VALUES (${db.escape(
         req.body.organization_name
-      )})`,
+      )}, ${db.escape(req.file.filename)})`,
       (err) => {
         if (err) {
           throw err;
@@ -194,18 +206,6 @@ router.post(
     );
   }
 );
-
-router.post("/dashboard/post/organizations/image", (req, res) => {
-  const form = new formidable.IncomingForm();
-  form.keepExtensions = true;
-  form.uploadDir = folder;
-  form.parse(req, (_, fields, files) => {
-    console.log("\n-----------");
-    console.log("Fields", fields);
-    console.log("Received:", Object.keys(files));
-    res.send("Thank you");
-  });
-});
 
 router.post(
   "/dashboard/post/events",

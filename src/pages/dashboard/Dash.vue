@@ -133,26 +133,13 @@
                     v-model="organization_name"
                   />
                   <q-uploader
-                    style="max-width: 300px"
                     :factory="uploadFile"
-                    max-files="1"
+                    auto-upload
+                    accept=".jpg, image/*"
                     ref="organization_uploader"
+                    :hide-upload-btn="true"
                     @rejected="onRejected"
                   />
-
-                  <!-- <q-uploader
-                    url=""
-                    ref="organization_uploader"
-                    @added="file_selected"
-                  /> -->
-                  <!-- <q-uploader
-                    style="max-width: 300px"
-                    label="Main Image"
-                    :factory="uploadFile"
-                    max-files="1"
-                    accept=".jpg, image/*"
-                    @rejected="onRejected"
-                  /> -->
                 </q-form>
               </q-card-section>
               <q-card-actions class="q-px-md q-mb-md">
@@ -224,18 +211,18 @@
 </template>
 
 <script>
+/* eslint-disable no-unused-vars */
+
 import api from "@/services/api.js";
-import axios from "axios";
 
 const event_organization_options_list = ["NIS", "Another org"];
 
 export default {
-  /* eslint-disable no-unused-vars */
   data() {
     return {
       selected_file: "",
-      check_if_document_upload: false,
       file_path: null,
+      fileData: null,
 
       selectedTable: "organizations",
       strengthLevel: 24,
@@ -257,34 +244,6 @@ export default {
   },
 
   methods: {
-    uploadFile(files) {
-      this.file_path = files[0];
-      const fileData = new FormData();
-      fileData.append("file_path ", this.file_path);
-      const uploadFile = axios.post(
-        "http://localhost:8888/api/dashboard/post/organizations/image",
-        fileData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
-    },
-
-    onRejected(rejectedEntries) {
-      this.$q.notify({
-        type: "negative",
-        message: `${rejectedEntries.length} file(s) did not pass validation constraints`,
-      });
-    },
-
-    organization_upload(files) {
-      return {
-        url: "http://localhost:8888/api/dashboard/post/organizations/image",
-        method: "POST",
-      };
-    },
     event_organizations_filter(val, update) {
       if (val === "") {
         update(() => {
@@ -305,14 +264,13 @@ export default {
     async insertTo(table) {
       try {
         let credentials = {};
-
+        let response;
         const user_credentials = {
           username: this.username,
           email: this.email,
           role: this.role,
           password: this.generatedPassword,
         };
-
         const event_credentials = {
           event_organization: this.event_organization,
           event_title: this.event_title,
@@ -321,21 +279,31 @@ export default {
           event_end_date: this.event_range.to,
         };
 
-        // let fd = new FormData();
-        // fd.append("file", this.selected_file);
-
-        const organization_credentials = {
-          organization_name: this.organization_name,
-          //organization_file: fd,
-        };
-
-        if (table === "users") credentials = user_credentials;
-        if (table === "organizations") credentials = organization_credentials;
-        if (table === "events") credentials = event_credentials;
-
-        console.log(credentials);
-        const response = await api.insertToTable(credentials, table);
-
+        if (table === "organizations") {
+          this.fileData.append("organization_name", this.organization_name);
+          console.log(this.fileData);
+          response = await api.insertToTable(this.fileData, table);
+          this.organization_name = "";
+          this.$refs.organization_uploader.reset();
+        } else if (table === "users") {
+          credentials = user_credentials;
+          response = await api.insertToTable(credentials, table);
+          this.updateGeneratedPassword();
+          this.username = "";
+          this.email = "";
+          this.role = "";
+          this.password = "";
+        } else if (table === "events") {
+          credentials = event_credentials;
+          response = await api.insertToTable(credentials, table);
+          this.event_title = "";
+          this.event_organization = "";
+          this.event_description = "";
+          this.event_range.from = "";
+          this.event_range.to = "";
+        } else {
+          response = null;
+        }
         this.$q.notify({
           color: "positive",
           position: "bottom-left",
@@ -343,25 +311,6 @@ export default {
           progress: true,
           timeout: 1500,
         });
-
-        if (table === "organizations") {
-          this.organization_name = "";
-          this.$refs.organization_uploader.reset();
-        } else if (table === "users") {
-          this.updateGeneratedPassword();
-          this.username = "";
-          this.email = "";
-          this.role = "";
-          this.password = "";
-        } else if (table === "events") {
-          this.event_title = "";
-          this.event_organization = "";
-          this.event_description = "";
-          this.event_range.from = "";
-          this.event_range.to = "";
-        } else {
-          return;
-        }
       } catch (error) {
         this.$q.notify({
           color: "negative",
@@ -371,6 +320,18 @@ export default {
           timeout: 1500,
         });
       }
+    },
+    uploadFile(files) {
+      this.file_path = files[0];
+      this.fileData = new FormData();
+      this.fileData.append("file", this.file_path);
+    },
+
+    onRejected(rejectedEntries) {
+      this.$q.notify({
+        type: "negative",
+        message: `${rejectedEntries.length} file(s) did not pass validation constraints`,
+      });
     },
     // needs refactoring
     updateGeneratedPassword() {

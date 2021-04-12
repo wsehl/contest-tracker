@@ -28,6 +28,11 @@ module.exports = {
         msg: "Please enter a valid organization name",
       });
     }
+    if (!req.file) {
+      return res.status(400).send({
+        msg: "You must select a file",
+      });
+    }
     next();
   },
   validateEvents: (req, res, next) => {
