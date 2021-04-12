@@ -134,12 +134,25 @@
                   />
                   <q-uploader
                     style="max-width: 300px"
-                    :factory="organization_upload"
+                    :factory="uploadFile"
                     max-files="1"
-                    :hide-upload-btn="true"
                     ref="organization_uploader"
                     @rejected="onRejected"
                   />
+
+                  <!-- <q-uploader
+                    url=""
+                    ref="organization_uploader"
+                    @added="file_selected"
+                  /> -->
+                  <!-- <q-uploader
+                    style="max-width: 300px"
+                    label="Main Image"
+                    :factory="uploadFile"
+                    max-files="1"
+                    accept=".jpg, image/*"
+                    @rejected="onRejected"
+                  /> -->
                 </q-form>
               </q-card-section>
               <q-card-actions class="q-px-md q-mb-md">
@@ -212,13 +225,19 @@
 
 <script>
 import api from "@/services/api.js";
+import axios from "axios";
 
 const event_organization_options_list = ["NIS", "Another org"];
 
 export default {
+  /* eslint-disable no-unused-vars */
   data() {
     return {
-      selectedTable: "events",
+      selected_file: "",
+      check_if_document_upload: false,
+      file_path: null,
+
+      selectedTable: "organizations",
       strengthLevel: 24,
 
       username: "",
@@ -238,7 +257,28 @@ export default {
   },
 
   methods: {
-    // eslint-disable-next-line no-unused-vars
+    uploadFile(files) {
+      this.file_path = files[0];
+      const fileData = new FormData();
+      fileData.append("file_path ", this.file_path);
+      const uploadFile = axios.post(
+        "http://localhost:8888/api/dashboard/post/organizations/image",
+        fileData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+    },
+
+    onRejected(rejectedEntries) {
+      this.$q.notify({
+        type: "negative",
+        message: `${rejectedEntries.length} file(s) did not pass validation constraints`,
+      });
+    },
+
     organization_upload(files) {
       return {
         url: "http://localhost:8888/api/dashboard/post/organizations/image",
@@ -281,8 +321,12 @@ export default {
           event_end_date: this.event_range.to,
         };
 
+        // let fd = new FormData();
+        // fd.append("file", this.selected_file);
+
         const organization_credentials = {
           organization_name: this.organization_name,
+          //organization_file: fd,
         };
 
         if (table === "users") credentials = user_credentials;
@@ -301,13 +345,6 @@ export default {
         });
 
         if (table === "organizations") {
-          console.log(this.$refs.organization_uploader.files);
-
-          if (response.status === 201) {
-            this.$refs.organization_uploader.upload();
-          } else {
-            this.$refs.organization_uploader.abort();
-          }
           this.organization_name = "";
           this.$refs.organization_uploader.reset();
         } else if (table === "users") {
@@ -339,12 +376,6 @@ export default {
     updateGeneratedPassword() {
       this.strengthLevel = this.strengthLevel + 1;
       this.strengthLevel = this.strengthLevel - 1;
-    },
-    onRejected() {
-      this.$q.notify({
-        type: "negative",
-        message: `File is bigger than 2kb`,
-      });
     },
   },
   computed: {
