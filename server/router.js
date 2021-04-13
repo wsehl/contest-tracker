@@ -35,6 +35,14 @@ router.get("/dashboard/users", userMiddleware.isAdmin, (req, res, next) => {
   });
 });
 
+router.get("/dashboard/organizations", (req, res, next) => {
+  db.query(`SELECT * FROM organizations`, (err, result) => {
+    return res.status(200).send({
+      data: result,
+    });
+  });
+});
+
 router.post("/signup", userMiddleware.validateRegister, (req, res, next) => {
   db.query(
     `SELECT * FROM users WHERE LOWER(username) = LOWER(${db.escape(

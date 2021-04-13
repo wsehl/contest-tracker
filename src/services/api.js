@@ -12,14 +12,13 @@ export default {
       .post(url + "signup/", credentials)
       .then((response) => response.data);
   },
-  getSecretContent() {
-    return axios.get(url + "user/").then((response) => response.data);
-  },
-  getSecretAdminContent() {
-    return axios.get(url + "admin/").then((response) => response.data);
-  },
   getUsersTable() {
     return axios.get(url + "dashboard/users").then((response) => response.data);
+  },
+  getOrganizationsTable() {
+    return axios
+      .get(url + "dashboard/organizations")
+      .then((response) => response.data);
   },
   insertToTable(credentials, table) {
     return axios

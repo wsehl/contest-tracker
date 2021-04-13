@@ -170,9 +170,6 @@
                     v-model="event_organization"
                     :options="event_organization_options"
                     label="Organization"
-                    @filter="event_organizations_filter"
-                    behavior="menu"
-                    use-input
                     input-debounce="0"
                   >
                     <template v-slot:no-option>
@@ -212,18 +209,11 @@
 
 <script>
 /* eslint-disable no-unused-vars */
-
 import api from "@/services/api.js";
-
-const event_organization_options_list = ["NIS", "Another org"];
 
 export default {
   data() {
     return {
-      selected_file: "",
-      file_path: null,
-      fileData: null,
-
       selectedTable: "organizations",
       strengthLevel: 24,
 
@@ -233,34 +223,38 @@ export default {
       role_options: ["User", "Curator", "Teacher", "Admin"],
 
       organization_name: "",
+      organization_data: null,
 
       event_title: "",
       event_organization: "",
       event_description: "",
-      event_organization_options_list,
-      event_organization_options: event_organization_options_list,
+      event_organization_options: [],
       event_range: { from: "", to: "" },
     };
   },
 
   methods: {
-    event_organizations_filter(val, update) {
-      if (val === "") {
-        update(() => {
-          this.event_organization_options = event_organization_options_list;
-        });
-        return;
-      }
-      update(() => {
-        const needle = val.toLowerCase();
-        this.event_organization_options = event_organization_options_list.filter(
-          (v) => v.toLowerCase().indexOf(needle) > -1
-        );
-      });
-    },
     setTable(table) {
       this.selectedTable = table;
+
+      if (table === "events") {
+        console.log(table);
+        this.getOrganizations();
+      }
     },
+
+    async getOrganizations() {
+      try {
+        const response = await api.getOrganizationsTable();
+        console.log(response.data);
+        this.event_organization_options = response.data.map(
+          ({ organization_name }) => organization_name
+        );
+      } catch (error) {
+        console.log(error.message);
+      }
+    },
+
     async insertTo(table) {
       try {
         let credentials = {};
@@ -278,11 +272,12 @@ export default {
           event_start_date: this.event_range.from,
           event_end_date: this.event_range.to,
         };
-
         if (table === "organizations") {
-          this.fileData.append("organization_name", this.organization_name);
-          console.log(this.fileData);
-          response = await api.insertToTable(this.fileData, table);
+          this.organization_data.append(
+            "organization_name",
+            this.organization_name
+          );
+          response = await api.insertToTable(this.organization_data, table);
           this.organization_name = "";
           this.$refs.organization_uploader.reset();
         } else if (table === "users") {
@@ -322,11 +317,10 @@ export default {
       }
     },
     uploadFile(files) {
-      this.file_path = files[0];
-      this.fileData = new FormData();
-      this.fileData.append("file", this.file_path);
+      let file_path = files[0];
+      this.organization_data = new FormData();
+      this.organization_data.append("file", file_path);
     },
-
     onRejected(rejectedEntries) {
       this.$q.notify({
         type: "negative",
