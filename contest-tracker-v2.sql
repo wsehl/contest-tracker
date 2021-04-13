@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: 127.0.0.1
--- Время создания: Апр 11 2021 г., 20:34
+-- Время создания: Апр 13 2021 г., 20:49
 -- Версия сервера: 10.4.14-MariaDB
 -- Версия PHP: 7.4.10
 
@@ -29,7 +29,7 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `events` (
   `id` int(10) NOT NULL,
-  `organization_name` varchar(255) NOT NULL,
+  `organization_id` int(10) NOT NULL,
   `event_title` varchar(255) NOT NULL,
   `event_description` varchar(255) NOT NULL,
   `start_date` date NOT NULL,
@@ -40,9 +40,11 @@ CREATE TABLE `events` (
 -- Дамп данных таблицы `events`
 --
 
-INSERT INTO `events` (`id`, `organization_name`, `event_title`, `event_description`, `start_date`, `end_date`) VALUES
-(1, 'NIS', 'Asdasd', 'asdasdasdasd', '2021-04-01', '2021-04-30'),
-(2, 'NIS', 'asdasdasd', 'adsasddas', '2021-04-01', '2021-04-30');
+INSERT INTO `events` (`id`, `organization_id`, `event_title`, `event_description`, `start_date`, `end_date`) VALUES
+(1, 1, 'Event', 'Event', '2021-04-01', '2021-04-30'),
+(2, 1, 'ads', 'adsads', '2021-04-01', '2021-04-30'),
+(3, 1, 'dfsdfsdf', 'adsasdadssad', '2021-04-01', '2021-04-30'),
+(4, 2, 'EVENT2', 'asd', '2021-04-01', '2021-04-29');
 
 -- --------------------------------------------------------
 
@@ -61,26 +63,8 @@ CREATE TABLE `organizations` (
 --
 
 INSERT INTO `organizations` (`id`, `organization_name`, `organization_image`) VALUES
-(1, 'NIS', ''),
-(2, 'asdasd', ''),
-(3, 'NID3', ''),
-(4, 'asdasd', ''),
-(5, 'asdasdas', ''),
-(6, 'fdgbxvc', ''),
-(7, 'adasdasdds', ''),
-(8, 'asdasd', ''),
-(9, 'asdasd', ''),
-(10, 'asdasd', ''),
-(11, 'asdasdas', ''),
-(12, 'asdasd', ''),
-(13, 'asdas', ''),
-(14, 'asdasdasd', ''),
-(15, 'asdasdasd', ''),
-(16, 'asdasd', ''),
-(17, 'asdasd', ''),
-(18, 'asdasd', ''),
-(19, 'asdasd', ''),
-(20, 'sadasda', '');
+(1, 'NIS', 'file-1618331019656.jpeg'),
+(2, 'NIS3', 'file-1618332240873.jpeg');
 
 -- --------------------------------------------------------
 
@@ -125,7 +109,11 @@ INSERT INTO `users` (`id`, `username`, `password`, `registered`, `role`, `last_l
 (20, 'asdasda123123', '$2a$10$14pvICiZmx5.xEr/XqAW5OAI7NJ2DxwJfGY7M67tC07gwr22rjncq', '2021-04-11 20:09:53', 'Curator', '0000-00-00 00:00:00', 'sdasdasda'),
 (21, 'sdfsdf', '$2a$10$FOTOB4yBVqdnH4AaBnYwA.GNR0nJmIBtigMWS2J8OIC6FY8JFgxO2', '2021-04-11 20:11:05', 'Curator', '0000-00-00 00:00:00', 'sdfsdfsdf'),
 (22, 'geasdnasd', '$2a$10$r3tSxn4TLGvb0f.OBpXCl.Bt9KtZbDv1z/WNxa6DzSqxJMFI4yNwS', '2021-04-11 21:36:10', 'Teacher', '0000-00-00 00:00:00', 'wasdasdasd@gmail.com'),
-(23, 'adsasda', '$2a$10$hUZiNMBhxC4WYEHoWsO1YuseauWjQrpXvtOQwiKenLmM5AVwj.jSC', '2021-04-11 21:36:47', 'User', '0000-00-00 00:00:00', 'asdasd');
+(23, 'adsasda', '$2a$10$hUZiNMBhxC4WYEHoWsO1YuseauWjQrpXvtOQwiKenLmM5AVwj.jSC', '2021-04-11 21:36:47', 'User', '0000-00-00 00:00:00', 'asdasd'),
+(24, 'userghfghfgh', '$2a$10$uTPssl.OthQGXQa8YMhpiemhMmi4hwOdIC5mqBKSp/R8E7uDa8ezW', '2021-04-12 17:33:56', 'User', '0000-00-00 00:00:00', 'adasdas'),
+(25, 'asdasdasdhjh', '$2a$10$Hm9MHKTSsOEo/50ydEtR/.AOjlHsUMNQq/SfCh.RTcbGYbC.4DUT2', '2021-04-12 18:05:03', 'User', '0000-00-00 00:00:00', 'asdasdasd'),
+(26, 'фывчя', '$2a$10$Cs3R83bF98AEwAddrvz6UexD6NGnsnt.5aObx2TKWsfWo8qcs8ZVG', '2021-04-12 18:06:57', 'User', '0000-00-00 00:00:00', 'asdasd231'),
+(27, 'asdadsfd', '$2a$10$UnqU31pKR2K9.Rrt3bTcwefcvLTzkRB/Gwg9JZGvXgZAr5SO.BAVm', '2021-04-12 20:16:45', 'User', '0000-00-00 00:00:00', 'asdasd');
 
 --
 -- Индексы сохранённых таблиц
@@ -141,7 +129,8 @@ ALTER TABLE `events`
 -- Индексы таблицы `organizations`
 --
 ALTER TABLE `organizations`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `organization_name` (`organization_name`);
 
 --
 -- Индексы таблицы `users`
@@ -157,19 +146,19 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT для таблицы `events`
 --
 ALTER TABLE `events`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT для таблицы `organizations`
 --
 ALTER TABLE `organizations`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT для таблицы `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
