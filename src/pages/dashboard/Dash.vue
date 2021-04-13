@@ -40,6 +40,16 @@
               </q-item-section>
               <q-item-section>Events</q-item-section>
             </q-item>
+            <q-item
+              clickable
+              @click="setTable('grades')"
+              :class="[selectedTable === 'grades' ? 'bg-grey-3' : '']"
+            >
+              <q-item-section avatar>
+                <q-icon color="primary" name="school" />
+              </q-item-section>
+              <q-item-section>Grades</q-item-section>
+            </q-item>
           </q-list>
         </q-card>
       </div>

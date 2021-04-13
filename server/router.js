@@ -35,6 +35,18 @@ router.get("/dashboard/users", userMiddleware.isAdmin, (req, res, next) => {
   });
 });
 
+router.get("/dashboard/events", (req, res, next) => {
+  db.query(
+    `SELECT * FROM organizations INNER JOIN events  
+  ON events.organization_id = organizations.id`,
+    (err, result) => {
+      return res.status(200).send({
+        data: result,
+      });
+    }
+  );
+});
+
 router.get("/dashboard/organizations", (req, res, next) => {
   db.query(`SELECT * FROM organizations`, (err, result) => {
     return res.status(200).send({

@@ -20,6 +20,11 @@ export default {
       .get(url + "dashboard/organizations")
       .then((response) => response.data);
   },
+  getEventsTable() {
+    return axios
+      .get(url + "dashboard/events")
+      .then((response) => response.data);
+  },
   insertToTable(credentials, table) {
     return axios
       .post(url + `dashboard/post/${table}/`, credentials)
