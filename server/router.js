@@ -220,7 +220,7 @@ router.post(
   dashboardMiddleware.validateEvents,
   (req, res, next) => {
     db.query(
-      `INSERT INTO events (organization_name, event_title, event_description, start_date, end_date) VALUES (${db.escape(
+      `INSERT INTO events (organization_id, event_title, event_description, start_date, end_date) VALUES (${db.escape(
         req.body.event_organization
       )},${db.escape(req.body.event_title)},${db.escape(
         req.body.event_description

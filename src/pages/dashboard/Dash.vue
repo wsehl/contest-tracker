@@ -236,25 +236,31 @@ export default {
   methods: {
     setTable(table) {
       this.selectedTable = table;
-
       if (table === "events") {
-        console.log(table);
         this.getOrganizations();
       }
     },
-
     async getOrganizations() {
       try {
         const response = await api.getOrganizationsTable();
-        console.log(response.data);
-        this.event_organization_options = response.data.map(
-          ({ organization_name }) => organization_name
+        response.data.forEach((obj) =>
+          this.renameKey(obj, "organization_name", "label")
         );
+        this.event_organization_options = response.data;
       } catch (error) {
         console.log(error.message);
       }
     },
-
+    renameKey(obj, old_key, new_key) {
+      if (old_key !== new_key) {
+        Object.defineProperty(
+          obj,
+          new_key,
+          Object.getOwnPropertyDescriptor(obj, old_key)
+        );
+        delete obj[old_key];
+      }
+    },
     async insertTo(table) {
       try {
         let credentials = {};
@@ -266,7 +272,7 @@ export default {
           password: this.generatedPassword,
         };
         const event_credentials = {
-          event_organization: this.event_organization,
+          event_organization: this.event_organization.id,
           event_title: this.event_title,
           event_description: this.event_description,
           event_start_date: this.event_range.from,
