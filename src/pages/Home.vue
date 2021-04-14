@@ -23,7 +23,7 @@
             <img
               style="vertical-align:middle"
               class="image"
-              :src="item.organization_image"
+              :src="require(`../../server/files/${item.organization_image}`)"
             />
             <span style="vertical-align:middle; margin-left: 10px">
               {{ item.organization_name }}
@@ -53,13 +53,6 @@ export default {
       loading: true,
       organizations: [],
       events: [],
-
-      flickityOptions: {
-        initialIndex: 3,
-        prevNextButtons: false,
-        pageDots: false,
-        wrapAround: true,
-      },
     };
   },
   methods: {
@@ -67,8 +60,8 @@ export default {
       return format(new Date(d), "dd.MM.yyyy");
     },
     fetchData() {
-      const organizations = `http://localhost:8888/api/dashboard/organizations`;
-      const events = `http://localhost:8888/api/dashboard/events`;
+      const organizations = `${process.env.VUE_APP_BACKEND_URL}/dashboard/organizations`;
+      const events = `${process.env.VUE_APP_BACKEND_URL}/dashboard/events`;
 
       const fetchedData = (url) => axios.get(url);
 
@@ -90,8 +83,6 @@ export default {
   created() {
     this.$q.loading.show();
     this.fetchData();
-    const kal = this.formatDate(new Date());
-    console.log(kal);
   },
 };
 </script>

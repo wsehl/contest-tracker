@@ -247,28 +247,24 @@ export default {
     setTable(table) {
       this.selectedTable = table;
       if (table === "events") {
-        this.getOrganizations();
-      }
-    },
-    async getOrganizations() {
-      try {
-        const response = await api.getOrganizationsTable();
-        response.data.forEach((obj) =>
-          this.renameKey(obj, "organization_name", "label")
-        );
-        this.event_organization_options = response.data;
-      } catch (error) {
-        console.log(error.message);
-      }
-    },
-    renameKey(obj, old_key, new_key) {
-      if (old_key !== new_key) {
-        Object.defineProperty(
-          obj,
-          new_key,
-          Object.getOwnPropertyDescriptor(obj, old_key)
-        );
-        delete obj[old_key];
+        const renameKey = (obj, old_key, new_key) => {
+          if (old_key !== new_key) {
+            Object.defineProperty(
+              obj,
+              new_key,
+              Object.getOwnPropertyDescriptor(obj, old_key)
+            );
+            delete obj[old_key];
+          }
+        };
+        const getOrganizations = async () => {
+          const response = await api.getTable("organizations");
+          response.data.forEach((obj) =>
+            renameKey(obj, "organization_name", "label")
+          );
+          this.event_organization_options = response.data;
+        };
+        getOrganizations();
       }
     },
     async insertTo(table) {

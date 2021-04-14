@@ -258,8 +258,7 @@ export default {
   },
   async created() {
     try {
-      const response = await api.getUsersTable();
-      console.log(response.data);
+      const response = await api.getTable("users");
       this.data = response.data;
     } catch (error) {
       console.log(error.message);
