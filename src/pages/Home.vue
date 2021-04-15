@@ -12,13 +12,31 @@
         </q-parallax>
       </div>
       <carousel
-        paginationActiveColor="#42b983"
-        paginationColor="#b2ebd1"
-        easing="linear"
+        paginationActiveColor="#3B82F6"
+        paginationColor="#BFDBFE"
+        easing="ease-out"
         class="carousel"
+        :scrollPerPage="true"
+        :autoplay="true"
+        :speed="300"
+        :autoplayHoverPause="true"
+        :perPageCustom="[
+          [768, 3],
+          [1024, 4],
+        ]"
       >
         <slide v-for="item in events.data" :key="item.id" class="carousel-item">
-          <h5>{{ item.event_title }}</h5>
+          <h5>
+            <router-link
+              :to="{
+                name: 'Event',
+                params: {
+                  id: item.id,
+                },
+              }"
+              >{{ item.event_title }}</router-link
+            >
+          </h5>
           <div style="margin-bottom: 20px">
             <img
               style="vertical-align:middle"

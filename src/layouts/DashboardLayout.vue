@@ -3,15 +3,7 @@
     <Navbar />
     <DashboardSidebar />
     <q-page-container>
-      <q-page class="row no-wrap">
-        <div class="col">
-          <div class="full-height">
-            <q-scroll-area class="col full-height" visible>
-              <router-view />
-            </q-scroll-area>
-          </div>
-        </div>
-      </q-page>
+      <router-view />
     </q-page-container>
   </q-layout>
 </template>

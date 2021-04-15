@@ -9,11 +9,17 @@ const routes = [
     path: "/",
     name: "Home",
     component: () => import("@/layouts/MainLayout.vue"),
+    meta: {
+      title: "Contest Tracker",
+    },
     children: [
       {
         path: "/",
         name: "Main",
         component: () => import("@/pages/Home.vue"),
+        meta: {
+          title: "Contest Tracker",
+        },
       },
       {
         path: "/login",
@@ -29,6 +35,14 @@ const routes = [
         component: () => import("@/pages/Signup.vue"),
         meta: {
           title: "Sign Up",
+        },
+      },
+      {
+        path: "/event/:id",
+        name: "Event",
+        component: () => import("@/pages/Event.vue"),
+        meta: {
+          title: "Event",
         },
       },
     ],
