@@ -132,7 +132,7 @@ router.post("/login", (req, res, next) => {
                 userId: result[0].id,
                 role: result[0].role,
               },
-              "SECRETKEY",
+              process.env.SECRET_KEY,
               {
                 expiresIn: "7d",
               }
