@@ -209,7 +209,7 @@ router.post(
   (req, res) => {
     db.query(
       `INSERT INTO organizations (organization_name, organization_image) VALUES (${db.escape(
-        req.body.organization_name
+        req.body.name
       )}, ${db.escape(req.file.filename)})`,
       (err) => {
         if (err) {

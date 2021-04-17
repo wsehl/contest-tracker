@@ -23,7 +23,7 @@ module.exports = {
     next();
   },
   validateOrganizations: (req, res, next) => {
-    if (!req.body.organization_name) {
+    if (!req.body.name) {
       return res.status(400).send({
         msg: "Please enter a valid organization name",
       });

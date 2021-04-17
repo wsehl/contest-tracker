@@ -233,7 +233,7 @@ export default {
       role_options: ["User", "Curator", "Teacher", "Admin"],
 
       organization_name: "",
-      organization_data: null,
+      organization_file: null,
 
       event_title: "",
       event_organization: "",
@@ -246,37 +246,25 @@ export default {
   methods: {
     setTable(table) {
       this.selectedTable = table;
-      if (table === "events") {
-        const renameKey = (obj, old_key, new_key) => {
-          if (old_key !== new_key) {
-            Object.defineProperty(
-              obj,
-              new_key,
-              Object.getOwnPropertyDescriptor(obj, old_key)
-            );
-            delete obj[old_key];
-          }
-        };
-        const getOrganizations = async () => {
-          const response = await api.getTable("organizations");
-          response.data.forEach((obj) =>
-            renameKey(obj, "organization_name", "label")
-          );
-          this.event_organization_options = response.data;
-        };
-        getOrganizations();
+      switch (table) {
+        case "events":
+          this.getOrganizationsList();
+          break;
+        case "organizations":
+          break;
       }
     },
     async insertTo(table) {
       try {
-        let credentials = {};
         let response;
+
         const user_credentials = {
           username: this.username,
           email: this.email,
           role: this.role,
           password: this.generatedPassword,
         };
+
         const event_credentials = {
           event_organization: this.event_organization.id,
           event_title: this.event_title,
@@ -284,33 +272,25 @@ export default {
           event_start_date: this.event_range.from,
           event_end_date: this.event_range.to,
         };
-        if (table === "organizations") {
-          this.organization_data.append(
-            "organization_name",
-            this.organization_name
-          );
-          response = await api.insertToTable(this.organization_data, table);
-          this.organization_name = "";
-          this.$refs.organization_uploader.reset();
-        } else if (table === "users") {
-          credentials = user_credentials;
-          response = await api.insertToTable(credentials, table);
-          this.updateGeneratedPassword();
-          this.username = "";
-          this.email = "";
-          this.role = "";
-          this.password = "";
-        } else if (table === "events") {
-          credentials = event_credentials;
-          response = await api.insertToTable(credentials, table);
-          this.event_title = "";
-          this.event_organization = "";
-          this.event_description = "";
-          this.event_range.from = "";
-          this.event_range.to = "";
-        } else {
-          response = null;
+
+        const organization_credentials = new FormData();
+        organization_credentials.append("name", this.organization_name);
+        organization_credentials.append("file", this.organization_file);
+
+        switch (table) {
+          case "users":
+            response = await api.insertToTable(user_credentials, table);
+            break;
+          case "events":
+            response = await api.insertToTable(event_credentials, table);
+            break;
+          case "organizations":
+            response = await api.insertToTable(organization_credentials, table);
+            break;
         }
+
+        this.clearForm(table);
+
         this.$q.notify({
           color: "positive",
           position: "bottom-left",
@@ -328,10 +308,51 @@ export default {
         });
       }
     },
+    clearForm(table) {
+      switch (table) {
+        case "users":
+          this.updateGeneratedPassword();
+          this.username = "";
+          this.email = "";
+          this.role = "";
+          this.password = "";
+          break;
+        case "events":
+          this.event_title = "";
+          this.event_organization = "";
+          this.event_description = "";
+          this.event_range.from = "";
+          this.event_range.to = "";
+          break;
+        case "organizations":
+          this.organization_name = "";
+          this.$refs.organization_uploader.reset();
+          break;
+      }
+    },
     uploadFile(files) {
-      let file_path = files[0];
-      this.organization_data = new FormData();
-      this.organization_data.append("file", file_path);
+      this.organization_file = files[0];
+    },
+    renameObjectKey({ obj, old_key, new_key }) {
+      if (old_key !== new_key) {
+        Object.defineProperty(
+          obj,
+          new_key,
+          Object.getOwnPropertyDescriptor(obj, old_key)
+        );
+        delete obj[old_key];
+      }
+    },
+    async getOrganizationsList() {
+      const response = await api.getTable("organizations");
+      response.data.forEach((obj) =>
+        this.renameObjectKey({
+          obj,
+          old_key: "organization_name",
+          new_key: "label",
+        })
+      );
+      this.event_organization_options = response.data;
     },
     onRejected(rejectedEntries) {
       this.$q.notify({
@@ -339,7 +360,6 @@ export default {
         message: `${rejectedEntries.length} file(s) did not pass validation constraints`,
       });
     },
-    // needs refactoring
     updateGeneratedPassword() {
       this.strengthLevel = this.strengthLevel + 1;
       this.strengthLevel = this.strengthLevel - 1;
