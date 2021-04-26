@@ -4,6 +4,19 @@ require("dotenv").config();
 const SECRETKEY = process.env.SECRET_KEY;
 
 module.exports = {
+  validateLogin: (req, res, next) => {
+    if (!req.body.username) {
+      return res.status(400).send({
+        msg: "Please enter a username ",
+      });
+    }
+    if (!req.body.password) {
+      return res.status(400).send({
+        msg: "Please enter a password",
+      });
+    }
+    next();
+  },
   validateRegister: (req, res, next) => {
     if (!req.body.username || req.body.username.length < 3) {
       return res.status(400).send({

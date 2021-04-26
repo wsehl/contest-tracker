@@ -3,43 +3,20 @@
 // const uuid = require("uuid");
 require("dotenv").config();
 const express = require("express");
-const multer = require("multer");
 const router = express.Router();
-const bcrypt = require("bcryptjs");
-const path = require("path");
-const jwt = require("jsonwebtoken");
+const middleware = require("./middleware");
+const route = require("./routes");
+
 const db = require("./lib/db.js");
-const authMiddleware = require("./middleware/users.js");
-const dashboardMiddleware = require("./middleware/dashboard.js");
-
-const auth = require("./routes/auth.js");
-
 db.connect();
 
-const folder = path.join(__dirname, "files");
-const storage = multer.diskStorage({
-  destination: function(req, file, cb) {
-    cb(null, folder);
-  },
-  filename: function(req, file, cb) {
-    let extArray = file.mimetype.split("/");
-    let extension = extArray[extArray.length - 1];
-    cb(null, file.fieldname + "-" + Date.now() + "." + extension);
-  },
-});
-const upload = multer({ storage: storage });
+const upload = require("./filestorage");
+const bcrypt = require("bcryptjs");
 
-router.post("/login", auth.login);
-router.post("/signup", auth.register, authMiddleware.validateRegister);
+router.post("/login", middleware.auth.validateLogin, route.auth.login);
+router.post("/signup", middleware.auth.validateRegister, route.auth.register);
 
-
-router.get("/dashboard/users", authMiddleware.isAdmin, (req, res, next) => {
-  db.query(`SELECT * FROM users`, (err, result) => {
-    return res.status(200).send({
-      data: result,
-    });
-  });
-});
+router.get("/dashboard/users", middleware.auth.isAdmin, route.users.getUsers);
 
 router.get("/dashboard/events", (req, res, next) => {
   db.query(
@@ -63,7 +40,7 @@ router.get("/dashboard/organizations", (req, res, next) => {
 
 router.post(
   "/dashboard/post/users",
-  dashboardMiddleware.validateUsers,
+  middleware.dashboard.validateUsers,
   (req, res, next) => {
     db.query(
       `SELECT * FROM users WHERE LOWER(username) = LOWER(${db.escape(
@@ -111,7 +88,7 @@ router.post(
 router.post(
   "/dashboard/post/organizations",
   upload.single("file"),
-  dashboardMiddleware.validateOrganizations,
+  middleware.dashboard.validateOrganizations,
   (req, res) => {
     db.query(
       `INSERT INTO organizations (organization_name, organization_image) VALUES (${db.escape(
@@ -135,7 +112,7 @@ router.post(
 
 router.post(
   "/dashboard/post/events",
-  dashboardMiddleware.validateEvents,
+  middleware.dashboard.validateEvents,
   (req, res, next) => {
     db.query(
       `INSERT INTO events (organization_id, event_title, event_description, start_date, end_date) VALUES (${db.escape(

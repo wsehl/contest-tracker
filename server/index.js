@@ -20,6 +20,8 @@ app.use(
   })
 );
 app.use(cors());
+
+app.use("/static", express.static(__dirname + '/files'));
 app.use("/api", router);
 
 app.listen(PORT, () => {

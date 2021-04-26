@@ -26,3 +26,4 @@ server/package-lock.json
 package-lock.json
 .env
 *.rest
+server/yarn.lock

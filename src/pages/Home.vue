@@ -41,8 +41,9 @@
             <img
               style="vertical-align:middle"
               class="image"
-              :src="require(`../../server/files/${item.organization_image}`)"
+              :src="`http://localhost:8888/static/${item.organization_image}`"
             />
+            <!-- :src="require(`../../server/files/${item.organization_image}`)" -->
             <span style="vertical-align:middle; margin-left: 10px">
               {{ item.organization_name }}
             </span>
