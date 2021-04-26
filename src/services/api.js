@@ -34,7 +34,7 @@ export default {
   },
   insertToTable(credentials, table) {
     return axios
-      .post(url + `/dashboard/post/${table}`, credentials)
+      .post(url + `/dashboard/${table}/add`, credentials)
       .then((response) => response.data);
   },
 };
