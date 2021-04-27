@@ -79,8 +79,8 @@ export default {
       return format(new Date(d), "dd.MM.yyyy");
     },
     fetchData() {
-      const organizations = `${process.env.VUE_APP_BACKEND_URL}/dashboard/organizations`;
-      const events = `${process.env.VUE_APP_BACKEND_URL}/dashboard/events`;
+      const organizations = `${process.env.VUE_APP_BACKEND_URL}/api/dashboard/organizations`;
+      const events = `${process.env.VUE_APP_BACKEND_URL}/api/dashboard/events`;
 
       const fetchedData = (url) => axios.get(url);
 
