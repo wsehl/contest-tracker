@@ -27,12 +27,18 @@ router.post("/login", middleware.auth.validateLogin, route.auth.login);
 router.post("/signup", middleware.auth.validateRegister, route.auth.register);
 
 router.get("/dashboard/users", middleware.auth.isAdmin, route.users.getAll);
-router.post("/dashboard/users/add", middleware.dashboard.validateUsers, route.users.addNew);
+router.post("/dashboard/users", middleware.auth.isAdmin, middleware.dashboard.validateUsers, route.users.addNew);
 
 router.get("/dashboard/events", route.events.getAll);
-router.post("/dashboard/events/add", middleware.dashboard.validateEvents, route.events.addNew);
+router.post("/dashboard/events", middleware.auth.isAdmin, middleware.dashboard.validateEvents, route.events.addNew);
 
 router.get("/dashboard/organizations", route.organizations.getAll);
-router.post("/dashboard/organizations/add", upload.single("file"), middleware.dashboard.validateOrganizations, route.organizations.addNew);
+router.post(
+  "/dashboard/organizations",
+  middleware.auth.isAdmin,
+  upload.single("file"),
+  middleware.dashboard.validateOrganizations,
+  route.organizations.addNew
+);
 
 module.exports = router;

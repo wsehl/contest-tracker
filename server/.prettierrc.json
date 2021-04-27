@@ -1,5 +1,5 @@
 {
   "singleQuote": false,
   "arrowParens": "always",
-  "printWidth": 140
+  "printWidth": 120
 }
