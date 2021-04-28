@@ -41,7 +41,7 @@
             <img
               style="vertical-align:middle"
               class="image"
-              :src="`${url}/static/${item.organization_image}`"
+              :src="`${url}/${item.organization_image}?alt=media`"
             />
             <span style="vertical-align:middle; margin-left: 10px">
               {{ item.organization_name }}
@@ -75,7 +75,8 @@ export default {
   },
   computed: {
     url() {
-      return process.env.VUE_APP_BACKEND_URL;
+      // return `${process.env.VUE_APP_BACKEND_URL}/static`;
+      return `https://firebasestorage.googleapis.com/v0/b/contest-tracker-87dc8.appspot.com/o`;
     },
   },
   methods: {

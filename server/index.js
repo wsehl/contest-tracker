@@ -17,7 +17,7 @@ if (!fs.existsSync(folder)) {
 app.use(express.json());
 app.use(
   express.urlencoded({
-    extended: true,
+    extended: true
   })
 );
 let corsOptions = {};
@@ -28,18 +28,17 @@ if (process.env.NODE_ENV == "production") {
       if (!origin) return callback(null, true);
       if (whitelist.indexOf(origin) === -1) {
         const message =
-          "The CORS policy for this origin doesnt allow access from the particular origin. Origin:" +
-          origin;
+          "The CORS policy for this origin doesnt allow access from the particular origin. Origin:" + origin;
         return callback(message, false);
       }
       return callback(null, true);
     },
+    credentials: true
   };
 }
 app.use(cors(corsOptions));
 
-
-app.use("/static", express.static(__dirname + '/files'));
+app.use("/static", express.static(__dirname + "/files"));
 app.use("/api", router);
 
 app.listen(PORT, () => {
