@@ -41,9 +41,8 @@
             <img
               style="vertical-align:middle"
               class="image"
-              :src="`http://localhost:8888/static/${item.organization_image}`"
+              :src="`${url}/static/${item.organization_image}`"
             />
-            <!-- :src="require(`../../server/files/${item.organization_image}`)" -->
             <span style="vertical-align:middle; margin-left: 10px">
               {{ item.organization_name }}
             </span>
@@ -58,7 +57,7 @@
 </template>
 
 <script>
-import axios from "axios";
+import api from "@/services/api.js";
 import { Carousel, Slide } from "vue-carousel";
 const { format } = require("date-fns");
 
@@ -74,23 +73,20 @@ export default {
       events: [],
     };
   },
+  computed: {
+    url() {
+      return process.env.VUE_APP_BACKEND_URL;
+    },
+  },
   methods: {
     formatDate(d) {
       return format(new Date(d), "dd.MM.yyyy");
     },
     fetchData() {
-      const organizations = `${process.env.VUE_APP_BACKEND_URL}/api/dashboard/organizations`;
-      const events = `${process.env.VUE_APP_BACKEND_URL}/api/dashboard/events`;
-
-      const fetchedData = (url) => axios.get(url);
-
-      const promises = [organizations, events].map(fetchedData);
-
-      Promise.all(promises)
-        .then((response) => {
-          this.organizations = response[0].data;
-          this.events = response[1].data;
-          console.log(this.organizations, this.events);
+      Promise.all([api.getOrganizationsTable(), api.getEventsTable()])
+        .then((results) => {
+          this.organizations = results[0];
+          this.events = results[1];
           this.loading = false;
           this.$q.loading.hide();
         })

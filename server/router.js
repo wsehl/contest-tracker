@@ -23,10 +23,7 @@ db.connect();
 const middleware = require("./middleware");
 const route = require("./routes");
 
-
-const { userValidationRules, validate } = require("./middleware/validator.js");
-
-router.post("/login", userValidationRules(), validate, middleware.auth.validateLogin, route.auth.login);
+router.post("/login", middleware.auth.validateLogin, route.auth.login);
 router.post("/signup", middleware.auth.validateRegister, route.auth.register);
 
 router.get("/dashboard/users", middleware.auth.isAdmin, route.users.getAll);

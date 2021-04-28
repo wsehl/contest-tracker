@@ -74,17 +74,12 @@ export default {
           this.$router.push("/");
         }
       } catch (error) {
-        let obj = error.response.data.msg;
-        Object.keys(obj).map((name) => {
-          Object.entries(obj[name]).filter(([, value]) =>
-            this.$q.notify({
-              color: "negative",
-              position: "bottom-left",
-              message: `${value}`,
-              progress: true,
-              timeout: 1500,
-            })
-          );
+        this.$q.notify({
+          color: "negative",
+          position: "bottom-left",
+          message: error.response.data.msg,
+          progress: true,
+          timeout: 1500,
         });
       }
     },
