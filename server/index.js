@@ -30,6 +30,9 @@ app.use(
 app.get("/", (req, res) => {
   res.status(200).sendFile(path.dirname(__filename) + "/assets/index.html");
 });
+app.get("/health", (req, res) => {
+  res.status(200).json({ message: "I'm alive" });
+});
 app.use("/static", express.static(__dirname + "/files"));
 app.use("/api", router);
 
