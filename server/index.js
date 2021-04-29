@@ -41,6 +41,10 @@ app.use(cors(corsOptions));
 app.use("/static", express.static(__dirname + "/files"));
 app.use("/api", router);
 
+app.get("/", (req, res) => {
+  res.status(200).sendFile(path.dirname(__filename) + "/assets/index.html");
+});
+
 app.listen(PORT, () => {
   console.info(`App listening on port: ${PORT}`);
 });
