@@ -36,14 +36,14 @@ module.exports = {
     next();
   },
   validateEvents: (req, res, next) => {
-    if (!req.body.event_organization) {
-      return res.status(400).send({
-        msg: "Please enter a valid organization name",
-      });
-    }
     if (!req.body.event_title) {
       return res.status(400).send({
         msg: "Please enter a valid event title",
+      });
+    }
+    if (!req.body.event_organization) {
+      return res.status(400).send({
+        msg: "Please enter a valid organization name",
       });
     }
     if (!req.body.event_description) {
