@@ -7,15 +7,13 @@ Vue.use(VueRouter);
 const routes = [
   {
     path: "/",
-    name: "Home",
+    name: "Layout",
+    redirect: { name: "Home" },
     component: () => import("@/layouts/MainLayout.vue"),
-    meta: {
-      title: "Contest Tracker",
-    },
     children: [
       {
         path: "/",
-        name: "Main",
+        name: "Home",
         component: () => import("@/pages/Home.vue"),
         meta: {
           title: "Contest Tracker",
@@ -28,6 +26,13 @@ const routes = [
         meta: {
           title: "Login",
         },
+        beforeEnter(to, from, next) {
+          if (store.getters.isLoggedIn) {
+            next({ name: "Home" });
+          } else {
+            next();
+          }
+        },
       },
       {
         path: "/signup",
@@ -35,6 +40,37 @@ const routes = [
         component: () => import("@/pages/Signup.vue"),
         meta: {
           title: "Sign Up",
+        },
+        beforeEnter(to, from, next) {
+          if (store.getters.isLoggedIn) {
+            next({ name: "Home" });
+          } else {
+            next();
+          }
+        },
+      },
+      {
+        path: "/about",
+        name: "About",
+        // component: () => import("@/pages/About.vue"),
+        meta: {
+          title: "About",
+        },
+      },
+      {
+        path: "/Archive",
+        name: "Archive",
+        // component: () => import("@/pages/Archive.vue"),
+        meta: {
+          title: "Archive",
+        },
+      },
+      {
+        path: "/Events",
+        name: "Events",
+        // component: () => import("@/pages/events.vue"),
+        meta: {
+          title: "Events",
         },
       },
       {
@@ -48,12 +84,14 @@ const routes = [
     ],
   },
   {
-    path: "/dashboard",
-    name: "Dashboard",
+    path: "/dash",
+    name: "Dash",
+    redirect: { name: "Dashboard" },
     component: () => import("@/layouts/DashboardLayout.vue"),
     children: [
       {
         path: "/dashboard",
+        name: "Dashboard",
         component: () => import("@/pages/dashboard/Dash.vue"),
         meta: {
           title: "Dashboard",
@@ -73,6 +111,9 @@ const routes = [
       } else {
         next({
           name: "Login",
+          query: {
+            redirectFrom: to.fullPath,
+          },
         });
       }
     },
@@ -95,18 +136,5 @@ router.beforeEach((to, from, next) => {
   }
   next();
 });
-
-// router.beforeEach((to, from, next) => {
-//   if (!store.getters.isLoggedIn) {
-//     next({
-//       path: "/login",
-//       query: {
-//         redirectFrom: to.fullPath,
-//       },
-//     });
-//   } else {
-//     next();
-//   }
-// });
 
 export default router;

@@ -96,7 +96,7 @@ export default {
           progress: true,
           timeout: 1500,
         });
-        this.$router.push("/login");
+        this.$router.push({ name: "Login" });
       } catch (error) {
         this.$q.notify({
           color: "negative",
@@ -107,11 +107,6 @@ export default {
         });
       }
     },
-  },
-  created() {
-    if (this.$store.getters.isLoggedIn) {
-      this.$router.push("/login");
-    }
   },
 };
 </script>

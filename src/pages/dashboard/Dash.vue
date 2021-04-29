@@ -218,13 +218,12 @@
 </template>
 
 <script>
-/* eslint-disable no-unused-vars */
 import api from "@/services/api.js";
 
 export default {
   data() {
     return {
-      selectedTable: "organizations",
+      selectedTable: "users",
       strengthLevel: 24,
 
       username: "",

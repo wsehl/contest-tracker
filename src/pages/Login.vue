@@ -60,6 +60,7 @@ export default {
         const response = await api.login(credentials);
         const token = response.token;
         const user = response.user;
+        this.$store.dispatch("login", { token, user });
         this.$q.notify({
           color: "positive",
           position: "bottom-left",
@@ -67,9 +68,8 @@ export default {
           progress: true,
           timeout: 1500,
         });
-        this.$store.dispatch("login", { token, user });
         if (this.$store.state.user.role === "Admin") {
-          this.$router.push("/dashboard");
+          this.$router.push({ name: "Dashboard" });
         } else {
           this.$router.push("/");
         }
@@ -83,11 +83,6 @@ export default {
         });
       }
     },
-  },
-  created() {
-    if (this.$store.getters.isLoggedIn) {
-      this.$router.push("/");
-    }
   },
 };
 </script>

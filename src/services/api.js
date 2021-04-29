@@ -1,4 +1,8 @@
+import store from "../store";
 import axios from "axios";
+
+axios.defaults.headers.common["Authorization"] = `Bearer ${store.state.token}`;
+
 const url = `${process.env.VUE_APP_BACKEND_URL}/api`;
 
 export default {

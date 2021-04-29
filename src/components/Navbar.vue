@@ -4,7 +4,7 @@
     height-hint="61.59"
   >
     <q-toolbar class="q-py-md q-px-lg">
-      <router-link to="/">
+      <router-link :to="{ name: 'Home' }">
         <q-btn round dense flat color="white" no-caps>
           <svg
             width="35"
@@ -28,13 +28,13 @@
         v-if="$q.screen.gt.xs"
         class="GL__toolbar-link q-ml-xs q-gutter-md text-body2 text-weight-medium row items-center no-wrap"
       >
-        <router-link to="/about" exact style="color: #4a4a4a">
+        <router-link :to="{ name: 'About' }" exact style="color: #4a4a4a">
           About
         </router-link>
-        <router-link to="/archive" exact style="color: #4a4a4a">
+        <router-link :to="{ name: 'Archive' }" exact style="color: #4a4a4a">
           Archive
         </router-link>
-        <router-link to="/events" exact style="color: #4a4a4a">
+        <router-link :to="{ name: 'Events' }" exact style="color: #4a4a4a">
           Upcoming events
         </router-link>
       </div>
@@ -44,13 +44,19 @@
           class="GL__toolbar-link q-gutter-md text-body2 text-weight-medium row items-center no-wrap"
         >
           <template v-if="user.role && user.role != 'User'">
-            <router-link to="/dashboard" exact style="color: #4a4a4a">
+            <router-link
+              :to="{ name: 'Dashboard' }"
+              exact
+              style="color: #4a4a4a"
+            >
               Dashboard
             </router-link>
           </template>
           <template v-if="!user.username">
-            <router-link to="/login" style="color: #4a4a4a">Login</router-link>
-            <router-link to="/signup" style="color: #4a4a4a"
+            <router-link :to="{ name: 'Login' }" style="color: #4a4a4a"
+              >Login</router-link
+            >
+            <router-link :to="{ name: 'Signup' }" style="color: #4a4a4a"
               >Sign up</router-link
             >
           </template>
@@ -87,7 +93,6 @@ export default {
   methods: {
     logout() {
       this.$store.dispatch("logout");
-      this.$router.push("/");
     },
   },
   computed: {
