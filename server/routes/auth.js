@@ -34,6 +34,14 @@ const auth = {
             }
           );
           db.query(`UPDATE users SET last_login = now() WHERE id = '${result[0].id}'`);
+          console.info(
+            `Logged in user: [${result[0].username}] with role: [${result[0].role}] at [${new Date().toLocaleString(
+              "ru-RU",
+              {
+                timeZone: "Asia/Almaty"
+              }
+            )}]`
+          );
           return res.status(200).send({
             msg: "Logged in successfully",
             token,
@@ -59,22 +67,38 @@ const auth = {
               msg: err
             });
           } else {
-            db.query(
-              `INSERT INTO users (username, password, registered, role, email) VALUES (${db.escape(
-                req.body.username
-              )}, ${db.escape(hash)}, now(), 'User', ${db.escape(req.body.email)})`,
-              (err) => {
-                if (err) {
-                  console.error(err);
-                  return res.status(400).send({
-                    msg: err
-                  });
-                }
-                return res.status(201).send({
-                  msg: "Successfully registered"
+            const reg_date = new Date()
+              .toISOString()
+              .slice(0, 19)
+              .replace("T", " ");
+
+            const newUser = {
+              username: req.body.username,
+              password: hash,
+              registered: reg_date,
+              role: "User",
+              email: req.body.email
+            };
+            db.query("INSERT INTO users SET ?", newUser, (err) => {
+              if (err) {
+                console.error(err);
+                return res.status(400).send({
+                  msg: "An error occured"
                 });
               }
-            );
+              console.info(
+                `Registered user: [${newUser.username}] with role: [${newUser.role}] at [${new Date().toLocaleString(
+                  "ru-RU",
+                  {
+                    timeZone: "Asia/Almaty"
+                  }
+                )}]`
+              );
+              return res.status(201).send({
+                msg: "Successfully registered",
+                status: 201
+              });
+            });
           }
         });
       }

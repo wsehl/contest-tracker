@@ -43,32 +43,18 @@ const users = {
                 });
               }
               console.info(
-                `Added user: ${newUser.username} with role: [${newUser.role}] at [${new Date().toLocaleString("ru-RU", {
-                  timeZone: "Asia/Almaty"
-                })}]`
+                `Added user: [${newUser.username}] with role: [${newUser.role}] at [${new Date().toLocaleString(
+                  "ru-RU",
+                  {
+                    timeZone: "Asia/Almaty"
+                  }
+                )}]`
               );
               return res.status(201).send({
                 msg: "Successfully added user",
                 status: 201
               });
             });
-
-            // db.query(
-            //   `INSERT INTO users (username, password, registered, role, email) VALUES (${db.escape(
-            //     req.body.username
-            //   )}, ${db.escape(hash)}, now(), ${db.escape(req.body.role)}, ${db.escape(req.body.email)})`,
-            //   (err) => {
-            //     if (err) {
-            //       return res.status(400).send({
-            //         msg: err
-            //       });
-            //     }
-            //     return res.status(201).send({
-            //       msg: "Successfully registered",
-            //       status: 201
-            //     });
-            //   }
-            // );
           }
         });
       }

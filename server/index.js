@@ -20,7 +20,6 @@ app.use(
     extended: true
   })
 );
-
 app.use(
   cors({
     origin: [FRONTEND_URI, "https://master--contest-tracker.netlify.app"],
@@ -28,12 +27,11 @@ app.use(
   })
 );
 
-app.use("/api", router);
-app.use("/static", express.static(__dirname + "/files"));
-
 app.get("/", (req, res) => {
   res.status(200).sendFile(path.dirname(__filename) + "/assets/index.html");
 });
+app.use("/static", express.static(__dirname + "/files"));
+app.use("/api", router);
 
 app.listen(PORT, () => {
   console.info(`App listening on port: ${PORT}`);

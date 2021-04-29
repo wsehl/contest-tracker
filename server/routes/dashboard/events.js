@@ -28,7 +28,7 @@ const users = {
         });
       }
       console.info(
-        `Added event: ${newEvent.event_title} at [${new Date().toLocaleString("ru-RU", {
+        `Added event: [${newEvent.event_title}] at [${new Date().toLocaleString("ru-RU", {
           timeZone: "Asia/Almaty"
         })}]`
       );

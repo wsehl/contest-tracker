@@ -39,7 +39,7 @@ const organizations = {
             });
           }
           console.info(
-            `Added organization: ${newOrganization.organization_name} at [${new Date().toLocaleString("ru-RU", {
+            `Added organization: [${newOrganization.organization_name}] at [${new Date().toLocaleString("ru-RU", {
               timeZone: "Asia/Almaty"
             })}]`
           );
