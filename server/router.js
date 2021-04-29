@@ -3,28 +3,12 @@ const express = require("express");
 const router = express.Router();
 const multer = require("multer");
 
-// const path = require("path");
-// const folder = path.join(__dirname, "files");
-// const storage = multer.diskStorage({
-//   destination: function(req, file, cb) {
-//     cb(null, folder);
-//   },
-//   filename: function(req, file, cb) {
-//     let extArray = file.mimetype.split("/");
-//     let extension = extArray[extArray.length - 1];
-//     cb(null, `${file.fieldname}_${Date.now()}.${extension}`);
-//   }
-// });
-
 const upload = multer({
   storage: multer.memoryStorage(),
   limits: {
     fileSize: 5 * 1024 * 1024 // 5mb
   }
 });
-
-const db = require("./lib/database.js");
-db.connect();
 
 const middleware = require("./middleware");
 const route = require("./routes");

@@ -34,5 +34,5 @@ app.use("/static", express.static(__dirname + "/files"));
 app.use("/api", router);
 
 app.listen(PORT, () => {
-  console.info(`App listening on port: ${PORT}`);
+  console.info(`Server running on port ${PORT}`);
 });

@@ -270,7 +270,13 @@ export default {
           this.loading = false;
         })
         .catch((error) => {
-          console.log(error.message);
+          this.$q.notify({
+            color: "negative",
+            position: "bottom-left",
+            message: error.response.data.msg,
+            progress: true,
+            timeout: 1500,
+          });
         });
     },
   },
