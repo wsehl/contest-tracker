@@ -1,5 +1,3 @@
-/* eslint-disable no-unreachable */
-
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const db = require("../lib/database.js");
@@ -7,23 +5,18 @@ const db = require("../lib/database.js");
 const auth = {
   login: (req, res) => {
     db.query(`SELECT * FROM users WHERE username = ${db.escape(req.body.username)};`, (err, result) => {
-      // user does not exists
       if (err) {
-        throw err;
-        return res.status(400).send({
-          msg: err
-        });
+        console.error(err);
+        return res.status(400);
       }
       if (!result.length) {
         return res.status(401).send({
           msg: "Username or password is incorrect!"
         });
       }
-      // check password
       bcrypt.compare(req.body.password, result[0]["password"], (bErr, bResult) => {
-        // wrong password
         if (bErr) {
-          throw bErr;
+          console.error(bErr);
           return res.status(401).send({
             msg: "Username or password is incorrect!"
           });
@@ -67,12 +60,12 @@ const auth = {
             });
           } else {
             db.query(
-              `INSERT INTO users (username, password, registered, role, email) VALUES (${db.escape(req.body.username)}, ${db.escape(
-                hash
-              )}, now(), 'User', ${db.escape(req.body.email)})`,
+              `INSERT INTO users (username, password, registered, role, email) VALUES (${db.escape(
+                req.body.username
+              )}, ${db.escape(hash)}, now(), 'User', ${db.escape(req.body.email)})`,
               (err) => {
                 if (err) {
-                  throw err;
+                  console.error(err);
                   return res.status(400).send({
                     msg: err
                   });

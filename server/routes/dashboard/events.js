@@ -13,24 +13,30 @@ const users = {
     );
   },
   addNew: (req, res) => {
-    db.query(
-      `INSERT INTO events (organization_id, event_title, event_description, start_date, end_date) VALUES (${db.escape(
-        req.body.event_organization
-      )},${db.escape(req.body.event_title)},${db.escape(req.body.event_description)},${db.escape(req.body.event_start_date)},${db.escape(
-        req.body.event_end_date
-      )})`,
-      (err) => {
-        if (err) {
-          return res.status(400).send({
-            msg: err
-          });
-        }
-        return res.status(201).send({
-          msg: "Successfully added event",
-          status: 201
+    const newEvent = {
+      organization_id: req.body.event_organization,
+      event_title: req.body.event_title,
+      event_description: req.body.event_description,
+      start_date: req.body.event_start_date,
+      end_date: req.body.event_end_date
+    };
+    db.query("INSERT INTO events SET ?", newEvent, (err) => {
+      if (err) {
+        console.error(err);
+        return res.status(400).send({
+          msg: "An error occured"
         });
       }
-    );
+      console.info(
+        `Added event: ${newEvent.event_title} at [${new Date().toLocaleString("ru-RU", {
+          timeZone: "Asia/Almaty"
+        })}]`
+      );
+      return res.status(201).send({
+        msg: "Successfully added event",
+        status: 201
+      });
+    });
   }
 };
 module.exports = users;

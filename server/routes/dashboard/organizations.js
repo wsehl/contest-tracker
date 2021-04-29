@@ -27,22 +27,27 @@ const organizations = {
         });
       });
       blobWriter.on("finish", () => {
-        db.query(
-          `INSERT INTO organizations (organization_name, organization_image) VALUES (${db.escape(
-            req.body.name
-          )}, ${db.escape(newFileName)})`,
-          (err) => {
-            if (err) {
-              return res.status(400).send({
-                msg: err
-              });
-            }
-            return res.status(201).send({
-              msg: "Successfully added organization",
-              status: 201
+        const newOrganization = {
+          organization_name: req.body.name,
+          organization_image: newFileName
+        };
+        db.query("INSERT INTO organizations SET ?", newOrganization, (err) => {
+          if (err) {
+            console.error(err);
+            return res.status(400).send({
+              msg: "An error occured"
             });
           }
-        );
+          console.info(
+            `Added organization: ${newOrganization.organization_name} at [${new Date().toLocaleString("ru-RU", {
+              timeZone: "Asia/Almaty"
+            })}]`
+          );
+          return res.status(201).send({
+            msg: "Successfully added organization",
+            status: 201
+          });
+        });
       });
       blobWriter.end(req.file.buffer);
     }
