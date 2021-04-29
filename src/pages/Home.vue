@@ -84,7 +84,7 @@ export default {
       return format(new Date(d), "dd.MM.yyyy");
     },
     fetchData() {
-      Promise.all([api.getOrganizationsTable(), api.getEventsTable()])
+      Promise.all([api.getTable("organizations"), api.getTable("events")])
         .then((results) => {
           this.organizations = results[0];
           this.events = results[1];

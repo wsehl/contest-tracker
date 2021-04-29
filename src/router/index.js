@@ -99,6 +99,7 @@ const routes = [
       },
       {
         path: "/dashboard/users",
+        name: "DashboardUsers",
         component: () => import("@/pages/dashboard/Users.vue"),
         meta: {
           title: "Dashboard - Users",

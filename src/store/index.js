@@ -17,17 +17,6 @@ export default new Vuex.Store({
   strict: true,
   plugins: [createPersistedState()],
   state: getDefaultState(),
-  getters: {
-    isLoggedIn: (state) => {
-      return state.token;
-    },
-    isAdmin: (state) => {
-      return state.token;
-    },
-    getUser: (state) => {
-      return state.user;
-    },
-  },
   mutations: {
     SET_TOKEN: (state, token) => {
       state.token = token;
@@ -37,6 +26,24 @@ export default new Vuex.Store({
     },
     RESET: (state) => {
       Object.assign(state, getDefaultState());
+    },
+  },
+  getters: {
+    getUser: (state) => {
+      return state.user;
+    },
+    getToken: (state) => {
+      return state.token;
+    },
+    isLoggedIn: (state) => {
+      return state.token;
+    },
+    isAdmin: (state) => {
+      if (state.user.role === "Admin") {
+        return true;
+      } else {
+        return false;
+      }
     },
   },
   actions: {

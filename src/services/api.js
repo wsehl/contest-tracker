@@ -1,44 +1,33 @@
-import store from "../store";
 import axios from "axios";
-
-axios.defaults.headers.common["Authorization"] = `Bearer ${store.state.token}`;
+import store from "../store";
 
 const url = `${process.env.VUE_APP_BACKEND_URL}/api`;
 
+const request = axios.create({
+  headers: {
+    Authorization: `Bearer ${store.getters.getToken}`,
+  },
+});
+
 export default {
   async login(credentials) {
-    return axios
-      .post(url + "/login", credentials)
+    return request
+      .post(`${url}/login`, credentials)
       .then((response) => response.data);
   },
   async signup(credentials) {
-    return axios
-      .post(url + "/signup", credentials)
-      .then((response) => response.data);
-  },
-  async getUsersTable() {
-    return axios
-      .get(url + "/dashboard/users")
-      .then((response) => response.data);
-  },
-  async getOrganizationsTable() {
-    return axios
-      .get(url + "/dashboard/organizations")
-      .then((response) => response.data);
-  },
-  async getEventsTable() {
-    return axios
-      .get(url + "/dashboard/events")
+    return request
+      .post(`${url}/signup`, credentials)
       .then((response) => response.data);
   },
   async getTable(table) {
-    return axios
-      .get(url + `/dashboard/${table}`)
+    return request
+      .get(`${url}/dashboard/${table}`)
       .then((response) => response.data);
   },
   async insertToTable(credentials, table) {
-    return axios
-      .post(url + `/dashboard/${table}`, credentials)
+    return request
+      .post(`${url}/dashboard/${table}`, credentials)
       .then((response) => response.data);
   },
 };
