@@ -22,7 +22,7 @@ app.use(
 );
 let corsOptions = {};
 if (process.env.NODE_ENV == "production") {
-  const whitelist = [FRONTEND_URI];
+  const whitelist = [FRONTEND_URI, "https://master--contest-tracker.netlify.app"];
   corsOptions = {
     origin: function(origin, callback) {
       if (!origin) return callback(null, true);
