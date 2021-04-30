@@ -50,6 +50,11 @@ export default {
       password: "",
     };
   },
+  computed: {
+    token() {
+      return this.$store.state.token;
+    },
+  },
   methods: {
     async login() {
       try {
@@ -61,6 +66,11 @@ export default {
         const token = response.token;
         const user = response.user;
         this.$store.dispatch("login", { token, user });
+        if (this.$store.state.user.role === "Admin") {
+          this.$router.push({ name: "Dashboard" });
+        } else {
+          this.$router.push("/");
+        }
         this.$q.notify({
           color: "positive",
           position: "bottom-left",
@@ -68,11 +78,6 @@ export default {
           progress: true,
           timeout: 1500,
         });
-        if (this.$store.state.user.role === "Admin") {
-          this.$router.push({ name: "Dashboard" });
-        } else {
-          this.$router.push("/");
-        }
       } catch (error) {
         this.$q.notify({
           color: "negative",
