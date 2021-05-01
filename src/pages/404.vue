@@ -14,6 +14,38 @@
       />
     </svg>
     <p class="text-faded">Sorry, nothing here...<strong>(404)</strong></p>
-    <q-btn color="primary" style="width:200px;" to="/" label="Go back" />
+    <q-btn
+      color="primary"
+      style="width:200px;"
+      @click.prevent="handleBack()"
+      label="Go back"
+    />
   </div>
 </template>
+
+<script>
+export default {
+  data() {
+    return {
+      fromRoute: null,
+    };
+  },
+  beforeRouteEnter(to, from, next) {
+    next((vm) => {
+      vm.fromRoute = from;
+    });
+  },
+  methods: {
+    handleBack() {
+      if (!this.fromRoute.name) {
+        this.$router.push({ name: "Home" });
+      } else {
+        this.$router.back();
+      }
+    },
+  },
+  created() {
+    this.$router.replace("/404");
+  },
+};
+</script>

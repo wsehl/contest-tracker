@@ -111,17 +111,24 @@ const routes = [
         next();
       } else {
         next({
-          name: "Login",
-          query: {
-            redirectFrom: to.fullPath,
-          },
+          name: "404",
         });
       }
     },
   },
   {
     path: "/:catchAll(.*)",
-    component: () => import("@/pages/404.vue"),
+    component: () => import("@/layouts/MainLayout.vue"),
+    children: [
+      {
+        name: "404",
+        path: "",
+        component: () => import("@/pages/404.vue"),
+        meta: {
+          title: "Page not found",
+        },
+      },
+    ],
   },
 ];
 
@@ -134,8 +141,8 @@ const router = new VueRouter({
 router.beforeEach((to, from, next) => {
   if (to.meta.title) {
     document.title = to.meta.title;
+    next();
   }
-  next();
 });
 
 export default router;
