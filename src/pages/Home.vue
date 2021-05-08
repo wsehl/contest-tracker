@@ -2,12 +2,9 @@
   <q-page>
     <template v-if="!loading">
       <div class="row">
-        <q-parallax src="nis_pavlodar.jpg">
-          <div
-            class="text-h3 q-pa-lg rounded-borders text-center"
-            style="background: rgba(255,255,255,0.5);backdrop-filter: blur(5px);color: #272727 !important;border-radius: 10px;"
-          >
-            Проектная деятельность НИШ Павлодар
+        <q-parallax src="main_picture.jpg">
+          <div class="text-h3 text-center parallax-title">
+            Проектная деятельность<br />НИШ Павлодар
           </div>
         </q-parallax>
       </div>
@@ -26,30 +23,33 @@
         ]"
       >
         <slide v-for="item in events.data" :key="item.id" class="carousel-item">
-          <h5>
+          <div class="title">
             <router-link
+              class="link"
               :to="{
                 name: 'Event',
                 params: {
                   id: item.id,
                 },
               }"
-              >{{ item.event_title }}</router-link
-            >
-          </h5>
-          <div style="margin-bottom: 20px">
+              >{{ item.event_title }}
+            </router-link>
+          </div>
+          <div class="body">
             <img
-              style="vertical-align:middle"
               class="image"
               :src="`${url}/${item.organization_image}?alt=media`"
             />
-            <span style="vertical-align:middle; margin-left: 10px">
+            <span class="organization">
               {{ item.organization_name }}
             </span>
           </div>
-          <p>
-            {{ formatDate(item.start_date) }} - {{ formatDate(item.end_date) }}
-          </p>
+          <div class="footer">
+            <p class="date">
+              {{ formatDate(item.start_date) }} -
+              {{ formatDate(item.end_date) }}
+            </p>
+          </div>
         </slide>
       </carousel>
     </template>
@@ -81,7 +81,7 @@ export default {
   },
   methods: {
     formatDate(d) {
-      return format(new Date(d), "dd.MM.yyyy");
+      return format(new Date(d), "PP");
     },
     fetchData() {
       Promise.all([api.getTable("organizations"), api.getTable("events")])
@@ -103,19 +103,52 @@ export default {
 };
 </script>
 
-<style>
-.image {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  object-fit: cover;
-}
-.carousel {
-  background-color: #f1f1f1;
-}
-.carousel-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
+<style lang="sass" scoped>
+.parallax-title
+  background: rgba(255,255,255,0.5)
+  backdrop-filter: blur(5px)
+  color: #0c1c27
+  border-radius: 15px
+  padding: 25px
+
+.carousel
+  background-color: rgb(245 245 245 / 70%)
+  border: 1px solid #ebeaeb
+  .carousel-item
+    display: flex
+    flex-direction: column
+    align-items: center
+    margin-top: 20px
+    margin-bottom: -20px
+    .title
+      display: flex
+      justify-content: center
+      .link
+        font-size: 26px
+        text-decoration: none
+        color: #4a4a4a
+        &:hover
+          text-decoration: underline
+    .body
+      display: flex
+      align-items: center
+      justify-content: center
+      margin: 10px 0px 10px 0px
+      .image
+        width: 55px
+        height: 55px
+        border-radius: 50%
+        object-fit: cover
+        margin-right: 5px
+      .organization
+        font-size: 20px
+        margin-left: 5px
+    .footer
+      display: flex
+      flex-direction: row
+      justify-content: center
+      align-items: center
+      .date
+        font-size: 14px
+        font-weight: 500
 </style>

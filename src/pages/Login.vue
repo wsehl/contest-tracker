@@ -1,41 +1,50 @@
 <template>
   <q-page class="flex flex-center">
-    <q-card
-      class="login-form"
-      v-bind:style="
-        $q.platform.is.mobile ? { width: '100%' } : { width: '30%' }
-      "
-    >
-      <q-card-section class="bg-blue-9">
-        <h4 class="text-h5 text-white q-my-sm">Login</h4>
-      </q-card-section>
-      <q-card-section>
-        <q-form class="q-gutter-md">
-          <q-input unelevated v-model="username" label="Username" lazy-rules />
+    <q-card>
+      <q-form @submit="login" greedy>
+        <q-card-section class="bg-blue-9">
+          <h4 class="text-h5 text-white q-my-sm">Login</h4>
+        </q-card-section>
+        <q-card-section>
+          <q-input
+            unelevated
+            v-model="username"
+            label="Username"
+            :rules="[
+              (val) => (val && val.length > 0) || 'Please type something',
+            ]"
+            :lazy-rules="'ondemand'"
+            no-error-icon
+          />
           <q-input
             type="password"
             unelevated
             v-model="password"
             label="Password"
-            lazy-rules
+            :rules="[
+              (val) => (val && val.length > 0) || 'Please type something',
+            ]"
+            :lazy-rules="'ondemand'"
+            no-error-icon
           />
-        </q-form>
-      </q-card-section>
-      <q-card-actions class="q-px-md">
-        <q-btn
-          unelevated
-          color="primary"
-          size="md"
-          class="full-width"
-          label="Login"
-          @click="login"
-        />
-      </q-card-actions>
-      <q-card-section class="text-center q-py-xs">
-        <router-link to="/signup" style="text-decoration: none;">
-          <p class="text-grey-6">Not reigistered? Created an account</p>
-        </router-link>
-      </q-card-section>
+        </q-card-section>
+        <q-card-actions class="q-px-md">
+          <q-btn
+            type="submit"
+            unelevated
+            color="primary"
+            size="md"
+            class="full-width"
+            label="Login"
+            ref="submitBtn"
+          />
+        </q-card-actions>
+        <q-card-section class="text-center q-py-xs">
+          <router-link to="/signup" style="text-decoration: none;">
+            <p class="text-grey-6">Not reigistered? Created an account</p>
+          </router-link>
+        </q-card-section>
+      </q-form>
     </q-card>
   </q-page>
 </template>
@@ -55,6 +64,7 @@ export default {
       return this.$store.state.token;
     },
   },
+
   methods: {
     async login() {
       try {
@@ -71,6 +81,7 @@ export default {
         } else {
           this.$router.push("/");
         }
+        this.$refs.submitBtn.disable = true;
         this.$q.notify({
           color: "positive",
           position: "bottom-left",
