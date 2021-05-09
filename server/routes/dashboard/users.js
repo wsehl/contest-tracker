@@ -56,40 +56,38 @@ const users = {
                 email: req.body.email
               };
 
-              db.query("INSERT INTO users SET ?", newUser, (err) => {
-                if (err) {
-                  console.error(err);
-                  return res.status(400).send({
-                    msg: "An error occured"
+              const mailOptions = {
+                from: mail_user,
+                to: req.body.email,
+                subject: "Your new account on Contest Tracker",
+                html: `Username: ${req.body.username} <br />Password: ${req.body.password}<br />Role: ${req.body.role}`
+              };
+
+              mailer.sendMail(mailOptions, function(error) {
+                if (error) {
+                  return res.status(403).send({
+                    msg: "Email not valid!"
                   });
                 }
-                console.info(
-                  `Added user: [${newUser.username}] with role: [${newUser.role}] at [${new Date().toLocaleString(
-                    "ru-RU",
-                    {
-                      timeZone: "Asia/Almaty"
-                    }
-                  )}]`
-                );
-
-                const mailOptions = {
-                  from: mail_user,
-                  to: req.body.email,
-                  subject: "Your new account on Contest Tracker",
-                  html: `Username: ${req.body.username} <br />Password: ${req.body.password}<br />Role: ${req.body.role}`
-                };
-
-                mailer.sendMail(mailOptions, function(error) {
-                  if (error) {
-                    console.error(error);
-                    return res.status(403).send({
-                      msg: "An error occured"
+                db.query("INSERT INTO users SET ?", newUser, (err) => {
+                  if (err) {
+                    console.error(err);
+                    return res.status(400).send({
+                      msg: "An error occured!"
                     });
                   }
-                  return res.status(201).send({
-                    msg: "Successfully added user",
-                    status: 201
-                  });
+                  console.info(
+                    `Added user: [${newUser.username}] with role: [${newUser.role}] at [${new Date().toLocaleString(
+                      "ru-RU",
+                      {
+                        timeZone: "Asia/Almaty"
+                      }
+                    )}]`
+                  );
+                });
+                return res.status(201).send({
+                  msg: "Successfully added user",
+                  status: 201
                 });
               });
             }

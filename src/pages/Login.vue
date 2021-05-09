@@ -1,12 +1,13 @@
 <template>
-  <q-page class="flex flex-center">
-    <q-card>
+  <q-page class="flex flex-center items-center">
+    <q-card :class="{ 'w-25': $q.screen.gt.md }">
       <q-form @submit="login" greedy>
         <q-card-section class="bg-blue-9">
           <h4 class="text-h5 text-white q-my-sm">Login</h4>
         </q-card-section>
         <q-card-section>
           <q-input
+            autofocus
             unelevated
             v-model="username"
             label="Username"

@@ -57,6 +57,22 @@ const routes = [
           title: "About",
         },
       },
+      {
+        path: "/account",
+        name: "Account",
+        component: () => import("@/pages/Account.vue"),
+        meta: {
+          title: "Account",
+        },
+      },
+      {
+        path: "/help",
+        name: "Help",
+        component: () => import("@/pages/Help.vue"),
+        meta: {
+          title: "Help",
+        },
+      },
       // {
       //   path: "/archive",
       //   name: "Archive",

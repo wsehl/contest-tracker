@@ -61,11 +61,23 @@
               <q-icon name="arrow_drop_down" size="16px" />
               <q-menu auto-close>
                 <q-list dense>
-                  <q-item clickable class="GL__menu-link">
+                  <q-item
+                    clickable
+                    class="GL__menu-link"
+                    :to="{
+                      name: 'Account',
+                    }"
+                  >
                     <q-item-section>Your profile</q-item-section>
                   </q-item>
                   <q-separator />
-                  <q-item clickable class="GL__menu-link">
+                  <q-item
+                    clickable
+                    class="GL__menu-link"
+                    :to="{
+                      name: 'Help',
+                    }"
+                  >
                     <q-item-section>Help</q-item-section>
                   </q-item>
                   <q-item clickable class="GL__menu-link" @click="logout">

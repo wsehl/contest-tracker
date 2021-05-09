@@ -3,19 +3,21 @@
     <div class="flex column items-center q-pb-md">
       <div class="text-h3">Events</div>
     </div>
-    <div class="q-pa-md" v-if="!loading">
-      <q-table
-        @row-click="goToEvent"
-        :data="data"
-        :color="'primary'"
-        :columns="columns"
-        :pagination="{
-          rowsPerPage: 15,
-        }"
-        flat
-        bordered
-      />
-    </div>
+    <template v-if="!loading">
+      <div class="q-mt-md" :class="{ 'w-35': $q.screen.gt.md }">
+        <q-table
+          @row-click="goToEvent"
+          :data="data"
+          :color="'primary'"
+          :columns="columns"
+          :pagination="{
+            rowsPerPage: 15,
+          }"
+          flat
+          bordered
+        />
+      </div>
+    </template>
   </q-page>
 </template>
 
