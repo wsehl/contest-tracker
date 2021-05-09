@@ -82,16 +82,18 @@
 </template>
 
 <script>
+import { mapActions, mapGetters } from "vuex";
+
 export default {
   methods: {
-    logout() {
-      this.$store.dispatch("logout");
-    },
+    ...mapActions({
+      logout: "logout",
+    }),
   },
   computed: {
-    user() {
-      return this.$store.state.user;
-    },
+    ...mapGetters({
+      user: "getUser",
+    }),
   },
 };
 </script>
@@ -102,7 +104,7 @@ export default {
   text-decoration: none
   &:hover
     opacity: 0.7
-.router-link-exact-active
+.router-link-active
   color: #0057ff
 
 .header

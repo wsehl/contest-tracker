@@ -1,5 +1,5 @@
 <template>
-  <q-page class="q-pa-sm">
+  <div class="q-px-sm">
     <q-card flat bordered v-if="!loading">
       <template>
         <q-table
@@ -197,7 +197,7 @@
         </q-table>
       </template>
     </q-card>
-  </q-page>
+  </div>
 </template>
 
 <script>

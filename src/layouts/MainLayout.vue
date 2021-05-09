@@ -1,6 +1,6 @@
 <template>
   <q-layout class="bg-grey-1">
-    <Navbar />
+    <main-navbar />
     <q-page-container>
       <router-view />
     </q-page-container>
@@ -8,11 +8,11 @@
 </template>
 
 <script>
-import Navbar from "@/components/Navbar.vue";
+import MainNavbar from "@/components/Navbar.vue";
 
 export default {
   components: {
-    Navbar,
+    MainNavbar,
   },
 };
 </script>

@@ -1,20 +1,20 @@
 <template>
   <q-layout class="bg-grey-3">
-    <Navbar />
-    <DashboardSidebar />
+    <main-navbar />
     <q-page-container>
+      <dashboard-sidebar />
       <router-view />
     </q-page-container>
   </q-layout>
 </template>
 
 <script>
-import Navbar from "@/components/Navbar.vue";
+import MainNavbar from "@/components/Navbar.vue";
 import DashboardSidebar from "@/components/DashboardSidebar.vue";
 
 export default {
   components: {
-    Navbar,
+    MainNavbar,
     DashboardSidebar,
   },
 };

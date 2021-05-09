@@ -3,8 +3,7 @@ const db = require("../../lib/database.js");
 const events = {
   getAll: (req, res) => {
     db.query(
-      `SELECT * FROM organizations INNER JOIN events  
-      ON events.organization_id = organizations.id`,
+      `SELECT * FROM organizations INNER JOIN events ON organizations.id = events.organization_id`,
       (err, result) => {
         return res.status(200).send({
           data: result
@@ -23,6 +22,12 @@ const events = {
           console.error(err);
           return res.status(400).send({
             msg: "An error occured"
+          });
+        }
+        if (!result.length) {
+          return res.status(404).send({
+            msg: "Not Found",
+            status: 404
           });
         }
         return res.status(200).send({

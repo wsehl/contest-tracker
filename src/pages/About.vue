@@ -15,8 +15,6 @@
 </template>
 
 <style lang="sass" scoped>
-.w-50
-    width: 50%
 .about
     .school-link
         color: inherit

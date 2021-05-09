@@ -59,12 +59,6 @@ export default {
       password: "",
     };
   },
-  computed: {
-    token() {
-      return this.$store.state.token;
-    },
-  },
-
   methods: {
     async login() {
       try {
@@ -81,7 +75,7 @@ export default {
         } else {
           this.$router.push("/");
         }
-        this.$refs.submitBtn.disable = true;
+        // this.$refs.submitBtn.disable = true;
         this.$q.notify({
           color: "positive",
           position: "bottom-left",

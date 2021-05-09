@@ -1,220 +1,218 @@
 <template>
-  <q-page>
-    <div class="row q-col-gutter-sm q-pa-sm">
-      <div class="col-lg-3 col-md-4 col-sm-12 col-xs-12">
+  <div class="row q-col-gutter-sm q-px-sm">
+    <div class="col-lg-3 col-md-4 col-sm-12 col-xs-12">
+      <q-card flat bordered>
+        <q-card-section>
+          <div class="text-h6">
+            Add
+          </div>
+        </q-card-section>
+        <q-separator inset></q-separator>
+        <q-list separator>
+          <q-item
+            clickable
+            @click="setTable('users')"
+            :class="[selectedTable === 'users' ? 'bg-grey-3' : '']"
+          >
+            <q-item-section avatar>
+              <q-icon color="primary" name="people" />
+            </q-item-section>
+            <q-item-section>Users</q-item-section>
+          </q-item>
+          <q-item
+            clickable
+            @click="setTable('organizations')"
+            :class="[selectedTable === 'organizations' ? 'bg-grey-3' : '']"
+          >
+            <q-item-section avatar>
+              <q-icon color="primary" name="corporate_fare" />
+            </q-item-section>
+            <q-item-section>Organizations</q-item-section>
+          </q-item>
+          <q-item
+            clickable
+            @click="setTable('events')"
+            :class="[selectedTable === 'events' ? 'bg-grey-3' : '']"
+          >
+            <q-item-section avatar>
+              <q-icon color="primary" name="event" />
+            </q-item-section>
+            <q-item-section>Events</q-item-section>
+          </q-item>
+          <q-item
+            clickable
+            @click="setTable('grades')"
+            :class="[selectedTable === 'grades' ? 'bg-grey-3' : '']"
+          >
+            <q-item-section avatar>
+              <q-icon color="primary" name="school" />
+            </q-item-section>
+            <q-item-section>Grades</q-item-section>
+          </q-item>
+        </q-list>
+      </q-card>
+    </div>
+    <div class="col-lg-9 col-md-8 col-sm-12 col-xs-12">
+      <template v-if="selectedTable === 'users'">
         <q-card flat bordered>
           <q-card-section>
-            <div class="text-h6">
-              Add
-            </div>
+            <div class="text-h6">Insert to {{ selectedTable }} table</div>
           </q-card-section>
           <q-separator inset></q-separator>
-          <q-list separator>
-            <q-item
-              clickable
-              @click="setTable('users')"
-              :class="[selectedTable === 'users' ? 'bg-grey-3' : '']"
-            >
-              <q-item-section avatar>
-                <q-icon color="primary" name="people" />
-              </q-item-section>
-              <q-item-section>Users</q-item-section>
-            </q-item>
-            <q-item
-              clickable
-              @click="setTable('organizations')"
-              :class="[selectedTable === 'organizations' ? 'bg-grey-3' : '']"
-            >
-              <q-item-section avatar>
-                <q-icon color="primary" name="corporate_fare" />
-              </q-item-section>
-              <q-item-section>Organizations</q-item-section>
-            </q-item>
-            <q-item
-              clickable
-              @click="setTable('events')"
-              :class="[selectedTable === 'events' ? 'bg-grey-3' : '']"
-            >
-              <q-item-section avatar>
-                <q-icon color="primary" name="event" />
-              </q-item-section>
-              <q-item-section>Events</q-item-section>
-            </q-item>
-            <q-item
-              clickable
-              @click="setTable('grades')"
-              :class="[selectedTable === 'grades' ? 'bg-grey-3' : '']"
-            >
-              <q-item-section avatar>
-                <q-icon color="primary" name="school" />
-              </q-item-section>
-              <q-item-section>Grades</q-item-section>
-            </q-item>
-          </q-list>
-        </q-card>
-      </div>
-      <div class="col-lg-9 col-md-8 col-sm-12 col-xs-12">
-        <template v-if="selectedTable === 'users'">
-          <q-card flat bordered>
+          <q-card>
             <q-card-section>
-              <div class="text-h6">Insert to {{ selectedTable }} table</div>
-            </q-card-section>
-            <q-separator inset></q-separator>
-            <q-card>
-              <q-card-section>
-                <q-form class="q-gutter-md">
-                  <q-input dense outlined label="Username" v-model="username" />
-                  <q-input dense outlined label="Email" v-model="email" />
-                  <q-select
-                    dense
-                    outlined
-                    v-model="role"
-                    :options="role_options"
-                    label="Role"
-                  />
-                  <!-- <q-input dense outlined label="Password" v-model="password" /> -->
-                  <!-- <q-icon
+              <q-form class="q-gutter-md">
+                <q-input dense outlined label="Username" v-model="username" />
+                <q-input dense outlined label="Email" v-model="email" />
+                <q-select
+                  dense
+                  outlined
+                  v-model="role"
+                  :options="role_options"
+                  label="Role"
+                />
+                <!-- <q-input dense outlined label="Password" v-model="password" /> -->
+                <!-- <q-icon
                     name="swap_vert"
                     class="cursor-pointer"
                     @click="updateGeneratedPassword"
                   /> -->
-                  <q-input
-                    dense
-                    outlined
-                    type="text"
-                    autocomplete="off"
-                    v-model="generatedPassword"
-                    label="Generated password"
-                  >
-                  </q-input>
-                  <q-item>
-                    <q-item-section avatar>
-                      <q-icon
-                        name="swap_vert"
-                        class="cursor-pointer"
-                        @click="updateGeneratedPassword"
+                <q-input
+                  dense
+                  outlined
+                  type="text"
+                  autocomplete="off"
+                  v-model="generatedPassword"
+                  label="Generated password"
+                >
+                </q-input>
+                <q-item>
+                  <q-item-section avatar>
+                    <q-icon
+                      name="swap_vert"
+                      class="cursor-pointer"
+                      @click="updateGeneratedPassword"
+                    />
+                  </q-item-section>
+                  <q-item-section>
+                    <div>
+                      <q-badge :color="strengthColor">
+                        Password strength:
+                      </q-badge>
+                      <q-slider
+                        snap
+                        label
+                        :step="12"
+                        :min="0"
+                        :max="48"
+                        :color="strengthColor"
+                        :label-value="strengthLabel"
+                        v-model="strengthLevel"
                       />
-                    </q-item-section>
-                    <q-item-section>
-                      <div>
-                        <q-badge :color="strengthColor">
-                          Password strength:
-                        </q-badge>
-                        <q-slider
-                          snap
-                          label
-                          :step="12"
-                          :min="0"
-                          :max="48"
-                          :color="strengthColor"
-                          :label-value="strengthLabel"
-                          v-model="strengthLevel"
-                        />
-                      </div>
-                    </q-item-section>
-                  </q-item>
-                </q-form>
-              </q-card-section>
-              <q-card-actions class="q-px-md q-mb-md">
-                <q-btn
-                  color="primary"
-                  size="md"
-                  class=""
-                  label="Save"
-                  @click="insertTo('users')"
-                />
-              </q-card-actions>
-            </q-card>
-          </q-card>
-        </template>
-        <template v-if="selectedTable === 'organizations'">
-          <q-card flat bordered>
-            <q-card-section>
-              <div class="text-h6">Insert to {{ selectedTable }} table</div>
+                    </div>
+                  </q-item-section>
+                </q-item>
+              </q-form>
             </q-card-section>
-            <q-separator inset></q-separator>
-            <q-card>
-              <q-card-section>
-                <q-form class="q-gutter-md">
-                  <q-input
-                    dense
-                    outlined
-                    label="Organization title"
-                    v-model="organization_name"
-                  />
-                  <q-uploader
-                    :factory="uploadFile"
-                    auto-upload
-                    accept=".jpg, image/*"
-                    ref="organization_uploader"
-                    :hide-upload-btn="true"
-                    @rejected="onRejected"
-                  />
-                </q-form>
-              </q-card-section>
-              <q-card-actions class="q-px-md q-mb-md">
-                <q-btn
-                  color="primary"
-                  size="md"
-                  class=""
-                  label="Save"
-                  @click="insertTo('organizations')"
-                />
-              </q-card-actions>
-            </q-card>
+            <q-card-actions class="q-px-md q-mb-md">
+              <q-btn
+                color="primary"
+                size="md"
+                class=""
+                label="Save"
+                @click="insertTo('users')"
+              />
+            </q-card-actions>
           </q-card>
-        </template>
-        <template v-if="selectedTable === 'events'">
-          <q-card flat bordered>
+        </q-card>
+      </template>
+      <template v-if="selectedTable === 'organizations'">
+        <q-card flat bordered>
+          <q-card-section>
+            <div class="text-h6">Insert to {{ selectedTable }} table</div>
+          </q-card-section>
+          <q-separator inset></q-separator>
+          <q-card>
             <q-card-section>
-              <div class="text-h6">Insert to {{ selectedTable }} table</div>
-            </q-card-section>
-            <q-separator inset></q-separator>
-            <q-card>
-              <q-card-section>
-                <q-form class="q-gutter-md">
-                  <q-input dense outlined label="Title" v-model="event_title" />
-                  <q-select
-                    dense
-                    outlined
-                    v-model="event_organization"
-                    :options="event_organization_options"
-                    label="Organization"
-                    input-debounce="0"
-                  >
-                    <template v-slot:no-option>
-                      <q-item>
-                        <q-item-section class="text-grey">
-                          No results
-                        </q-item-section>
-                      </q-item>
-                    </template>
-                  </q-select>
-                  <q-input
-                    dense
-                    outlined
-                    label="Description"
-                    v-model="event_description"
-                    type="textarea"
-                  />
-                  <q-date v-model="event_range" range />
-                </q-form>
-              </q-card-section>
-              <q-card-actions class="q-px-md q-mb-md">
-                <q-btn
-                  color="primary"
-                  size="md"
-                  class=""
-                  label="Save"
-                  @click="insertTo('events')"
+              <q-form class="q-gutter-md">
+                <q-input
+                  dense
+                  outlined
+                  label="Organization title"
+                  v-model="organization_name"
                 />
-              </q-card-actions>
-            </q-card>
+                <q-uploader
+                  :factory="uploadFile"
+                  auto-upload
+                  accept=".jpg, image/*"
+                  ref="organization_uploader"
+                  :hide-upload-btn="true"
+                  @rejected="onRejected"
+                />
+              </q-form>
+            </q-card-section>
+            <q-card-actions class="q-px-md q-mb-md">
+              <q-btn
+                color="primary"
+                size="md"
+                class=""
+                label="Save"
+                @click="insertTo('organizations')"
+              />
+            </q-card-actions>
           </q-card>
-        </template>
-      </div>
+        </q-card>
+      </template>
+      <template v-if="selectedTable === 'events'">
+        <q-card flat bordered>
+          <q-card-section>
+            <div class="text-h6">Insert to {{ selectedTable }} table</div>
+          </q-card-section>
+          <q-separator inset></q-separator>
+          <q-card>
+            <q-card-section>
+              <q-form class="q-gutter-md">
+                <q-input dense outlined label="Title" v-model="event_title" />
+                <q-select
+                  dense
+                  outlined
+                  v-model="event_organization"
+                  :options="event_organization_options"
+                  label="Organization"
+                  input-debounce="0"
+                >
+                  <template v-slot:no-option>
+                    <q-item>
+                      <q-item-section class="text-grey">
+                        No results
+                      </q-item-section>
+                    </q-item>
+                  </template>
+                </q-select>
+                <q-input
+                  dense
+                  outlined
+                  label="Description"
+                  v-model="event_description"
+                  type="textarea"
+                />
+                <q-date v-model="event_range" range />
+              </q-form>
+            </q-card-section>
+            <q-card-actions class="q-px-md q-mb-md">
+              <q-btn
+                color="primary"
+                size="md"
+                class=""
+                label="Save"
+                @click="insertTo('events')"
+              />
+            </q-card-actions>
+          </q-card>
+        </q-card>
+      </template>
     </div>
-  </q-page>
+  </div>
 </template>
 
 <script>
