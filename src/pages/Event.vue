@@ -1,11 +1,11 @@
 <template>
-  <div>
+  <div v-if="!loading">
     Hello
   </div>
 </template>
 
 <script>
-import axios from "axios";
+import api from "@/services/api.js";
 
 export default {
   data() {
@@ -14,15 +14,32 @@ export default {
       event: {},
     };
   },
+  methods: {
+    fetchData() {
+      api
+        .getRow("event", this.$route.params.id)
+        .then((response) => {
+          this.event = response.data;
+          console.log(response);
+        })
+        .finally(() => {
+          this.loading = false;
+          this.$q.loading.hide();
+        })
+        .catch((error) => {
+          this.$q.notify({
+            color: "negative",
+            position: "bottom-left",
+            message: error.response.data.msg,
+            progress: true,
+            timeout: 1500,
+          });
+        });
+    },
+  },
   created() {
-    axios
-      .get(`${process.env.VUE_APP_BACKEND_URL}event/${this.$route.params.id}`)
-      .catch((err) => console.log(err))
-      .then((response) => {
-        console.log(response.data);
-        document.title = this.response.data.event_name;
-      })
-      .finally(() => (this.loading = false));
+    this.$q.loading.show();
+    this.fetchData();
   },
 };
 </script>

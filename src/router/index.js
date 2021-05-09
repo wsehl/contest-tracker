@@ -52,23 +52,23 @@ const routes = [
       {
         path: "/about",
         name: "About",
-        // component: () => import("@/pages/About.vue"),
+        component: () => import("@/pages/About.vue"),
         meta: {
           title: "About",
         },
       },
+      // {
+      //   path: "/archive",
+      //   name: "Archive",
+      //   component: () => import("@/pages/Archive.vue"),
+      //   meta: {
+      //     title: "Archive",
+      //   },
+      // },
       {
-        path: "/Archive",
-        name: "Archive",
-        // component: () => import("@/pages/Archive.vue"),
-        meta: {
-          title: "Archive",
-        },
-      },
-      {
-        path: "/Events",
+        path: "/events",
         name: "Events",
-        // component: () => import("@/pages/events.vue"),
+        component: () => import("@/pages/Events.vue"),
         meta: {
           title: "Events",
         },

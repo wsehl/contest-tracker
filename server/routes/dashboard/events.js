@@ -1,11 +1,30 @@
 const db = require("../../lib/database.js");
 
-const users = {
+const events = {
   getAll: (req, res) => {
     db.query(
       `SELECT * FROM organizations INNER JOIN events  
       ON events.organization_id = organizations.id`,
       (err, result) => {
+        return res.status(200).send({
+          data: result
+        });
+      }
+    );
+  },
+  getOne: (req, res) => {
+    const eventId = req.params.id;
+    db.query(
+      `SELECT * FROM organizations INNER JOIN events ON events.organization_id = organizations.id WHERE events.id = ${db.escape(
+        eventId
+      )}`,
+      (err, result) => {
+        if (err) {
+          console.error(err);
+          return res.status(400).send({
+            msg: "An error occured"
+          });
+        }
         return res.status(200).send({
           data: result
         });
@@ -39,4 +58,4 @@ const users = {
     });
   }
 };
-module.exports = users;
+module.exports = events;

@@ -20,6 +20,7 @@ router.get("/dashboard/users", middleware.auth.isAdmin, route.users.getAll);
 router.post("/dashboard/users", middleware.auth.isAdmin, middleware.dashboard.validateUsers, route.users.addNew);
 
 router.get("/dashboard/events", route.events.getAll);
+router.get("/dashboard/event/:id", route.events.getOne);
 router.post("/dashboard/events", middleware.auth.isAdmin, middleware.dashboard.validateEvents, route.events.addNew);
 
 router.get("/dashboard/organizations", route.organizations.getAll);

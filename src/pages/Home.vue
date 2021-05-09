@@ -1,12 +1,13 @@
 <template>
   <q-page>
     <template v-if="!loading">
-      <div class="row">
-        <q-parallax src="main_picture.jpg">
-          <div class="text-h3 text-center parallax-title">
-            Проектная деятельность<br />НИШ Павлодар
-          </div>
-        </q-parallax>
+      <q-parallax src="main_picture.jpg">
+        <div class="text-h3 text-center parallax-title">
+          <div>Проектная деятельность<br />НИШ Павлодар</div>
+        </div>
+      </q-parallax>
+      <div class="upcoming-events">
+        Upcoming Events
       </div>
       <carousel
         paginationActiveColor="#3B82F6"
@@ -22,7 +23,7 @@
           [1024, 4],
         ]"
       >
-        <slide v-for="item in events.data" :key="item.id" class="carousel-item">
+        <slide v-for="item in events" :key="item.id" class="carousel-item">
           <div class="title">
             <router-link
               class="link"
@@ -75,7 +76,6 @@ export default {
   },
   computed: {
     url() {
-      // return `${process.env.VUE_APP_BACKEND_URL}/static`;
       return `https://firebasestorage.googleapis.com/v0/b/contest-tracker-87dc8.appspot.com/o`;
     },
   },
@@ -86,8 +86,10 @@ export default {
     fetchData() {
       Promise.all([api.getTable("organizations"), api.getTable("events")])
         .then((results) => {
-          this.organizations = results[0];
-          this.events = results[1];
+          this.organizations = results[0].data;
+          this.events = results[1].data;
+        })
+        .finally(() => {
           this.loading = false;
           this.$q.loading.hide();
         })
@@ -111,9 +113,16 @@ export default {
   border-radius: 15px
   padding: 25px
 
+.upcoming-events
+  display: flex
+  flex-direction: column
+  align-items: center
+  font-size: 24px
+  font-weight: 500
+  padding: 15px 0 5px 0
+
 .carousel
-  background-color: rgb(245 245 245 / 70%)
-  border: 1px solid #ebeaeb
+  border-bottom: 1px solid #ebeaeb
   .carousel-item
     display: flex
     flex-direction: column

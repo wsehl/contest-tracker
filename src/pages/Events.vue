@@ -1,0 +1,79 @@
+<template>
+  <q-page class="q-page flex column items-center q-layout-padding">
+    <div class="flex column items-center q-pb-md">
+      <div class="text-h3">Events</div>
+    </div>
+    <div class="q-pa-md" v-if="!loading">
+      <q-table
+        @row-click="goToEvent"
+        :data="data"
+        :color="'primary'"
+        :columns="columns"
+        :pagination="{
+          rowsPerPage: 15,
+        }"
+        flat
+        bordered
+      />
+    </div>
+  </q-page>
+</template>
+
+<script>
+import api from "@/services/api.js";
+import EventsTable from "@/mixins/tables/EventsTable.js";
+
+export default {
+  mixins: [EventsTable],
+  data() {
+    return {
+      loading: true,
+      data: [],
+    };
+  },
+  methods: {
+    goToEvent(event, row) {
+      this.$router.push({
+        name: "Event",
+        params: { id: row.id },
+      });
+    },
+    fetchData() {
+      api
+        .getTable("events")
+        .then((response) => {
+          this.data = response.data;
+        })
+        .finally(() => {
+          this.loading = false;
+          this.$q.loading.hide();
+        })
+        .catch((error) => {
+          this.$q.notify({
+            color: "negative",
+            position: "bottom-left",
+            message: error.response.data.msg,
+            progress: true,
+            timeout: 1500,
+          });
+        });
+    },
+  },
+  created() {
+    this.$q.loading.show();
+    this.fetchData();
+  },
+};
+</script>
+
+<style lang="sass" scoped>
+.w-50
+    width: 50%
+.w-70
+    width: 70%
+.w-100
+    width: 100%
+.about
+    .school-link
+        color: inherit
+</style>

@@ -1,4 +1,5 @@
 const db = require("../../lib/database.js");
+const { mailer, mail_user } = require("../../lib/mailer.js");
 const bcrypt = require("bcryptjs");
 
 const users = {
@@ -70,9 +71,25 @@ const users = {
                     }
                   )}]`
                 );
-                return res.status(201).send({
-                  msg: "Successfully added user",
-                  status: 201
+
+                const mailOptions = {
+                  from: mail_user,
+                  to: req.body.email,
+                  subject: "Your new account on Contest Tracker",
+                  html: `Username: ${req.body.username} <br />Password: ${req.body.password}<br />Role: ${req.body.role}`
+                };
+
+                mailer.sendMail(mailOptions, function(error) {
+                  if (error) {
+                    console.error(error);
+                    return res.status(403).send({
+                      msg: "An error occured"
+                    });
+                  }
+                  return res.status(201).send({
+                    msg: "Successfully added user",
+                    status: 201
+                  });
                 });
               });
             }

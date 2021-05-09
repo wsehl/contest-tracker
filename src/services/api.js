@@ -28,6 +28,11 @@ export default {
       .get(`${url}/dashboard/${table}`, options())
       .then((response) => response.data);
   },
+  getRow(table, id) {
+    return axios
+      .get(`${url}/dashboard/${table}/${id}`, options())
+      .then((response) => response.data);
+  },
   insertToTable(credentials, table) {
     return axios
       .post(`${url}/dashboard/${table}`, credentials, options())

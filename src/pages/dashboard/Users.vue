@@ -1,7 +1,7 @@
 <template>
   <q-page class="q-pa-sm">
-    <q-card flat bordered>
-      <template v-if="!loading">
+    <q-card flat bordered v-if="!loading">
+      <template>
         <q-table
           title="Users"
           class="text-grey-8"
@@ -268,6 +268,7 @@ export default {
         })
         .finally(() => {
           this.loading = false;
+          this.$q.loading.hide();
         })
         .catch((error) => {
           this.$q.notify({
@@ -281,6 +282,7 @@ export default {
     },
   },
   mounted() {
+    this.$q.loading.show();
     this.fetchData();
   },
 };

@@ -1,8 +1,5 @@
 <template>
-  <q-header
-    style="background: #fff; border-bottom: 1px solid #ebeaeb; color: #4a4a4a"
-    height-hint="61.59"
-  >
+  <q-header height-hint="61.59" class="header">
     <q-toolbar class="q-py-md q-px-lg">
       <router-link :to="{ name: 'Home' }">
         <q-btn round dense flat color="white" no-caps>
@@ -28,37 +25,33 @@
         v-if="$q.screen.gt.xs"
         class="GL__toolbar-link q-ml-xs q-gutter-md text-body2 text-weight-medium row items-center no-wrap"
       >
-        <router-link :to="{ name: 'About' }" exact style="color: #4a4a4a">
+        <router-link :to="{ name: 'About' }" class="router-link">
           About
         </router-link>
-        <router-link :to="{ name: 'Archive' }" exact style="color: #4a4a4a">
-          Archive
+        <router-link :to="{ name: 'Events' }" class="router-link">
+          Events
         </router-link>
-        <router-link :to="{ name: 'Events' }" exact style="color: #4a4a4a">
+        <!-- <router-link :to="{ name: 'Events' }" class="router-link">
           Upcoming events
-        </router-link>
+        </router-link> -->
       </div>
       <q-space />
       <div class="q-pl-sm row items-center no-wrap">
         <div
-          class="GL__toolbar-link q-gutter-md text-body2 text-weight-medium row items-center no-wrap"
+          class="q-gutter-md text-body2 text-weight-medium row items-center no-wrap"
         >
           <template v-if="user.role && user.role != 'User'">
-            <router-link
-              :to="{ name: 'Dashboard' }"
-              exact
-              style="color: #4a4a4a"
-            >
+            <router-link :to="{ name: 'Dashboard' }" class="router-link">
               Dashboard
             </router-link>
           </template>
           <template v-if="!user.username">
-            <router-link :to="{ name: 'Login' }" style="color: #4a4a4a"
-              >Login</router-link
-            >
-            <router-link :to="{ name: 'Signup' }" style="color: #4a4a4a"
-              >Sign up</router-link
-            >
+            <router-link :to="{ name: 'Login' }" class="router-link">
+              Login
+            </router-link>
+            <router-link :to="{ name: 'Signup' }" class="router-link">
+              Sign up
+            </router-link>
           </template>
           <template v-else>
             <q-btn dense flat no-wrap>
@@ -104,6 +97,19 @@ export default {
 </script>
 
 <style lang="sass" scoped>
+.router-link
+  color: #4a4a4a
+  text-decoration: none
+  &:hover
+    opacity: 0.7
+.router-link-exact-active
+  color: #0057ff
+
+.header
+  background: #fff
+  border-bottom: 1px solid #ebeaeb
+  color: #4a4a4a
+
 .GL
   &__select-GL__menu-link
     .default-type
@@ -115,12 +121,6 @@ export default {
         color: white
       .default-type
         visibility: visible
-  &__toolbar-link
-    a
-      color: black
-      text-decoration: none
-      &:hover
-        opacity: 0.7
   &__menu-link:hover
     background: #0366d6
     color: white
