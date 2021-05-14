@@ -33,18 +33,21 @@ export default {
         },
         {
           name: "registered",
+          align: "left",
           label: "Registered at",
           field: "registered",
           sortable: true,
         },
         {
           name: "last_login",
+          align: "left",
           label: "Last login",
           field: "last_login",
           sortable: true,
         },
         {
           name: "actions",
+          align: "center",
           label: "Actions",
           field: "actions",
         },

@@ -71,17 +71,13 @@
                   :options="role_options"
                   label="Role"
                 />
-                <!-- <q-input dense outlined label="Password" v-model="password" /> -->
-                <!-- <q-icon
-                    name="swap_vert"
-                    class="cursor-pointer"
-                    @click="updateGeneratedPassword"
-                  /> -->
+                <q-input dense outlined label="Password" v-model="password" />
                 <q-input
                   dense
                   outlined
                   type="text"
                   autocomplete="off"
+                  readonly
                   v-model="generatedPassword"
                   label="Generated password"
                 >
@@ -225,6 +221,7 @@ export default {
       strengthLevel: 24,
 
       username: "",
+      password: "",
       email: "",
       role: "",
       role_options: ["User", "Curator", "Teacher", "Admin"],
@@ -259,7 +256,7 @@ export default {
           username: this.username,
           email: this.email,
           role: this.role,
-          password: this.generatedPassword,
+          password: this.password,
         };
 
         const event_credentials = {

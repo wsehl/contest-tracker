@@ -9,7 +9,7 @@
           <q-input
             autofocus
             unelevated
-            v-model="username"
+            v-model="user.username"
             label="Username"
             :rules="[
               (val) => (val && val.length > 0) || 'Please type something',
@@ -20,7 +20,7 @@
           <q-input
             type="email"
             unelevated
-            v-model="email"
+            v-model="user.email"
             label="Email"
             :rules="[
               (val) => (val && val.length > 0) || 'Please type something',
@@ -31,7 +31,7 @@
           <q-input
             type="password"
             unelevated
-            v-model="password"
+            v-model="user.password"
             label="Password"
             :rules="[
               (val) => (val && val.length > 0) || 'Please type something',
@@ -42,7 +42,7 @@
           <q-input
             type="password"
             unelevated
-            v-model="password_repeat"
+            v-model="user.password_repeat"
             label="Password (repeat)"
             :rules="[
               (val) => (val && val.length > 0) || 'Please type something',
@@ -78,24 +78,19 @@ import api from "@/services/api.js";
 export default {
   data() {
     return {
-      username: "",
-      email: "",
-      password: "",
-      password_repeat: "",
+      user: {
+        username: "",
+        email: "",
+        password: "",
+        password_repeat: "",
+      },
     };
   },
   methods: {
     async signup() {
       try {
-        const credentials = {
-          username: this.username,
-          email: this.email,
-          password: this.password,
-          password_repeat: this.password_repeat,
-        };
-        const response = await api.signup(credentials);
+        const response = await api.signup(this.user);
         this.$router.push({ name: "Login" });
-        this.$refs.submitBtn.disable = true;
         this.$q.notify({
           color: "positive",
           position: "bottom-left",

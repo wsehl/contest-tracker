@@ -9,7 +9,7 @@
           <q-input
             autofocus
             unelevated
-            v-model="username"
+            v-model="user.username"
             label="Username"
             :rules="[
               (val) => (val && val.length > 0) || 'Please type something',
@@ -20,7 +20,7 @@
           <q-input
             type="password"
             unelevated
-            v-model="password"
+            v-model="user.password"
             label="Password"
             :rules="[
               (val) => (val && val.length > 0) || 'Please type something',
@@ -56,18 +56,16 @@ import api from "@/services/api.js";
 export default {
   data() {
     return {
-      username: "",
-      password: "",
+      user: {
+        username: "",
+        password: "",
+      },
     };
   },
   methods: {
     async login() {
       try {
-        const credentials = {
-          username: this.username,
-          password: this.password,
-        };
-        const response = await api.login(credentials);
+        const response = await api.login(this.user);
         const token = response.token;
         const user = response.user;
         this.$store.dispatch("login", { token, user });
@@ -76,7 +74,6 @@ export default {
         } else {
           this.$router.push("/");
         }
-        // this.$refs.submitBtn.disable = true;
         this.$q.notify({
           color: "positive",
           position: "bottom-left",

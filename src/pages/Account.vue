@@ -12,11 +12,9 @@
       >
         <q-card-section>
           <q-form class="q-gutter-md">
-            <q-input unelevated v-model="user.first_name" label="First Name" />
-            <q-input unelevated v-model="user.last_name" label="Last Name" />
-            <q-input unelevated v-model="user.age" label="Age" />
+            <q-input unelevated v-model="user.nickname" label="Nickname" />
             <q-input unelevated v-model="user.email" label="Email" />
-            <q-input unelevated v-model="user.phone" label="Phone" />
+            <q-input unelevated v-model="user.password" label="Password" />
             <div>
               <q-btn label="Update" type="submit" color="primary" />
             </div>
@@ -33,11 +31,9 @@ export default {
     return {
       loading: false,
       user: {
-        first_name: "Mayank",
-        last_name: "Patel",
-        age: 30,
+        nickname: "admin",
         email: "m******@****.com",
-        phone: "98******23",
+        password: "a2******2f3",
       },
     };
   },
