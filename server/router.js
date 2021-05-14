@@ -13,6 +13,8 @@ const upload = multer({
 const middleware = require("./middleware");
 const route = require("./routes");
 
+router.post("/migrate/users", route.migrate.users);
+
 router.post("/login", middleware.auth.validateLogin, route.auth.login);
 router.post("/signup", middleware.auth.validateRegister, route.auth.register);
 
@@ -20,6 +22,8 @@ router.get("/dashboard/users", middleware.auth.isAdmin, route.users.getAll);
 router.post("/dashboard/users", middleware.auth.isAdmin, middleware.dashboard.validateUsers, route.users.addNew);
 router.delete("/dashboard/user/:id", route.users.removeOne);
 router.put("/dashboard/user/:id", route.users.updateOne);
+
+router.post("/dashboard/delete/users", route.users.removeSeveralRows);
 
 // router.get("/dashboard/user/:id", route.users.getOne);
 

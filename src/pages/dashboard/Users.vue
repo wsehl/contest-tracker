@@ -19,6 +19,13 @@
         selection="multiple"
         :selected.sync="selected"
       >
+        <template v-slot:top-left>
+          <q-input outlined dense v-model="filter" placeholder="Search">
+            <template v-slot:append>
+              <q-icon name="search" />
+            </template>
+          </q-input>
+        </template>
         <template v-slot:top-right="props">
           <q-dialog v-model="show_edit_dialog" class="q-pa-sm q-gutter-sm">
             <q-card>
@@ -89,11 +96,20 @@
               </q-card-section>
             </q-card>
           </q-dialog>
-          <q-input outlined dense v-model="filter" placeholder="Search">
-            <template v-slot:append>
-              <q-icon name="search" />
-            </template>
-          </q-input>
+          <div v-if="selected.length > 1">
+            <q-btn
+              flat
+              round
+              dense
+              icon="delete"
+              @click="deleteSeveral"
+              no-caps
+            >
+              <q-tooltip :disable="$q.platform.is.mobile" v-close-popup>
+                Delete several rows
+              </q-tooltip>
+            </q-btn>
+          </div>
           <q-btn
             flat
             round
@@ -164,10 +180,18 @@
             <q-td key="registered" :props="props">
               {{ props.row.registered }}
             </q-td>
-            <q-td key="last_login" :props="props">
+            <q-td
+              key="last_login"
+              :props="props"
+              :class="mode === 'grid' ? 'hidden' : ''"
+            >
               {{ props.row.last_login }}
             </q-td>
-            <q-td key="actions" :props="props">
+            <q-td
+              key="actions"
+              :props="props"
+              :class="mode === 'grid' ? 'hidden' : ''"
+            >
               <q-btn
                 @click="viewItem(props.row)"
                 icon="visibility"
@@ -193,7 +217,6 @@
           </q-tr>
         </template>
       </q-table>
-      <!-- <div class="q-mt-md">Selected: {{ JSON.stringify(selected) }}</div> -->
     </q-card>
   </div>
 </template>
@@ -244,6 +267,32 @@ export default {
     viewItem(item) {
       this.viewedItem = Object.assign({}, item);
       this.show_view_dialog = true;
+    },
+    deleteSeveral() {
+      const rows = this.selected.map((item) => item.id);
+      confirm("Are you sure you want to delete several items?") &&
+        api
+          .removeSeveralRows("users", rows)
+          .then((response) => {
+            this.$q.notify({
+              color: "positive",
+              position: "bottom-left",
+              message: response.msg,
+              progress: true,
+              timeout: 1500,
+            });
+            this.selected = [];
+            this.fetchData();
+          })
+          .catch((error) => {
+            this.$q.notify({
+              color: "negative",
+              position: "bottom-left",
+              message: error.response.data.msg,
+              progress: true,
+              timeout: 1500,
+            });
+          });
     },
     editRow() {
       api

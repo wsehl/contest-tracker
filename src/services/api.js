@@ -44,6 +44,11 @@ export default {
       .delete(`/dashboard/${table}/${id}`, options())
       .then((response) => response.data);
   },
+  removeSeveralRows(table, cred) {
+    return api
+      .post(`/dashboard/delete/${table}`, cred, options())
+      .then((response) => response.data);
+  },
   editRow(table, id, cred) {
     return api
       .put(`/dashboard/${table}/${id}`, cred, options())

@@ -25,16 +25,22 @@ const users = {
           msg: "An error occured"
         });
       }
-      db.query(`ALTER TABLE users AUTO_INCREMENT = 1`, (err) => {
-        if (err) {
-          console.error(err);
-          return res.status(400).send({
-            msg: "An error occured"
-          });
-        }
-      });
       return res.status(200).send({
-        msg: "Succesfully removed"
+        msg: "Succefully Removed"
+      });
+    });
+  },
+  removeSeveralRows: (req, res) => {
+    // DELETE FROM users WHERE id IN (2, 3)
+    db.query(`DELETE FROM users WHERE id IN (${db.escape(req.body)})`, (err) => {
+      if (err) {
+        console.error(err);
+        return res.status(400).send({
+          msg: "An error occured"
+        });
+      }
+      return res.status(200).send({
+        msg: "Succefully Removed"
       });
     });
   },
@@ -117,7 +123,6 @@ const users = {
                     msg: "An error occured!"
                   });
                 }
-                console.log(req.body.password, req.body.username, newUser);
                 console.info(
                   `Added user: [${newUser.username}] with role: [${newUser.role}] at [${new Date().toLocaleString(
                     "ru-RU",
