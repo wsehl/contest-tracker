@@ -6,8 +6,8 @@ const router = require("./router");
 
 const app = express();
 
-const PORT = process.env.PORT || 8888;
-const FRONTEND_URI = process.env.FRONTEND_URI || "http://localhost:3000";
+const PORT = process.env.PORT || 8889;
+const FRONTEND_URI = process.env.FRONTEND_URI || "http://localhost:3001";
 const FILES_FOLDER = path.join(__dirname, "files");
 
 if (!fs.existsSync(FILES_FOLDER)) {

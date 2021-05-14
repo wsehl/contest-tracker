@@ -5,7 +5,7 @@
   "scripts": {
     "lint": "vue-cli-service lint",
     "build": "vue-cli-service build",
-    "serve": "vue-cli-service serve --port 3000",
+    "serve": "vue-cli-service serve --port 3001",
     "server": "nodemon index.js --prefix server",
     "dev": "concurrently \"npm run server\" \"npm run serve\"",
     "dist": "concurrently \"npm run server\" \"npm run build && serve -l 3000 -s dist\"",
