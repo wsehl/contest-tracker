@@ -1,201 +1,199 @@
 <template>
   <div class="q-px-sm">
     <q-card flat bordered v-if="!loading">
-      <template>
-        <q-table
-          title="Users"
-          class="text-grey-8"
-          :data="data"
-          :hide-header="mode === 'grid'"
-          :columns="columns"
-          row-key="username"
-          :grid="mode === 'grid'"
-          :filter="filter"
-          binary-state-sort
-          dense
-          :pagination="initialPagination"
-        >
-          <template v-slot:top-right="props">
-            <q-btn
-              unelevated
-              outline
-              color="primary"
-              label="Add user"
-              @click="show_dialog = true"
-              no-caps
-            ></q-btn>
-            <div class="q-pa-sm q-gutter-sm">
-              <q-dialog v-model="show_dialog">
-                <q-card>
-                  <q-card-section>
-                    <div class="text-h6">User</div>
-                  </q-card-section>
-                  <q-card-section>
-                    <div class="row">
-                      <q-input
-                        v-model="editedItem.username"
-                        label="Username"
-                      ></q-input>
-                      <q-input
-                        v-model="editedItem.email"
-                        label="Email"
-                      ></q-input>
-                      <q-input v-model="editedItem.role" label="Role"></q-input>
-                    </div>
-                  </q-card-section>
-                  <q-card-actions align="right">
-                    <q-btn
-                      flat
-                      label="OK"
-                      color="primary"
-                      v-close-popup
-                      @click="addRow"
-                    ></q-btn>
-                  </q-card-actions>
-                </q-card>
-              </q-dialog>
-            </div>
-            <q-input outlined dense v-model="filter" placeholder="Search">
-              <template v-slot:append>
-                <q-icon name="search" />
-              </template>
-            </q-input>
-            <q-btn
-              flat
-              round
-              dense
-              :icon="props.inFullscreen ? 'fullscreen_exit' : 'fullscreen'"
-              @click="props.toggleFullscreen"
-              v-if="mode === 'list'"
-            >
-              <q-tooltip :disable="$q.platform.is.mobile" v-close-popup
-                >{{
-                  props.inFullscreen ? "Exit Fullscreen" : "Toggle Fullscreen"
-                }}
-              </q-tooltip>
-            </q-btn>
-            <q-btn
-              flat
-              round
-              dense
-              :icon="mode === 'grid' ? 'list' : 'grid_on'"
-              @click="
-                mode = mode === 'grid' ? 'list' : 'grid';
-                separator = mode === 'grid' ? 'none' : 'horizontal';
-              "
-              v-if="!props.inFullscreen"
-            >
-              <q-tooltip :disable="$q.platform.is.mobile" v-close-popup
-                >{{ mode === "grid" ? "List" : "Grid" }}
-              </q-tooltip>
-            </q-btn>
-          </template>
-          <template v-slot:body="props">
-            <q-tr :props="props">
-              <q-td key="id" :props="props">
-                {{ props.row.id }}
-              </q-td>
-              <q-td key="username" :props="props">
-                {{ props.row.username }}
-                <q-popup-edit
-                  v-model="props.row.username"
-                  title="Update username"
-                  buttons
-                >
-                  <q-input
-                    v-model="props.row.username"
+      <q-table
+        ref="table"
+        title="Users"
+        class="text-grey-8"
+        dense
+        :data="data"
+        :columns="columns"
+        :pagination="{
+          rowsPerPage: 15,
+        }"
+        row-key="id"
+        binary-state-sort
+        :hide-header="mode === 'grid'"
+        :grid="mode === 'grid'"
+        :filter="filter"
+        selection="multiple"
+        :selected.sync="selected"
+      >
+        <template v-slot:top-right="props">
+          <q-dialog v-model="show_edit_dialog" class="q-pa-sm q-gutter-sm">
+            <q-card>
+              <q-card-section>
+                <div class="text-h6">
+                  User Details
+                  <q-btn
+                    round
+                    flat
                     dense
-                    autofocus
-                  ></q-input>
-                </q-popup-edit>
-              </q-td>
-              <q-td key="email" :props="props">
-                {{ props.row.email }}
-                <q-popup-edit
-                  v-model="props.row.email"
-                  title="Update email"
-                  buttons
-                >
-                  <q-input v-model="props.row.email" dense autofocus></q-input>
-                </q-popup-edit>
-              </q-td>
-              <q-td key="role" :props="props"
-                >{{ props.row.role }}
-                <q-popup-edit
-                  v-model="props.row.role"
-                  title="Update role"
-                  buttons
-                >
-                  <q-input
-                    v-model="props.row.role"
-                    dense
-                    autofocus
-                  ></q-input> </q-popup-edit
-              ></q-td>
-              <q-td key="registered" :props="props">{{
-                props.row.registered
-              }}</q-td>
-              <q-td key="last_login" :props="props">{{
-                props.row.last_login
-              }}</q-td>
-              <q-td key="actions" :props="props">
+                    icon="close"
+                    class="float-right"
+                    color="grey-8"
+                    v-close-popup
+                  />
+                </div>
+              </q-card-section>
+              <q-card-section>
+                <div class="col">
+                  <q-input v-model="editedItem.username" label="Username">
+                  </q-input>
+                  <q-input v-model="editedItem.email" label="Email"></q-input>
+                  <q-input v-model="editedItem.role" label="Role"></q-input>
+                </div>
+              </q-card-section>
+              <q-card-actions align="right">
                 <q-btn
-                  @click="visible_dialog = true"
-                  icon="visibility"
-                  size="sm"
-                  no-caps
-                  unelevated
+                  flat
+                  label="OK"
+                  color="primary"
+                  v-close-popup
+                  @click="editRow"
                 />
-                <q-btn
-                  @click="editItem(props.row)"
-                  icon="edit"
-                  size="sm"
-                  no-caps
-                  unelevated
-                ></q-btn>
-                <q-btn
-                  @click="deleteItem(props.row)"
-                  icon="delete"
-                  size="sm"
-                  no-caps
-                  unelevated
-                ></q-btn>
-              </q-td>
-              <q-dialog v-model="visible_dialog">
-                <q-card class="my-card" flat bordered>
-                  <q-card-section>
-                    <div class="text-h6">
-                      User Details
-                      <q-btn
-                        round
-                        flat
-                        dense
-                        icon="close"
-                        class="float-right"
-                        color="grey-8"
-                        v-close-popup
-                      ></q-btn>
-                    </div>
-                  </q-card-section>
-                  <q-card-section horizontal>
-                    <q-card-section class="q-pt-xs">
-                      <div class="text-overline">username</div>
-                      <div class="text-caption text-grey">
-                        {{ props.row.username }}
-                      </div>
-                      <hr />
-                      <div class="text-overline">role</div>
-                      <div class="text-caption text-grey">
-                        {{ props.row.role }}
-                      </div>
-                    </q-card-section>
-                  </q-card-section>
-                </q-card>
-              </q-dialog>
-            </q-tr>
-          </template>
-        </q-table>
-      </template>
+              </q-card-actions>
+            </q-card>
+          </q-dialog>
+          <q-dialog v-model="show_view_dialog" class="q-pa-sm q-gutter-sm">
+            <q-card flat bordered>
+              <q-card-section>
+                <div class="text-h6">
+                  User Details
+                  <q-btn
+                    round
+                    flat
+                    dense
+                    icon="close"
+                    class="float-right"
+                    color="grey-8"
+                    v-close-popup
+                  />
+                </div>
+              </q-card-section>
+              <q-card-section>
+                <div class="col">
+                  <q-input readonly v-model="viewedItem.id" label="ID">
+                  </q-input>
+                  <q-input
+                    readonly
+                    v-model="viewedItem.username"
+                    label="Username"
+                  >
+                  </q-input>
+                  <q-input readonly v-model="viewedItem.email" label="Email">
+                  </q-input>
+                  <q-input readonly v-model="viewedItem.role" label="Role">
+                  </q-input>
+                </div>
+              </q-card-section>
+            </q-card>
+          </q-dialog>
+          <q-input outlined dense v-model="filter" placeholder="Search">
+            <template v-slot:append>
+              <q-icon name="search" />
+            </template>
+          </q-input>
+          <q-btn
+            flat
+            round
+            dense
+            :icon="props.inFullscreen ? 'fullscreen_exit' : 'fullscreen'"
+            @click="props.toggleFullscreen"
+            v-if="mode === 'list'"
+          >
+            <q-tooltip :disable="$q.platform.is.mobile" v-close-popup>
+              {{ props.inFullscreen ? "Exit Fullscreen" : "Toggle Fullscreen" }}
+            </q-tooltip>
+          </q-btn>
+          <q-btn
+            flat
+            round
+            dense
+            :icon="mode === 'grid' ? 'list' : 'grid_on'"
+            @click="
+              mode = mode === 'grid' ? 'list' : 'grid';
+              separator = mode === 'grid' ? 'none' : 'horizontal';
+            "
+            v-if="!props.inFullscreen"
+          >
+            <q-tooltip :disable="$q.platform.is.mobile" v-close-popup>
+              {{ mode === "grid" ? "List" : "Grid" }}
+            </q-tooltip>
+          </q-btn>
+        </template>
+        <template v-slot:body="props">
+          <q-tr :props="props">
+            <q-td @click="props.selected = true">
+              <q-checkbox dense v-model="props.selected" color="primary" />
+            </q-td>
+            <q-td key="id" :props="props">
+              {{ props.row.id }}
+            </q-td>
+            <q-td key="username" :props="props">
+              {{ props.row.username }}
+              <q-popup-edit
+                v-model="props.row.username"
+                title="Update username"
+                buttons
+              >
+                <q-input v-model="props.row.username" dense autofocus>
+                </q-input>
+              </q-popup-edit>
+            </q-td>
+            <q-td key="email" :props="props">
+              {{ props.row.email }}
+              <q-popup-edit
+                v-model="props.row.email"
+                title="Update email"
+                buttons
+              >
+                <q-input v-model="props.row.email" dense autofocus></q-input>
+              </q-popup-edit>
+            </q-td>
+            <q-td key="role" :props="props">
+              {{ props.row.role }}
+              <q-popup-edit
+                v-model="props.row.role"
+                title="Update role"
+                buttons
+              >
+                <q-input v-model="props.row.role" dense autofocus></q-input>
+              </q-popup-edit>
+            </q-td>
+            <q-td key="registered" :props="props">
+              {{ props.row.registered }}
+            </q-td>
+            <q-td key="last_login" :props="props">
+              {{ props.row.last_login }}
+            </q-td>
+            <q-td key="actions" :props="props">
+              <q-btn
+                @click="viewItem(props.row)"
+                icon="visibility"
+                size="sm"
+                no-caps
+                unelevated
+              />
+              <q-btn
+                @click="editItem(props.row)"
+                icon="edit"
+                size="sm"
+                no-caps
+                unelevated
+              />
+              <q-btn
+                @click="deleteRow(props.row)"
+                icon="delete"
+                size="sm"
+                no-caps
+                unelevated
+              />
+            </q-td>
+          </q-tr>
+        </template>
+      </q-table>
+      <!-- <div class="q-mt-md">Selected: {{ JSON.stringify(selected) }}</div> -->
     </q-card>
   </div>
 </template>
@@ -209,56 +207,90 @@ export default {
   data() {
     return {
       loading: true,
-      filter: "",
+
       mode: "list",
-      visible_dialog: false,
-      show_dialog: false,
-      editedIndex: -1,
-      initialPagination: {
-        rowsPerPage: 15,
+      filter: "",
+      data: [],
+      selected: [],
+
+      show_edit_dialog: false,
+      show_view_dialog: false,
+
+      defaultItem: {
+        id: "",
+        username: "",
+        email: "",
+        role: "",
       },
       editedItem: {
-        name: "",
         id: "",
         username: "",
         email: "",
         role: "",
       },
-      defaultItem: {
-        name: "",
+      viewedItem: {
         id: "",
         username: "",
         email: "",
         role: "",
       },
-      data: [],
     };
   },
   methods: {
-    addRow() {
-      if (this.editedIndex > -1) {
-        Object.assign(this.data[this.editedIndex], this.editedItem);
-      } else {
-        this.data.push(this.editedItem);
-      }
-      this.close();
-    },
-    deleteItem(item) {
-      const index = this.data.indexOf(item);
-      confirm("Are you sure you want to delete this item?") &&
-        this.data.splice(index, 1);
-    },
     editItem(item) {
-      this.editedIndex = this.data.indexOf(item);
       this.editedItem = Object.assign({}, item);
-      this.show_dialog = true;
+      this.show_edit_dialog = true;
     },
-    close() {
-      this.show_dialog = false;
-      setTimeout(() => {
-        this.editedItem = Object.assign({}, this.defaultItem);
-        this.editedIndex = -1;
-      }, 300);
+    viewItem(item) {
+      this.viewedItem = Object.assign({}, item);
+      this.show_view_dialog = true;
+    },
+    editRow() {
+      api
+        .editRow("user", this.editedItem.id, this.editedItem)
+        .then((response) => {
+          this.$q.notify({
+            color: "positive",
+            position: "bottom-left",
+            message: response.msg,
+            progress: true,
+            timeout: 1500,
+          });
+          this.fetchData();
+        })
+        .catch((error) => {
+          this.$q.notify({
+            color: "negative",
+            position: "bottom-left",
+            message: error.response.data.msg,
+            progress: true,
+            timeout: 1500,
+          });
+        });
+    },
+    deleteRow(item) {
+      confirm("Are you sure you want to delete this item?") &&
+        api
+          .removeRow("user", item.id)
+          .then((response) => {
+            this.$q.notify({
+              color: "positive",
+              position: "bottom-left",
+              message: response.msg,
+              progress: true,
+              timeout: 1500,
+            });
+            this.fetchData();
+          })
+          .catch((error) => {
+            this.$q.notify({
+              color: "negative",
+              position: "bottom-left",
+              message: error.response.data.msg,
+              progress: true,
+              timeout: 1500,
+            });
+          });
     },
     fetchData() {
       api

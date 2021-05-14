@@ -2,6 +2,7 @@ import axios from "axios";
 import store from "@/store";
 
 const url = `${process.env.VUE_APP_BACKEND_URL}/api`;
+const api = axios.create({ baseURL: url });
 
 const options = () => {
   const token = store.getters.getToken;
@@ -14,28 +15,38 @@ const options = () => {
 
 export default {
   login(credentials) {
-    return axios
-      .post(`${url}/login`, credentials, options())
+    return api
+      .post(`/login`, credentials, options())
       .then((response) => response.data);
   },
   signup(credentials) {
-    return axios
-      .post(`${url}/signup`, credentials, options())
+    return api
+      .post(`/signup`, credentials, options())
       .then((response) => response.data);
   },
   getTable(table) {
-    return axios
-      .get(`${url}/dashboard/${table}`, options())
-      .then((response) => response.data);
-  },
-  getRow(table, id) {
-    return axios
-      .get(`${url}/dashboard/${table}/${id}`, options())
+    return api
+      .get(`/dashboard/${table}`, options())
       .then((response) => response.data);
   },
   insertToTable(credentials, table) {
-    return axios
-      .post(`${url}/dashboard/${table}`, credentials, options())
+    return api
+      .post(`/dashboard/${table}`, credentials, options())
+      .then((response) => response.data);
+  },
+  getRow(table, id) {
+    return api
+      .get(`/dashboard/${table}/${id}`, options())
+      .then((response) => response.data);
+  },
+  removeRow(table, id) {
+    return api
+      .delete(`/dashboard/${table}/${id}`, options())
+      .then((response) => response.data);
+  },
+  editRow(table, id, cred) {
+    return api
+      .put(`/dashboard/${table}/${id}`, cred, options())
       .then((response) => response.data);
   },
 };
