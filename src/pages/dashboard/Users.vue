@@ -2,7 +2,6 @@
   <div class="q-px-sm">
     <q-card flat bordered v-if="!loading">
       <q-table
-        ref="table"
         title="Users"
         class="text-grey-8"
         dense
@@ -12,7 +11,6 @@
           rowsPerPage: 15,
         }"
         row-key="id"
-        binary-state-sort
         :hide-header="mode === 'grid'"
         :grid="mode === 'grid'"
         :filter="filter"
@@ -148,50 +146,20 @@
             </q-td>
             <q-td key="username" :props="props">
               {{ props.row.username }}
-              <q-popup-edit
-                v-model="props.row.username"
-                title="Update username"
-                buttons
-              >
-                <q-input v-model="props.row.username" dense autofocus>
-                </q-input>
-              </q-popup-edit>
             </q-td>
             <q-td key="email" :props="props">
               {{ props.row.email }}
-              <q-popup-edit
-                v-model="props.row.email"
-                title="Update email"
-                buttons
-              >
-                <q-input v-model="props.row.email" dense autofocus></q-input>
-              </q-popup-edit>
             </q-td>
             <q-td key="role" :props="props">
               {{ props.row.role }}
-              <q-popup-edit
-                v-model="props.row.role"
-                title="Update role"
-                buttons
-              >
-                <q-input v-model="props.row.role" dense autofocus></q-input>
-              </q-popup-edit>
             </q-td>
             <q-td key="registered" :props="props">
               {{ props.row.registered }}
             </q-td>
-            <q-td
-              key="last_login"
-              :props="props"
-              :class="mode === 'grid' ? 'hidden' : ''"
-            >
+            <q-td key="last_login" :props="props">
               {{ props.row.last_login }}
             </q-td>
-            <q-td
-              key="actions"
-              :props="props"
-              :class="mode === 'grid' ? 'hidden' : ''"
-            >
+            <q-td key="actions" :props="props">
               <q-btn
                 @click="viewItem(props.row)"
                 icon="visibility"

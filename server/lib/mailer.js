@@ -15,3 +15,8 @@ module.exports = {
   mailer: mailer,
   mail_user: mail_user,
 };
+
+mailer.verify(function (error, success) {
+  if (error) console.log(error);
+  if (success) console.log("Mailer is ready");
+});

@@ -4,7 +4,7 @@
       <div class="text-h3">Events</div>
     </div>
     <template v-if="!loading">
-      <div class="q-mt-md" :class="{ 'w-35': $q.screen.gt.md }">
+      <div class="q-mt-md">
         <q-table
           @row-click="goToEvent"
           :data="data"

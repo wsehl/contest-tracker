@@ -20,7 +20,7 @@
         :autoplayHoverPause="true"
         :perPageCustom="[
           [768, 3],
-          [1024, 4],
+          [1024, 3],
         ]"
       >
         <slide v-for="item in events" :key="item.id" class="carousel-item">
@@ -132,10 +132,15 @@ export default {
     .title
       display: flex
       justify-content: center
+      text-align: center
       .link
         font-size: 26px
         text-decoration: none
         color: #4a4a4a
+        width: 400px
+        white-space: nowrap
+        overflow: hidden
+        text-overflow: ellipsis
         &:hover
           text-decoration: underline
     .body

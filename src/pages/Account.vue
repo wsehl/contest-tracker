@@ -12,9 +12,10 @@
       >
         <q-card-section>
           <q-form class="q-gutter-md">
-            <q-input unelevated v-model="user.nickname" label="Nickname" />
+            <q-input unelevated v-model="user.role" readonly label="Role" />
+            <q-input unelevated v-model="user.username" label="Nickname" />
             <q-input unelevated v-model="user.email" label="Email" />
-            <q-input unelevated v-model="user.password" label="Password" />
+            <q-input unelevated v-model="fake.password" label="Password" />
             <div>
               <q-btn label="Update" type="submit" color="primary" />
             </div>
@@ -26,16 +27,20 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
+
 export default {
   data() {
     return {
-      loading: false,
-      user: {
-        nickname: "admin",
-        email: "m******@****.com",
-        password: "a2******2f3",
+      fake: {
+        password: "*******",
       },
     };
+  },
+  computed: {
+    ...mapGetters({
+      user: "getUser",
+    }),
   },
 };
 </script>
