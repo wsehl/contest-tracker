@@ -1,12 +1,12 @@
 const auth = require("./auth.js");
-const migrate = require("./migrate.js");
+const sql = require("./sql.js");
 const users = require("./dashboard/users.js");
 const events = require("./dashboard/events.js");
 const organizations = require("./dashboard/organizations.js");
 
 module.exports = {
   auth: auth,
-  migrate: migrate,
+  sql: sql,
   users: users,
   events: events,
   organizations: organizations

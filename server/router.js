@@ -13,8 +13,6 @@ const upload = multer({
 const middleware = require("./middleware");
 const route = require("./routes");
 
-router.post("/migrate/users", route.migrate.users);
-
 router.post("/login", middleware.auth.validateLogin, route.auth.login);
 router.post("/signup", middleware.auth.validateRegister, route.auth.register);
 

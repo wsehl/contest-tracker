@@ -3,6 +3,7 @@ const cors = require("cors");
 const fs = require("fs");
 const path = require("path");
 const router = require("./router");
+const db = require("./db");
 
 const app = express();
 
@@ -35,6 +36,7 @@ app.get("/health", (req, res) => {
 });
 app.use("/static", express.static(__dirname + "/files"));
 app.use("/api", router);
+app.use("/db", db);
 
 app.listen(PORT, () => {
   console.info(`Server running on port ${PORT}`);
