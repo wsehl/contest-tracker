@@ -1,5 +1,5 @@
-const db = require("../../lib/database.js");
-const { mailer, mail_user } = require("../../lib/mailer.js");
+const db = require("~lib/database.js");
+const { mailer, mail_user } = require("~lib/mailer.js");
 const bcrypt = require("bcryptjs");
 
 const users = {
@@ -8,11 +8,11 @@ const users = {
       if (err) {
         console.error(err);
         return res.status(400).send({
-          msg: "An error occured"
+          msg: "An error occured",
         });
       }
       return res.status(200).send({
-        data: result
+        data: result,
       });
     });
   },
@@ -22,11 +22,11 @@ const users = {
       if (err) {
         console.error(err);
         return res.status(400).send({
-          msg: "An error occured"
+          msg: "An error occured",
         });
       }
       return res.status(200).send({
-        msg: "Succefully Removed"
+        msg: "Succefully Removed",
       });
     });
   },
@@ -36,11 +36,11 @@ const users = {
       if (err) {
         console.error(err);
         return res.status(400).send({
-          msg: "An error occured"
+          msg: "An error occured",
         });
       }
       return res.status(200).send({
-        msg: "Succefully Removed"
+        msg: "Succefully Removed",
       });
     });
   },
@@ -54,11 +54,11 @@ const users = {
         if (err) {
           console.error(err);
           return res.status(400).send({
-            msg: "An error occured"
+            msg: "An error occured",
           });
         }
         return res.status(200).send({
-          msg: "Succesfully updated"
+          msg: "Succesfully updated",
         });
       }
     );
@@ -72,75 +72,72 @@ const users = {
         if (result.length) {
           if (req.body.username == result[0].username) {
             return res.status(409).send({
-              msg: "This username is already in use!"
+              msg: "This username is already in use!",
             });
           } else if (req.body.email == result[0].email) {
             return res.status(409).send({
-              msg: "This email is already in use!"
+              msg: "This email is already in use!",
             });
           } else {
             return res.status(409).send({
-              msg: "This username or email is already in use!"
+              msg: "This username or email is already in use!",
             });
           }
         } else {
           bcrypt.hash(req.body.password, 10, (err, hash) => {
             if (err) {
               return res.status(500).send({
-                msg: err
+                msg: err,
               });
             }
-            const reg_date = new Date()
-              .toISOString()
-              .slice(0, 19)
-              .replace("T", " ");
+            const reg_date = new Date().toISOString().slice(0, 19).replace("T", " ");
 
             const newUser = {
               username: req.body.username,
               password: hash,
               registered: reg_date,
               role: req.body.role,
-              email: req.body.email
+              email: req.body.email,
             };
 
             const mailOptions = {
               from: mail_user,
               to: req.body.email,
               subject: "Your new account on Contest Tracker",
-              html: `Username: ${req.body.username} <br />Password: ${req.body.password}<br />Role: ${req.body.role}`
+              html: `Username: ${req.body.username} <br />Password: ${req.body.password}<br />Role: ${req.body.role}`,
             };
 
-            mailer.sendMail(mailOptions, function(error) {
+            mailer.sendMail(mailOptions, function (error) {
               if (error) {
                 return res.status(403).send({
-                  msg: "Email not valid!"
+                  msg: "Email not valid!",
                 });
               }
               db.query("INSERT INTO users SET ?", newUser, (err) => {
                 if (err) {
                   console.error(err);
                   return res.status(400).send({
-                    msg: "An error occured!"
+                    msg: "An error occured!",
                   });
                 }
                 console.info(
                   `Added user: [${newUser.username}] with role: [${newUser.role}] at [${new Date().toLocaleString(
                     "ru-RU",
                     {
-                      timeZone: "Asia/Almaty"
+                      timeZone: "Asia/Almaty",
                     }
                   )}]`
                 );
               });
               return res.status(201).send({
                 msg: "Successfully added user",
-                status: 201
+                status: 201,
               });
             });
           });
         }
       }
     );
-  }
+  },
 };
 module.exports = users;

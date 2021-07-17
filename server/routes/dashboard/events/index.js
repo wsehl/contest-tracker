@@ -1,4 +1,4 @@
-const db = require("../../lib/database.js");
+const db = require("~lib/database.js");
 
 const events = {
   getAll: (req, res) => {
@@ -6,7 +6,7 @@ const events = {
       `SELECT * FROM organizations INNER JOIN events ON organizations.id = events.organization_id`,
       (err, result) => {
         return res.status(200).send({
-          data: result
+          data: result,
         });
       }
     );
@@ -21,17 +21,17 @@ const events = {
         if (err) {
           console.error(err);
           return res.status(400).send({
-            msg: "An error occured"
+            msg: "An error occured",
           });
         }
         if (!result.length) {
           return res.status(404).send({
             msg: "Not Found",
-            status: 404
+            status: 404,
           });
         }
         return res.status(200).send({
-          data: result
+          data: result,
         });
       }
     );
@@ -42,25 +42,25 @@ const events = {
       event_title: req.body.event_title,
       event_description: req.body.event_description,
       start_date: req.body.event_start_date,
-      end_date: req.body.event_end_date
+      end_date: req.body.event_end_date,
     };
     db.query("INSERT INTO events SET ?", newEvent, (err) => {
       if (err) {
         console.error(err);
         return res.status(400).send({
-          msg: "An error occured"
+          msg: "An error occured",
         });
       }
       console.info(
         `Added event: [${newEvent.event_title}] at [${new Date().toLocaleString("ru-RU", {
-          timeZone: "Asia/Almaty"
+          timeZone: "Asia/Almaty",
         })}]`
       );
       return res.status(201).send({
         msg: "Successfully added event",
-        status: 201
+        status: 201,
       });
     });
-  }
+  },
 };
 module.exports = events;

@@ -1,6 +1,6 @@
-const db = require("../lib/database.js");
+const db = require("~lib/database.js");
 
-const sql = {
+const database = {
   migrateUsers: (req, res) => {
     db.query(
       `CREATE TABLE users (
@@ -130,4 +130,4 @@ const sql = {
   },
 };
 
-module.exports = sql;
+module.exports = database;

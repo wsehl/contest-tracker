@@ -4,7 +4,12 @@
   "main": "index.js",
   "scripts": {
     "start": "node .",
-    "dev": "nodemon ."
+    "dev": "nodemon .",
+    "postinstall": "link-module-alias"
+  },
+  "_moduleAliases": {
+    "~root": ".",
+    "~lib": "./lib"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
@@ -22,6 +27,12 @@
   },
   "devDependencies": {
     "nodemon": "^2.0.7",
-    "prettier": "2.2.1"
+    "prettier": "2.2.1",
+    "link-module-alias": "^1.2.0"
+  },
+  "prettier": {
+    "singleQuote": false,
+    "arrowParens": "always",
+    "printWidth": 120
   }
 }

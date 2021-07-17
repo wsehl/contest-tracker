@@ -1,13 +1,13 @@
-const auth = require("./auth.js");
-const sql = require("./sql.js");
-const users = require("./dashboard/users.js");
-const events = require("./dashboard/events.js");
-const organizations = require("./dashboard/organizations.js");
+const auth = require("./auth/index.js");
+const sql = require("./sql/index.js");
+const users = require("./dashboard/users/index.js");
+const events = require("./dashboard/events/index.js");
+const organizations = require("./dashboard/organizations/index.js");
 
 module.exports = {
-  auth: auth,
-  sql: sql,
-  users: users,
-  events: events,
-  organizations: organizations
+  auth,
+  sql,
+  users,
+  events,
+  organizations,
 };
