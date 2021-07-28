@@ -10,7 +10,7 @@ const upload = multer({
 });
 
 const middleware = require("../middleware");
-const route = require(".");
+const route = require("./index.js");
 
 router.post("/login", middleware.auth.validateLogin, route.auth.login);
 router.post("/signup", middleware.auth.validateRegister, route.auth.register);
