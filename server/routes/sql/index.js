@@ -10,7 +10,7 @@ module.exports = {
         role enum('User', 'Admin', 'Teacher', 'Curator') NOT NULL,
         email varchar(100) NOT NULL,
         registered datetime NOT NULL,
-        last_login datetime NOT NULL,
+        last_login datetime NOT NULL DEFAULT current_timestamp(),
         PRIMARY KEY (id)
       );`,
       (err) => {
