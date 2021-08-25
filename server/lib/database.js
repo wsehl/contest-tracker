@@ -11,7 +11,7 @@ const db = mysql.createPool({
 });
 
 db.getConnection((err, connection) => {
-  if (err) console.log(error);
+  if (err) console.log(err);
   if (connection) console.log("[module] Database succesfully connected");
 });
 

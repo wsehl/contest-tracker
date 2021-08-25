@@ -1,4 +1,4 @@
-const db = require("~lib/database.js");
+const db = require("../../lib/database.js");
 
 module.exports = {
   migrateUsers: (req, res) => {

@@ -1,4 +1,4 @@
-const db = require("~lib/database.js");
+const db = require("../../../lib/database.js");
 
 const events = {
   getAll: (req, res) => {

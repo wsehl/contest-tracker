@@ -1,6 +1,6 @@
-const db = require("~lib/database.js");
-const { mailer, mail_user } = require("~lib/mailer.js");
 const bcrypt = require("bcryptjs");
+const db = require("../../../lib/database.js");
+const { mailer, mail_user } = require("../../../lib/mailer.js");
 
 const users = {
   getAll: (req, res) => {

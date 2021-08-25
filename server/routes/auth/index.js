@@ -1,6 +1,6 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const db = require("~lib/database.js");
+const db = require("../../lib/database.js");
 
 const auth = {
   login: (req, res) => {

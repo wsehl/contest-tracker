@@ -1,5 +1,5 @@
-const db = require("~lib/database.js");
-const firebase = require("~lib/firebase.js");
+const db = require("../../../lib/database.js");
+const firebase = require("../../../lib/firebase.js");
 
 const organizations = {
   getAll: (req, res) => {

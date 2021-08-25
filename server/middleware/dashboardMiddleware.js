@@ -7,7 +7,7 @@ module.exports = {
     }
     if (!req.body.email || req.body.email.length < 3) {
       return res.status(400).send({
-        msg: "Please enter a valid email adress",
+        msg: "Please enter a valid email address",
       });
     }
     if (!req.body.role) {
