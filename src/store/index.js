@@ -38,11 +38,7 @@ export default new Vuex.Store({
       return state.token;
     },
     isAdmin: (state) => {
-      if (state.user.role === "Admin") {
-        return true;
-      } else {
-        return false;
-      }
+      return state.user.role === "Admin";
     },
   },
   actions: {

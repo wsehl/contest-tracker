@@ -3,9 +3,7 @@
     <div class="col-lg-3 col-md-4 col-sm-12 col-xs-12">
       <q-card flat bordered>
         <q-card-section>
-          <div class="text-h6">
-            Add
-          </div>
+          <div class="text-h6">Add</div>
         </q-card-section>
         <q-separator inset></q-separator>
         <q-list separator>
@@ -212,7 +210,7 @@
 </template>
 
 <script>
-import api from "@/services/api.js";
+import { insertToTable, getTable } from "@/api";
 
 export default {
   data() {
@@ -273,13 +271,13 @@ export default {
 
         switch (table) {
           case "users":
-            response = await api.insertToTable(user_credentials, table);
+            response = await insertToTable(user_credentials, table);
             break;
           case "events":
-            response = await api.insertToTable(event_credentials, table);
+            response = await insertToTable(event_credentials, table);
             break;
           case "organizations":
-            response = await api.insertToTable(organization_credentials, table);
+            response = await insertToTable(organization_credentials, table);
             break;
         }
 
@@ -338,7 +336,7 @@ export default {
       }
     },
     async getOrganizationsList() {
-      const response = await api.getTable("organizations");
+      const response = await getTable("organizations");
       response.data.forEach((obj) =>
         this.renameObjectKey({
           obj,

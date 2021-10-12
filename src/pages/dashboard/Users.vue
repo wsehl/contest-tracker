@@ -190,7 +190,12 @@
 </template>
 
 <script>
-import api from "@/services/api.js";
+import {
+  removeRow,
+  getTable,
+  editRow as editRowInTable,
+  removeSeveralRows,
+} from "@/api";
 import UsersTable from "@/mixins/tables/UsersTable.js";
 
 export default {
@@ -239,8 +244,7 @@ export default {
     deleteSeveral() {
       const rows = this.selected.map((item) => item.id);
       confirm("Are you sure you want to delete several items?") &&
-        api
-          .removeSeveralRows("users", rows)
+        removeSeveralRows("users", rows)
           .then((response) => {
             this.$q.notify({
               color: "positive",
@@ -263,8 +267,7 @@ export default {
           });
     },
     editRow() {
-      api
-        .editRow("user", this.editedItem.id, this.editedItem)
+      editRowInTable("user", this.editedItem.id, this.editedItem)
         .then((response) => {
           this.$q.notify({
             color: "positive",
@@ -287,8 +290,7 @@ export default {
     },
     deleteRow(item) {
       confirm("Are you sure you want to delete this item?") &&
-        api
-          .removeRow("user", item.id)
+        removeRow("user", item.id)
           .then((response) => {
             this.$q.notify({
               color: "positive",
@@ -310,8 +312,7 @@ export default {
           });
     },
     fetchData() {
-      api
-        .getTable("users")
+      getTable("users")
         .then((response) => {
           this.data = response.data;
         })

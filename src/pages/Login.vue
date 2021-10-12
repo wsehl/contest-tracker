@@ -1,9 +1,9 @@
 <template>
-  <q-page class="flex flex-center">
-    <q-card :class="{ 'w-20': $q.screen.gt.lg }">
-      <q-form @submit="signup" greedy>
+  <q-page class="flex flex-center items-center">
+    <q-card :class="{ 'w-25': $q.screen.gt.md }">
+      <q-form @submit="authenticate" greedy>
         <q-card-section class="bg-blue-9">
-          <h4 class="text-h5 text-white q-my-sm">Create an account</h4>
+          <h4 class="text-h5 text-white q-my-sm">Login</h4>
         </q-card-section>
         <q-card-section>
           <q-input
@@ -11,17 +11,6 @@
             unelevated
             v-model="user.username"
             label="Username"
-            :rules="[
-              (val) => (val && val.length > 0) || 'Please type something',
-            ]"
-            :lazy-rules="'ondemand'"
-            no-error-icon
-          />
-          <q-input
-            type="email"
-            unelevated
-            v-model="user.email"
-            label="Email"
             :rules="[
               (val) => (val && val.length > 0) || 'Please type something',
             ]"
@@ -39,17 +28,6 @@
             :lazy-rules="'ondemand'"
             no-error-icon
           />
-          <q-input
-            type="password"
-            unelevated
-            v-model="user.password_repeat"
-            label="Password (repeat)"
-            :rules="[
-              (val) => (val && val.length > 0) || 'Please type something',
-            ]"
-            :lazy-rules="'ondemand'"
-            no-error-icon
-          />
         </q-card-section>
         <q-card-actions class="q-px-md">
           <q-btn
@@ -58,13 +36,13 @@
             color="primary"
             size="md"
             class="full-width"
-            label="Sign up"
+            label="Login"
             ref="submitBtn"
           />
         </q-card-actions>
         <q-card-section class="text-center q-py-xs">
-          <router-link to="/login" style="text-decoration: none;">
-            <p class="text-grey-6">Already have an account? Login</p>
+          <router-link to="/signup" style="text-decoration: none">
+            <p class="text-grey-6">Not reigistered? Created an account</p>
           </router-link>
         </q-card-section>
       </q-form>
@@ -73,24 +51,29 @@
 </template>
 
 <script>
-import api from "@/services/api.js";
+import { login } from "@/api";
 
 export default {
   data() {
     return {
       user: {
         username: "",
-        email: "",
         password: "",
-        password_repeat: "",
       },
     };
   },
   methods: {
-    async signup() {
+    async authenticate() {
       try {
-        const response = await api.signup(this.user);
-        this.$router.push({ name: "Login" });
+        const response = await login(this.user);
+        const token = response.token;
+        const user = response.user;
+        this.$store.dispatch("login", { token, user });
+        if (this.$store.state.user.role === "Admin") {
+          this.$router.push({ name: "Dashboard" });
+        } else {
+          this.$router.push("/");
+        }
         this.$q.notify({
           color: "positive",
           position: "bottom-left",

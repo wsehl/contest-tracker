@@ -23,7 +23,14 @@
       </router-link>
       <div
         v-if="$q.screen.gt.xs"
-        class="GL__toolbar-link q-ml-xs q-gutter-md text-body2 text-weight-medium row items-center no-wrap"
+        class="
+          GL__toolbar-link
+          q-ml-xs q-gutter-md
+          text-body2 text-weight-medium
+          row
+          items-center
+          no-wrap
+        "
       >
         <router-link :to="{ name: 'About' }" class="router-link">
           About
@@ -38,7 +45,13 @@
       <q-space />
       <div class="q-pl-sm row items-center no-wrap">
         <div
-          class="q-gutter-md text-body2 text-weight-medium row items-center no-wrap"
+          class="
+            q-gutter-md
+            text-body2 text-weight-medium
+            row
+            items-center
+            no-wrap
+          "
         >
           <template v-if="user.role && user.role != 'User'">
             <router-link :to="{ name: 'Dashboard' }" class="router-link">
@@ -55,7 +68,7 @@
           </template>
           <template v-else>
             <q-btn dense flat no-wrap>
-              <div class="q-body-2" style="text-transform: none;">
+              <div class="q-body-2" style="text-transform: none">
                 {{ user.username }}
               </div>
               <q-icon name="arrow_drop_down" size="16px" />

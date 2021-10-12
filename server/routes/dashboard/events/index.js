@@ -52,9 +52,12 @@ const events = {
         });
       }
       console.info(
-        `Added event: [${newEvent.event_title}] at [${new Date().toLocaleString("ru-RU", {
-          timeZone: "Asia/Almaty",
-        })}]`
+        `Added event: [${newEvent.event_title}] at [${new Date().toLocaleString(
+          "ru-RU",
+          {
+            timeZone: "Asia/Almaty",
+          }
+        )}]`
       );
       return res.status(201).send({
         msg: "Successfully added event",

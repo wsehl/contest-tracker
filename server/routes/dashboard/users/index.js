@@ -32,24 +32,29 @@ const users = {
   },
   removeSeveralRows: (req, res) => {
     // DELETE FROM users WHERE id IN (2, 3)
-    db.query(`DELETE FROM users WHERE id IN (${db.escape(req.body)})`, (err) => {
-      if (err) {
-        console.error(err);
-        return res.status(400).send({
-          msg: "An error occured",
+    db.query(
+      `DELETE FROM users WHERE id IN (${db.escape(req.body)})`,
+      (err) => {
+        if (err) {
+          console.error(err);
+          return res.status(400).send({
+            msg: "An error occured",
+          });
+        }
+        return res.status(200).send({
+          msg: "Succefully Removed",
         });
       }
-      return res.status(200).send({
-        msg: "Succefully Removed",
-      });
-    });
+    );
   },
   updateOne: (req, res) => {
     const userId = req.params.id;
     db.query(
-      `UPDATE users SET username = ${db.escape(req.body.username)}, role = ${db.escape(
-        req.body.role
-      )}, email = ${db.escape(req.body.email)} WHERE id = ${db.escape(userId)}`,
+      `UPDATE users SET username = ${db.escape(
+        req.body.username
+      )}, role = ${db.escape(req.body.role)}, email = ${db.escape(
+        req.body.email
+      )} WHERE id = ${db.escape(userId)}`,
       (err) => {
         if (err) {
           console.error(err);
@@ -90,7 +95,10 @@ const users = {
                 msg: err,
               });
             }
-            const reg_date = new Date().toISOString().slice(0, 19).replace("T", " ");
+            const reg_date = new Date()
+              .toISOString()
+              .slice(0, 19)
+              .replace("T", " ");
 
             const newUser = {
               username: req.body.username,
@@ -121,12 +129,11 @@ const users = {
                   });
                 }
                 console.info(
-                  `Added user: [${newUser.username}] with role: [${newUser.role}] at [${new Date().toLocaleString(
-                    "ru-RU",
-                    {
-                      timeZone: "Asia/Almaty",
-                    }
-                  )}]`
+                  `Added user: [${newUser.username}] with role: [${
+                    newUser.role
+                  }] at [${new Date().toLocaleString("ru-RU", {
+                    timeZone: "Asia/Almaty",
+                  })}]`
                 );
               });
               return res.status(201).send({

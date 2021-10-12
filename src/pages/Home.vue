@@ -6,9 +6,7 @@
           <div>Проектная деятельность<br />НИШ Павлодар</div>
         </div>
       </q-parallax>
-      <div class="upcoming-events">
-        Upcoming Events
-      </div>
+      <div class="upcoming-events">Upcoming Events</div>
       <carousel
         paginationActiveColor="#3B82F6"
         paginationColor="#BFDBFE"
@@ -58,7 +56,7 @@
 </template>
 
 <script>
-import api from "@/services/api.js";
+import { getTable } from "@/api";
 import { Carousel, Slide } from "vue-carousel";
 const { format } = require("date-fns");
 
@@ -84,7 +82,7 @@ export default {
       return format(new Date(d), "PP");
     },
     fetchData() {
-      Promise.all([api.getTable("organizations"), api.getTable("events")])
+      Promise.all([getTable("organizations"), getTable("events")])
         .then((results) => {
           this.organizations = results[0].data;
           this.events = results[1].data;

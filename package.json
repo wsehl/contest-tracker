@@ -1,16 +1,56 @@
 {
   "name": "contest-tracker",
-  "version": "1.0.0",
-  "scripts": {
-    "install-all": "cd client && npm install && cd ../server && npm install",
-    "serve": "npm run dev --prefix client",
-    "build": "npm run build --prefix client",
-    "server": "npm run dev --prefix server",
-    "dev": "concurrently \"npm run serve\" \"npm run server\"",
-    "heroku-postbuild": "echo Skip builds on Heroku"
-  },
+  "version": "0.2.0",
   "license": "MIT",
+  "scripts": {
+    "serve": "vue-cli-service serve --port 3001",
+    "server": "nodemon server/index.js",
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint",
+    "dev": "concurrently \"npm run server\" \"npm run serve\"",
+    "heroku-postbuild": "echo Skip builds on Heroku",
+    "format": "prettier --write ."
+  },
+  "dependencies": {
+    "@quasar/extras": "^1.10.2",
+    "axios": "^0.21.1",
+    "bcryptjs": "^2.4.3",
+    "core-js": "^3.6.5",
+    "cors": "^2.8.5",
+    "date-fns": "^2.20.3",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "express-validator": "^6.12.2",
+    "firebase-admin": "^9.12.0",
+    "jsonwebtoken": "^8.5.1",
+    "multer": "^1.4.3",
+    "mysql2": "^2.3.0",
+    "node-fetch": "^3.0.0",
+    "nodemailer": "^6.7.0",
+    "quasar": "^1.15.10",
+    "uuid": "^8.3.2",
+    "vue": "^2.6.11",
+    "vue-carousel": "^0.18.0",
+    "vue-router": "^3.2.0",
+    "vuex": "^3.4.0",
+    "vuex-persistedstate": "^4.0.0-beta.3"
+  },
   "devDependencies": {
-    "concurrently": "^4.1.0"
+    "@vue/cli-plugin-babel": "~4.5.0",
+    "@vue/cli-plugin-eslint": "~4.5.0",
+    "@vue/cli-plugin-router": "~4.5.0",
+    "@vue/cli-plugin-vuex": "~4.5.0",
+    "@vue/cli-service": "~4.5.0",
+    "@vue/eslint-config-prettier": "^6.0.0",
+    "babel-eslint": "^10.1.0",
+    "concurrently": "^6.3.0",
+    "eslint": "^6.7.2",
+    "eslint-plugin-prettier": "^3.3.1",
+    "eslint-plugin-vue": "^6.2.2",
+    "nodemon": "^2.0.13",
+    "sass": "^1.29.0",
+    "sass-loader": "^10.1.0",
+    "vue-cli-plugin-quasar": "~3.0.1",
+    "vue-template-compiler": "^2.6.11"
   }
 }

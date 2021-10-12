@@ -8,7 +8,7 @@
         </div>
       </div>
       <div v-else>
-        <div class="flex column items-center q-pb-md ">
+        <div class="flex column items-center q-pb-md">
           <q-btn
             outline
             rounded
@@ -21,9 +21,7 @@
             <div class="text-h4 q-mb-md">
               {{ event.event_title }}
             </div>
-            <div class="text-h6">
-              Date
-            </div>
+            <div class="text-h6">Date</div>
             <div class="text-subtitle1 q-mb-md">
               {{
                 `${formatDate(event.start_date)} - ${formatDate(
@@ -31,15 +29,11 @@
                 )}`
               }}
             </div>
-            <div class="text-h6">
-              Description
-            </div>
+            <div class="text-h6">Description</div>
             <div class="text-body1">
               {{ event.event_description }}
             </div>
-            <div class="text-h6 q-mt-md">
-              Organization
-            </div>
+            <div class="text-h6 q-mt-md">Organization</div>
             <div class="organization-section">
               <div class="body">
                 <img
@@ -59,7 +53,7 @@
 </template>
 
 <script>
-import api from "@/services/api.js";
+import { getRow } from "@/api";
 import { format } from "date-fns";
 
 export default {
@@ -81,8 +75,7 @@ export default {
       return format(new Date(d), "PP");
     },
     fetchData() {
-      api
-        .getRow("event", this.$route.params.id)
+      getRow("event", this.$route.params.id)
         .then((response) => {
           if (response.status === 404) {
             this.exists = false;

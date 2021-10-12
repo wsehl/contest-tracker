@@ -26,7 +26,10 @@ module.exports = {
         msg: "Please enter a password with min. 6 chars",
       });
     }
-    if (!req.body.password_repeat || req.body.password != req.body.password_repeat) {
+    if (
+      !req.body.password_repeat ||
+      req.body.password != req.body.password_repeat
+    ) {
       return res.status(422).send({
         msg: "Both passwords must match",
       });
@@ -51,12 +54,11 @@ module.exports = {
       const decoded = jwt.verify(token, SECRETKEY);
       if (decoded.role != "Admin") {
         console.info(
-          `Permission denied: for [${decoded.username}] with role: [${decoded.role}] at [${new Date().toLocaleString(
-            "ru-RU",
-            {
-              timeZone: "Asia/Almaty",
-            }
-          )}]`
+          `Permission denied: for [${decoded.username}] with role: [${
+            decoded.role
+          }] at [${new Date().toLocaleString("ru-RU", {
+            timeZone: "Asia/Almaty",
+          })}]`
         );
         return res.status(403).send({
           msg: "Permission denied!",

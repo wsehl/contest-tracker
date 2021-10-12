@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import api from "@/services/api.js";
+import { getTable } from "@/api";
 import EventsTable from "@/mixins/tables/EventsTable.js";
 
 export default {
@@ -41,8 +41,7 @@ export default {
       });
     },
     fetchData() {
-      api
-        .getTable("events")
+      getTable("events")
         .then((response) => {
           this.data = response.data;
         })
