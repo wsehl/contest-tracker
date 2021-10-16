@@ -1,15 +1,11 @@
 require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
-const fs = require("fs");
 const path = require("path");
 const router = require("./routes/router");
 
 const PORT = process.env.PORT || 8889;
 const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:3001";
-const FILES_FOLDER = path.join(__dirname, "files");
-
-if (!fs.existsSync(FILES_FOLDER)) fs.mkdirSync(FILES_FOLDER);
 
 const app = express();
 
@@ -23,7 +19,7 @@ app.get("/", (req, res) => {
 app.get("/health", (req, res) => {
   res.status(200).send({ message: "I'm alive" });
 });
-app.use("/static", express.static(__dirname + "/files"));
+
 app.use("/api", router);
 
 app.listen(PORT, () => {

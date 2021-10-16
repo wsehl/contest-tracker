@@ -22,7 +22,8 @@ admin.initializeApp({
 });
 
 const bucket = admin.storage().bucket();
+const db = admin.firestore();
 
-module.exports = {
-  bucket,
-};
+console.log("[module] Firebase succesfully connected");
+
+module.exports = { bucket, db };

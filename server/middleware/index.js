@@ -1,5 +1,5 @@
-const authMiddleware = require("./authMiddleware.js");
-const dashboardMiddleware = require("./dashboardMiddleware.js");
+const authMiddleware = require("./validation/auth");
+const dashboardMiddleware = require("./validation/dashboard");
 
 module.exports = {
   auth: authMiddleware,

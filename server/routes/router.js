@@ -46,13 +46,4 @@ router.post(
   route.organizations.addNew
 );
 
-// DATABASE
-router.post("/migrate/users", route.sql.migrateUsers);
-router.post("/migrate/events", route.sql.migrateEvents);
-router.post("/migrate/organizations", route.sql.migrateOrganizations);
-
-router.post("/seed/users", route.sql.seedUsers);
-router.post("/seed/events", route.sql.seedEvents);
-router.post("/seed/organizations", route.sql.seedOrganizations);
-
 module.exports = router;
