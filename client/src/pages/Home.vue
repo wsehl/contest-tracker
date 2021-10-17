@@ -1,6 +1,6 @@
 <template>
   <q-page v-if="!loading">
-    <q-parallax src="./hero.jpg">
+    <q-parallax src="images/hero.jpg">
       <h3 class="text-white text-center">
         Проектная деятельность НИШ Павлодар
       </h3>

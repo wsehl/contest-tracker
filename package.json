@@ -1,6 +1,6 @@
 {
   "name": "contest-tracker",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "license": "MIT",
   "scripts": {
     "serve": "vue-cli-service serve --port 3001",
