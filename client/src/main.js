@@ -10,13 +10,14 @@ import "@quasar/extras/material-icons-outlined/material-icons-outlined.css";
 import "@quasar/extras/material-icons-round/material-icons-round.css";
 import "@quasar/extras/material-icons-sharp/material-icons-sharp.css";
 import { Quasar, Notify, Loading } from "quasar";
+import langRu from "quasar/lang/ru";
 
 Vue.use(Quasar, {
   plugins: {
     Notify,
     Loading,
   },
-  config: {},
+  lang: langRu,
 });
 
 Vue.config.productionTip = false;

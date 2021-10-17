@@ -109,10 +109,10 @@ export default {
   .body
     display: flex
     flex-direction: column
-    align-items: center
+    align-items: start
     .image
-      width: 125px
-      height: 125px
+      width: 150px
+      height: 150px
       margin: 5px 0px 5px 0px
       border-radius: 4px
       border: 1px #e5e5e5 solid

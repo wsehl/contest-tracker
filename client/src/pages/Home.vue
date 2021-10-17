@@ -153,6 +153,7 @@ export default {
         height: 55px
         border-radius: 50%
         object-fit: cover
+        object-position: center
         margin-right: 5px
       .organization
         font-size: 20px

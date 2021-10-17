@@ -1,15 +1,15 @@
 <template>
   <q-page class="container mx-auto q-pa-md">
     <div class="flex column q-pb-md">
-      <div class="text-h3">Help</div>
-      <div class="text-subtitle1">Answers to frequently asked questions</div>
+      <div class="text-h3">Помощь</div>
+      <div class="text-subtitle1">Ответы на часто задаваемые вопросы</div>
     </div>
     <q-card flat bordered>
       <q-list bordered>
         <q-expansion-item
           expand-separator
           icon="help"
-          label="What is Сontest Tracker for?"
+          label="Для чего нужен Сontest Tracker?"
         >
           <q-card>
             <q-card-section>
@@ -23,7 +23,7 @@
         <q-expansion-item
           expand-separator
           icon="lock"
-          label="How can I change or reset my password?"
+          label="Как я могу изменить или сбросить свой пароль?"
         >
           <q-card>
             <q-card-section>
@@ -37,7 +37,7 @@
         <q-expansion-item
           expand-separator
           icon="email"
-          label="Is it possible to receive notifications of new events by mail?"
+          label="Можно ли получать уведомления о новых событиях по почте?"
         >
           <q-card>
             <q-card-section>

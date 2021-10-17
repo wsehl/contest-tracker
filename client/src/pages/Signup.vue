@@ -1,6 +1,6 @@
 <template>
-  <q-page class="flex flex-center">
-    <q-card :class="{ 'w-20': $q.screen.gt.lg }">
+  <q-page class="flex flex-center items-center">
+    <q-card flat bordered class="signup-card">
       <q-form @submit="register" greedy>
         <q-card-section class="bg-blue-9">
           <h4 class="text-h5 text-white q-my-sm">Create an account</h4>
@@ -111,3 +111,9 @@ export default {
   },
 };
 </script>
+
+<style lang="sass" scoped>
+.signup-card
+  width: 100%
+  max-width: 350px
+</style>

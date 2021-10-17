@@ -1,6 +1,6 @@
 <template>
   <q-page class="flex flex-center items-center">
-    <q-card :class="{ 'w-25': $q.screen.gt.md }">
+    <q-card flat bordered class="login-card">
       <q-form @submit="authenticate" greedy>
         <q-card-section class="bg-blue-9">
           <h4 class="text-h5 text-white q-my-sm">Login</h4>
@@ -94,3 +94,9 @@ export default {
   },
 };
 </script>
+
+<style lang="sass" scoped>
+.login-card
+  width: 100%
+  max-width: 350px
+</style>

@@ -6,60 +6,58 @@
           <div class="text-h6">Добавить пользователя</div>
         </q-card-section>
         <q-separator inset></q-separator>
-        <q-card-section>
-          <q-form class="q-gutter-md">
-            <q-input dense outlined label="Username" v-model="username" />
-            <q-input dense outlined label="Email" v-model="email" />
-            <q-select
-              dense
-              outlined
-              v-model="role"
-              :options="role_options"
-              label="Role"
-            />
-            <q-input dense outlined label="Password" v-model="password" />
-            <q-input
-              dense
-              outlined
-              type="text"
-              autocomplete="off"
-              readonly
-              v-model="generatedPassword"
-              label="Generated password"
-            >
-            </q-input>
-            <q-item>
-              <q-item-section avatar>
-                <q-icon
-                  name="swap_vert"
-                  class="cursor-pointer"
-                  @click="updateGeneratedPassword"
+        <q-card-section class="q-gutter-md">
+          <q-input dense outlined label="Имя пользователя" v-model="username" />
+          <q-input dense outlined label="Почта" v-model="email" />
+          <q-select
+            dense
+            outlined
+            v-model="role"
+            :options="role_options"
+            label="Роль"
+          />
+          <q-input dense outlined label="Пароль" v-model="password" />
+          <q-input
+            dense
+            outlined
+            type="text"
+            autocomplete="off"
+            readonly
+            v-model="generatedPassword"
+            label="Предложенный пароль"
+          >
+          </q-input>
+          <q-item>
+            <q-item-section avatar>
+              <q-icon
+                name="swap_vert"
+                class="cursor-pointer"
+                @click="updateGeneratedPassword"
+              />
+            </q-item-section>
+            <q-item-section>
+              <div>
+                <q-badge :color="strengthColor">Сложность пароля:</q-badge>
+                <q-slider
+                  snap
+                  label
+                  :step="12"
+                  :min="0"
+                  :max="48"
+                  :color="strengthColor"
+                  :label-value="strengthLabel"
+                  v-model="strengthLevel"
                 />
-              </q-item-section>
-              <q-item-section>
-                <div>
-                  <q-badge :color="strengthColor">Password strength:</q-badge>
-                  <q-slider
-                    snap
-                    label
-                    :step="12"
-                    :min="0"
-                    :max="48"
-                    :color="strengthColor"
-                    :label-value="strengthLabel"
-                    v-model="strengthLevel"
-                  />
-                </div>
-              </q-item-section>
-            </q-item>
-          </q-form>
+              </div>
+            </q-item-section>
+          </q-item>
         </q-card-section>
         <q-card-actions class="q-px-md q-mb-md">
           <q-btn
             color="primary"
             size="md"
             class="full-width"
-            label="Save"
+            label="Добавить"
             @click="insertTo('users')"
           />
         </q-card-actions>
@@ -69,7 +67,6 @@
       <q-card flat bordered>
         <q-table
           class="text-grey-8"
-          dense
           :data="data"
           :columns="columns"
           :pagination="{
@@ -99,7 +96,7 @@
                 no-caps
               >
                 <q-tooltip :disable="$q.platform.is.mobile" v-close-popup>
-                  Delete several rows
+                  Удалить несколько строк
                 </q-tooltip>
               </q-btn>
             </div>
@@ -112,7 +109,9 @@
             >
               <q-tooltip :disable="$q.platform.is.mobile" v-close-popup>
                 {{
-                  props.inFullscreen ? "Exit Fullscreen" : "Toggle Fullscreen"
+                  props.inFullscreen
+                    ? "Выйти из полноэкранного режима"
+                    : "Включить полноэкранный режим"
                 }}
               </q-tooltip>
             </q-btn>
@@ -158,10 +157,10 @@
           </template>
         </q-table>
         <q-dialog v-model="show_edit_dialog" class="q-pa-sm q-gutter-sm">
-          <q-card>
+          <q-card style="min-width: 350px">
             <q-card-section>
               <div class="text-h6">
-                User Details
+                Данные пользователя
                 <q-btn
                   round
                   flat
@@ -174,17 +173,33 @@
               </div>
             </q-card-section>
             <q-card-section>
-              <div class="col">
-                <q-input v-model="editedItem.username" label="Username">
+              <div class="q-gutter-md">
+                <q-input
+                  outlined
+                  dense
+                  v-model="editedItem.username"
+                  label="Имя пользователя"
+                >
                 </q-input>
-                <q-input v-model="editedItem.email" label="Email"></q-input>
-                <q-input v-model="editedItem.role" label="Role"></q-input>
+                <q-input
+                  outlined
+                  dense
+                  v-model="editedItem.email"
+                  label="Почта"
+                ></q-input>
+                <q-select
+                  outlined
+                  dense
+                  v-model="editedItem.role"
+                  :options="role_options"
+                  label="Роль"
+                />
               </div>
             </q-card-section>
-            <q-card-actions align="right">
+            <q-card-actions align="center">
               <q-btn
                 flat
-                label="OK"
+                label="Обновить"
                 color="primary"
                 v-close-popup
                 @click="editRow"
@@ -193,10 +208,10 @@
           </q-card>
         </q-dialog>
         <q-dialog v-model="show_view_dialog" class="q-pa-sm q-gutter-sm">
-          <q-card flat bordered>
+          <q-card style="min-width: 350px">
             <q-card-section>
               <div class="text-h6">
-                User Details
+                Данные пользователя
                 <q-btn
                   round
                   flat
@@ -209,17 +224,30 @@
               </div>
             </q-card-section>
             <q-card-section>
-              <div class="col">
-                <q-input readonly v-model="viewedItem.id" label="ID"> </q-input>
+              <div class="q-gutter-md">
                 <q-input
                   readonly
+                  dense
+                  outlined
                   v-model="viewedItem.username"
-                  label="Username"
+                  label="Имя пользователя"
                 >
                 </q-input>
-                <q-input readonly v-model="viewedItem.email" label="Email">
+                <q-input
+                  readonly
+                  dense
+                  outlined
+                  v-model="viewedItem.email"
+                  label="Почта"
+                >
                 </q-input>
-                <q-input readonly v-model="viewedItem.role" label="Role">
+                <q-input
+                  readonly
+                  outlined
+                  dense
+                  v-model="viewedItem.role"
+                  label="Роль"
+                >
                 </q-input>
               </div>
             </q-card-section>
@@ -257,28 +285,28 @@ export default {
         {
           name: "username",
           align: "left",
-          label: "Username",
+          label: "Имя пользователя",
           field: "username",
           sortable: true,
         },
         {
           name: "email",
           align: "left",
-          label: "Email",
+          label: "Почта",
           field: "email",
           sortable: true,
         },
         {
           name: "role",
           align: "left",
-          label: "Role",
+          label: "Роль",
           field: "role",
           sortable: true,
         },
         {
           name: "actions",
-          align: "center",
-          label: "Actions",
+          align: "right",
+          label: "Действия",
           field: "actions",
         },
       ],

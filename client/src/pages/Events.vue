@@ -2,7 +2,7 @@
   <q-page class="container mx-auto q-pa-md">
     <q-table
       :loading="loading"
-      title="Events"
+      title="Конкурсы"
       color="primary"
       @row-click="goToEvent"
       :data="data"
@@ -28,29 +28,29 @@ export default {
       columns: [
         {
           name: "event_title",
-          label: "Event",
+          label: "Конкурс",
           field: "event_title",
           sortable: true,
           align: "left",
         },
         {
           name: "organization_name",
-          label: "Organization",
+          label: "Организация",
           field: "organization_name",
           sortable: true,
           align: "left",
         },
         {
-          name: "Start Date",
-          label: "Start Date",
+          name: "start_date",
+          label: "Дата начала",
           field: "start_date",
           sortable: true,
           format: (val, row) => `${this.formatDate(row.start_date)}`,
           align: "center",
         },
         {
-          name: "End Date",
-          label: "End Date",
+          name: "end_date",
+          label: "Дата конца",
           field: "end_date",
           sortable: true,
           format: (val, row) => `${this.formatDate(row.end_date)}`,

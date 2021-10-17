@@ -6,42 +6,84 @@
           <div class="text-h6">Добавить оргиназацю</div>
         </q-card-section>
         <q-separator inset></q-separator>
-        <q-card-section>
-          <q-form class="q-gutter-md">
-            <q-input
-              dense
-              outlined
-              label="Organization title"
-              v-model="organization_name"
-            />
-            <q-uploader
-              :factory="uploadFile"
-              auto-upload
-              accept=".jpg, image/*"
-              ref="organization_uploader"
-              :hide-upload-btn="true"
-              @rejected="onRejected"
-            />
-          </q-form>
+        <q-card-section class="q-gutter-md">
+          <q-input
+            dense
+            outlined
+            label="Название"
+            v-model="organization_name"
+          />
+          <q-uploader
+            :factory="uploadFile"
+            auto-upload
+            flat
+            bordered
+            accept=".jpg, image/*"
+            ref="organization_uploader"
+            :hide-upload-btn="true"
+            @rejected="onRejected"
+          />
         </q-card-section>
         <q-card-actions class="q-px-md q-mb-md">
           <q-btn
             color="primary"
             size="md"
             class="full-width"
-            label="Save"
+            label="Добавить"
             @click="insertTo('organizations')"
           />
         </q-card-actions>
       </q-card>
     </div>
-    <div class="col-lg-9 col-md-8 col-sm-12 col-xs-12"></div>
+    <div class="col-lg-9 col-md-8 col-sm-12 col-xs-12">
+      <q-card flat bordered>
+        <q-table
+          class="text-grey-8"
+          :data="data"
+          :columns="columns"
+          :pagination="{
+            rowsPerPage: 15,
+          }"
+          :loading="loading"
+          row-key="organization_name"
+        >
+          <template v-slot:top-left>
+            <q-input outlined dense v-model="filter" placeholder="Поиск">
+              <template v-slot:append>
+                <q-icon name="search" />
+              </template>
+            </q-input>
+          </template>
+          <template v-slot:top-right="props">
+            <q-btn
+              flat
+              round
+              dense
+              :icon="props.inFullscreen ? 'fullscreen_exit' : 'fullscreen'"
+              @click="props.toggleFullscreen"
+            >
+              <q-tooltip :disable="$q.platform.is.mobile" v-close-popup>
+                {{
+                  props.inFullscreen ? "Exit Fullscreen" : "Toggle Fullscreen"
+                }}
+              </q-tooltip>
+            </q-btn>
+          </template>
+          <template v-slot:body="props">
+            <q-tr :props="props">
+              <q-td key="organization_name" :props="props">
+                {{ props.row.organization_name }}
+              </q-td>
+            </q-tr>
+          </template>
+        </q-table>
+      </q-card>
+    </div>
   </div>
 </template>
 
 <script>
 /* eslint-disable no-unused-vars */
-
 import {
   insertToTable,
   removeRow,
@@ -54,9 +96,20 @@ export default {
   data() {
     return {
       loading: true,
-      data: [],
       organization_name: "",
       organization_file: null,
+
+      filter: "",
+      data: [],
+      columns: [
+        {
+          name: "organization_name",
+          align: "left",
+          label: "Название",
+          field: "organization_name",
+          sortable: true,
+        },
+      ],
     };
   },
   created() {

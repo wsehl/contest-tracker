@@ -1,10 +1,11 @@
 <template>
   <div id="q-app">
-    <q-ajax-bar color="primary" position="top" />
     <q-layout class="bg-grey-1" view="hHh lpR fFf">
       <app-navbar />
       <q-page-container>
-        <router-view />
+        <keep-alive>
+          <router-view />
+        </keep-alive>
       </q-page-container>
     </q-layout>
   </div>
