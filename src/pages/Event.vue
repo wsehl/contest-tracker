@@ -1,55 +1,50 @@
 <template>
-  <div v-if="!loading">
-    <q-page class="q-page flex column items-center q-layout-padding">
-      <div v-if="!exists">
-        <div class="flex column items-center q-pb-md">
-          <div class="text-h3">Not Found</div>
-          <div class="text-subtitle1">There are no such event</div>
-        </div>
+  <q-page v-if="!loading" class="container mx-auto q-pa-md">
+    <div v-if="!exists">
+      <div class="flex column q-pb-md">
+        <div class="text-h3">Not Found</div>
+        <div class="text-subtitle1">There are no such event</div>
       </div>
-      <div v-else>
-        <div class="flex column items-center q-pb-md">
-          <q-btn
-            outline
-            rounded
-            color="primary"
-            icon="event"
-            label="All events"
-            :to="{ name: 'Events' }"
-          />
-          <div class="w-50 flex column q-mt-md">
-            <div class="text-h4 q-mb-md">
-              {{ event.event_title }}
-            </div>
-            <div class="text-h6">Date</div>
-            <div class="text-subtitle1 q-mb-md">
-              {{
-                `${formatDate(event.start_date)} - ${formatDate(
-                  event.end_date
-                )}`
-              }}
-            </div>
-            <div class="text-h6">Description</div>
-            <div class="text-body1">
-              {{ event.event_description }}
-            </div>
-            <div class="text-h6 q-mt-md">Organization</div>
-            <div class="organization-section">
-              <div class="body">
-                <img
-                  class="image"
-                  :src="`${url}/${event.organization_image}?alt=media`"
-                />
-                <span class="organization">
-                  {{ event.organization_name }}
-                </span>
-              </div>
-            </div>
+    </div>
+    <div v-else class="flex column items-start q-pb-md">
+      <q-btn
+        outline
+        rounded
+        color="primary"
+        icon="event"
+        label="All events"
+        :to="{ name: 'Events' }"
+      />
+      <div class="w-50 flex column q-mt-md">
+        <div class="text-h4 q-mb-md">
+          {{ event.event_title }}
+        </div>
+        <div class="text-h6">Date</div>
+        <div class="text-subtitle1 q-mb-md">
+          {{
+            `${formatDate(event.start_date)} - ${formatDate(event.end_date)}`
+          }}
+        </div>
+        <div class="text-h6">Description</div>
+        <div class="text-body1">
+          {{ event.event_description }}
+        </div>
+        <div class="text-h6 q-mt-md">Organization</div>
+        <div class="organization-section">
+          <div class="body">
+            <q-img
+              spinner-color="blue"
+              class="image"
+              :src="`${url}/${event.organization_image}?alt=media`"
+            />
+            <span class="organization">
+              {{ event.organization_name }}
+            </span>
           </div>
         </div>
       </div>
-    </q-page>
-  </div>
+    </div>
+  </q-page>
 </template>
 
 <script>
@@ -117,8 +112,14 @@ export default {
     flex-direction: column
     align-items: center
     .image
-      width: 150px
-      height: 150px
-      border-radius: 50%
-      bject-fit: cover
+      width: 125px
+      height: 125px
+      margin: 5px 0px 5px 0px
+      border-radius: 4px
+      border: 1px #e5e5e5 solid
+      object-fit: cover
+      object-position: center
+    .organization
+      font-size: 18px
+      font-weight: 400
 </style>

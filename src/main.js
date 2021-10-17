@@ -2,7 +2,22 @@ import Vue from "vue";
 import App from "./App.vue";
 import router from "./router";
 import store from "./store";
-import "./quasar";
+import "./assets/styles.css";
+import "quasar/dist/quasar.css";
+import "@quasar/extras/roboto-font/roboto-font.css";
+import "@quasar/extras/material-icons/material-icons.css";
+import "@quasar/extras/material-icons-outlined/material-icons-outlined.css";
+import "@quasar/extras/material-icons-round/material-icons-round.css";
+import "@quasar/extras/material-icons-sharp/material-icons-sharp.css";
+import { Quasar, Notify, Loading } from "quasar";
+
+Vue.use(Quasar, {
+  plugins: {
+    Notify,
+    Loading,
+  },
+  config: {},
+});
 
 Vue.config.productionTip = false;
 

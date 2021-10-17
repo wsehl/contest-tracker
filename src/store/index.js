@@ -8,7 +8,7 @@ Vue.use(Vuex);
 const getDefaultState = () => {
   return {
     token: "",
-    user: {},
+    user: null,
   };
 };
 
@@ -29,7 +29,7 @@ export default new Vuex.Store({
   },
   getters: {
     getUser: (state) => {
-      return state.user;
+      return state?.user;
     },
     getToken: (state) => {
       return state.token;
@@ -38,7 +38,7 @@ export default new Vuex.Store({
       return state.token;
     },
     isAdmin: (state) => {
-      return state.user.role === "Admin";
+      return state?.user?.role === "Admin";
     },
   },
   actions: {
@@ -47,7 +47,7 @@ export default new Vuex.Store({
       commit("SET_USER", user);
     },
     logout: ({ commit }) => {
-      commit("RESET", "");
+      commit("RESET");
       router.push({ name: "Home" });
     },
   },

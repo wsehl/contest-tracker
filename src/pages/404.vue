@@ -13,35 +13,16 @@
         fill-opacity="0.2"
       />
     </svg>
-    <p class="text-faded">Sorry, nothing here...<strong>(404)</strong></p>
-    <q-btn
-      color="primary"
-      style="width: 200px"
-      @click.prevent="handleBack()"
-      label="Go back"
-    />
+    <div class="text-subtitle1 q-mb-md">Page not found</div>
+    <q-btn color="primary" flat @click="goHome()" label="Go home" />
   </div>
 </template>
 
 <script>
 export default {
-  data() {
-    return {
-      fromRoute: null,
-    };
-  },
-  beforeRouteEnter(to, from, next) {
-    next((vm) => {
-      vm.fromRoute = from;
-    });
-  },
   methods: {
-    handleBack() {
-      if (!this.fromRoute.name) {
-        this.$router.push({ name: "Home" });
-      } else {
-        this.$router.back();
-      }
+    goHome() {
+      this.$router.push({ name: "Home" });
     },
   },
   created() {

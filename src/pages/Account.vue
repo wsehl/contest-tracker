@@ -1,28 +1,21 @@
 <template>
-  <q-page class="q-page flex column items-center q-layout-padding">
-    <div class="flex column items-center q-pb-md">
-      <div class="text-h3">Account</div>
+  <q-page class="container mx-auto q-pa-md">
+    <div class="text-h3">Account</div>
+    <div style="max-width: 400px">
+      <q-form class="q-mt-md q-gutter-md">
+        <q-input outlined v-model="user.username" label="Username" />
+        <q-input outlined v-model="user.role" readonly label="Role" />
+        <q-input outlined v-model="user.email" label="Email" />
+        <div>
+          <q-btn
+            label="Update"
+            type="submit"
+            class="full-width"
+            color="primary"
+          />
+        </div>
+      </q-form>
     </div>
-    <template v-if="!loading">
-      <q-card
-        flat
-        bordered
-        class="q-mt-md"
-        :class="{ 'w-20': $q.screen.gt.md }"
-      >
-        <q-card-section>
-          <q-form class="q-gutter-md">
-            <q-input unelevated v-model="user.role" readonly label="Role" />
-            <q-input unelevated v-model="user.username" label="Nickname" />
-            <q-input unelevated v-model="user.email" label="Email" />
-            <q-input unelevated v-model="fake.password" label="Password" />
-            <div>
-              <q-btn label="Update" type="submit" color="primary" />
-            </div>
-          </q-form>
-        </q-card-section>
-      </q-card>
-    </template>
   </q-page>
 </template>
 

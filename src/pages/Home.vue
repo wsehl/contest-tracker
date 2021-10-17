@@ -1,57 +1,59 @@
 <template>
-  <q-page>
-    <template v-if="!loading">
-      <q-parallax src="main_picture.jpg">
-        <div class="text-h3 text-center parallax-title">
-          <div>Проектная деятельность<br />НИШ Павлодар</div>
+  <q-page v-if="!loading">
+    <q-parallax src="./hero.jpg">
+      <h3 class="text-white text-center">
+        Проектная деятельность НИШ Павлодар
+      </h3>
+    </q-parallax>
+    <div class="container mx-auto">
+      <div class="section-title">Upcoming Events</div>
+    </div>
+    <carousel
+      paginationActiveColor="#3B82F6"
+      paginationColor="#BFDBFE"
+      easing="ease-out"
+      class="carousel"
+      :scrollPerPage="true"
+      :autoplay="true"
+      :speed="300"
+      :autoplayHoverPause="true"
+      :perPageCustom="[
+        [768, 3],
+        [1024, 3],
+      ]"
+    >
+      <slide v-for="item in events" :key="item.id" class="carousel-item">
+        <div class="title">
+          <router-link
+            class="link"
+            :to="{
+              name: 'Event',
+              params: {
+                id: item.id,
+              },
+            }"
+          >
+            {{ item.event_title }}
+          </router-link>
         </div>
-      </q-parallax>
-      <div class="upcoming-events">Upcoming Events</div>
-      <carousel
-        paginationActiveColor="#3B82F6"
-        paginationColor="#BFDBFE"
-        easing="ease-out"
-        class="carousel"
-        :scrollPerPage="true"
-        :autoplay="true"
-        :speed="300"
-        :autoplayHoverPause="true"
-        :perPageCustom="[
-          [768, 3],
-          [1024, 3],
-        ]"
-      >
-        <slide v-for="item in events" :key="item.id" class="carousel-item">
-          <div class="title">
-            <router-link
-              class="link"
-              :to="{
-                name: 'Event',
-                params: {
-                  id: item.id,
-                },
-              }"
-              >{{ item.event_title }}
-            </router-link>
-          </div>
-          <div class="body">
-            <img
-              class="image"
-              :src="`${url}/${item.organization_image}?alt=media`"
-            />
-            <span class="organization">
-              {{ item.organization_name }}
-            </span>
-          </div>
-          <div class="footer">
-            <p class="date">
-              {{ formatDate(item.start_date) }} -
-              {{ formatDate(item.end_date) }}
-            </p>
-          </div>
-        </slide>
-      </carousel>
-    </template>
+        <div class="body">
+          <q-img
+            class="image"
+            spinner-color="blue"
+            :src="`${url}/${item.organization_image}?alt=media`"
+          />
+          <span class="organization">
+            {{ item.organization_name }}
+          </span>
+        </div>
+        <div class="footer">
+          <p class="date">
+            {{ formatDate(item.start_date) }} -
+            {{ formatDate(item.end_date) }}
+          </p>
+        </div>
+      </slide>
+    </carousel>
   </q-page>
 </template>
 
@@ -111,12 +113,12 @@ export default {
   border-radius: 15px
   padding: 25px
 
-.upcoming-events
+.section-title
   display: flex
   flex-direction: column
   align-items: center
-  font-size: 24px
-  font-weight: 500
+  font-size: 32px
+  font-weight: 400
   padding: 15px 0 5px 0
 
 .carousel

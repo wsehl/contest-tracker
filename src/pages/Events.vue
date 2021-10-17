@@ -1,39 +1,68 @@
 <template>
-  <q-page class="q-page flex column items-center q-layout-padding">
-    <div class="flex column items-center q-pb-md">
-      <div class="text-h3">Events</div>
-    </div>
-    <template v-if="!loading">
-      <div class="q-mt-md">
-        <q-table
-          @row-click="goToEvent"
-          :data="data"
-          :color="'primary'"
-          :columns="columns"
-          :pagination="{
-            rowsPerPage: 15,
-          }"
-          flat
-          bordered
-        />
-      </div>
-    </template>
+  <q-page class="container mx-auto q-pa-md">
+    <q-table
+      :loading="loading"
+      title="Events"
+      color="primary"
+      @row-click="goToEvent"
+      :data="data"
+      :columns="columns"
+      :pagination="{
+        rowsPerPage: 15,
+      }"
+      flat
+      bordered
+    />
   </q-page>
 </template>
 
 <script>
 import { getTable } from "@/api";
-import EventsTable from "@/mixins/tables/EventsTable.js";
+import { format } from "date-fns";
 
 export default {
-  mixins: [EventsTable],
   data() {
     return {
       loading: true,
       data: [],
+      columns: [
+        {
+          name: "event_title",
+          label: "Event",
+          field: "event_title",
+          sortable: true,
+          align: "left",
+        },
+        {
+          name: "organization_name",
+          label: "Organization",
+          field: "organization_name",
+          sortable: true,
+          align: "left",
+        },
+        {
+          name: "Start Date",
+          label: "Start Date",
+          field: "start_date",
+          sortable: true,
+          format: (val, row) => `${this.formatDate(row.start_date)}`,
+          align: "center",
+        },
+        {
+          name: "End Date",
+          label: "End Date",
+          field: "end_date",
+          sortable: true,
+          format: (val, row) => `${this.formatDate(row.end_date)}`,
+          align: "center",
+        },
+      ],
     };
   },
   methods: {
+    formatDate(d) {
+      return format(new Date(d), "PP");
+    },
     goToEvent(event, row) {
       this.$router.push({
         name: "Event",
@@ -41,13 +70,13 @@ export default {
       });
     },
     fetchData() {
+      this.loading = true;
       getTable("events")
         .then((response) => {
           this.data = response.data;
         })
         .finally(() => {
           this.loading = false;
-          this.$q.loading.hide();
         })
         .catch((error) => {
           this.$q.notify({
@@ -61,20 +90,7 @@ export default {
     },
   },
   created() {
-    this.$q.loading.show();
     this.fetchData();
   },
 };
 </script>
-
-<style lang="sass" scoped>
-.w-50
-    width: 50%
-.w-70
-    width: 70%
-.w-100
-    width: 100%
-.about
-    .school-link
-        color: inherit
-</style>

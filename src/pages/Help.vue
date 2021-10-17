@@ -1,11 +1,11 @@
 <template>
-  <q-page class="q-page flex column items-center q-layout-padding">
-    <div class="flex column items-center q-pb-md">
+  <q-page class="container mx-auto q-pa-md">
+    <div class="flex column q-pb-md">
       <div class="text-h3">Help</div>
       <div class="text-subtitle1">Answers to frequently asked questions</div>
     </div>
-    <q-card flat bordered :class="{ 'w-30': $q.screen.gt.md }">
-      <q-list bordered class="rounded-borders">
+    <q-card flat bordered>
+      <q-list bordered>
         <q-expansion-item
           expand-separator
           icon="help"
@@ -20,7 +20,6 @@
             </q-card-section>
           </q-card>
         </q-expansion-item>
-
         <q-expansion-item
           expand-separator
           icon="lock"
@@ -35,7 +34,6 @@
             </q-card-section>
           </q-card>
         </q-expansion-item>
-
         <q-expansion-item
           expand-separator
           icon="email"
@@ -54,9 +52,3 @@
     </q-card>
   </q-page>
 </template>
-
-<script>
-export default {};
-</script>
-
-<style lang="scss" scoped></style>

@@ -2,149 +2,104 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 import store from "../store/index";
 
+const isAuthenticated = () => store.getters.isLoggedIn;
+const isAdmin = () => store.getters.isAdmin;
+
 Vue.use(VueRouter);
 
 const routes = [
   {
     path: "/",
-    name: "Layout",
-    redirect: { name: "Home" },
-    component: () => import("@/layouts/MainLayout.vue"),
-    children: [
-      {
-        path: "/",
-        name: "Home",
-        component: () => import("@/pages/Home.vue"),
-        meta: {
-          title: "Contest Tracker",
-        },
-      },
-      {
-        path: "/login",
-        name: "Login",
-        component: () => import("@/pages/Login.vue"),
-        meta: {
-          title: "Login",
-        },
-        beforeEnter(to, from, next) {
-          if (store.getters.isLoggedIn) {
-            next({ name: "Home" });
-          } else {
-            next();
-          }
-        },
-      },
-      {
-        path: "/signup",
-        name: "Signup",
-        component: () => import("@/pages/Signup.vue"),
-        meta: {
-          title: "Sign Up",
-        },
-        beforeEnter(to, from, next) {
-          if (store.getters.isLoggedIn) {
-            next({ name: "Home" });
-          } else {
-            next();
-          }
-        },
-      },
-      {
-        path: "/about",
-        name: "About",
-        component: () => import("@/pages/About.vue"),
-        meta: {
-          title: "About",
-        },
-      },
-      {
-        path: "/account",
-        name: "Account",
-        component: () => import("@/pages/Account.vue"),
-        meta: {
-          title: "Account",
-        },
-      },
-      {
-        path: "/help",
-        name: "Help",
-        component: () => import("@/pages/Help.vue"),
-        meta: {
-          title: "Help",
-        },
-      },
-      // {
-      //   path: "/archive",
-      //   name: "Archive",
-      //   component: () => import("@/pages/Archive.vue"),
-      //   meta: {
-      //     title: "Archive",
-      //   },
-      // },
-      {
-        path: "/events",
-        name: "Events",
-        component: () => import("@/pages/Events.vue"),
-        meta: {
-          title: "Events",
-        },
-      },
-      {
-        path: "/event/:id",
-        name: "Event",
-        component: () => import("@/pages/Event.vue"),
-        meta: {
-          title: "Event",
-        },
-      },
-    ],
+    name: "Home",
+    meta: {
+      title: "Contest Tracker",
+    },
+    component: () => import("@/pages/Home.vue"),
   },
   {
-    path: "/dash",
-    name: "Dash",
-    redirect: { name: "Dashboard" },
-    component: () => import("@/layouts/DashboardLayout.vue"),
+    path: "/login",
+    name: "Login",
+    meta: {
+      title: "Login",
+      authForbidden: true,
+    },
+    component: () => import("@/pages/Login.vue"),
+  },
+  {
+    path: "/signup",
+    name: "Signup",
+    meta: {
+      title: "Sign Up",
+      authForbidden: true,
+    },
+    component: () => import("@/pages/Signup.vue"),
+  },
+  {
+    path: "/about",
+    name: "About",
+    meta: {
+      title: "About",
+    },
+    component: () => import("@/pages/About.vue"),
+  },
+  {
+    path: "/account",
+    name: "Account",
+    meta: {
+      title: "Account",
+      authRequired: true,
+    },
+    component: () => import("@/pages/Account.vue"),
+  },
+  {
+    path: "/help",
+    name: "Help",
+    meta: {
+      title: "Help",
+    },
+    component: () => import("@/pages/Help.vue"),
+  },
+  {
+    path: "/events",
+    name: "Events",
+    meta: {
+      title: "Events",
+    },
+    component: () => import("@/pages/Events.vue"),
+  },
+  {
+    path: "/event/:id",
+    name: "Event",
+    meta: {
+      title: "Event",
+    },
+    component: () => import("@/pages/Event.vue"),
+  },
+
+  {
+    path: "/dashboard",
+    name: "Dashboard",
+    redirect: { name: "DashboardUsers" },
+    component: () => import("@/pages/dashboard/Dashboard.vue"),
     children: [
-      {
-        path: "/dashboard",
-        name: "Dashboard",
-        component: () => import("@/pages/dashboard/Dash.vue"),
-        meta: {
-          title: "Dashboard",
-        },
-      },
       {
         path: "/dashboard/users",
         name: "DashboardUsers",
-        component: () => import("@/pages/dashboard/Users.vue"),
+        component: () => import("@/pages/dashboard/DashboardUsers.vue"),
         meta: {
           title: "Dashboard - Users",
+          isAdmin: true,
         },
       },
     ],
-    beforeEnter(to, from, next) {
-      if (store.getters.isAdmin) {
-        next();
-      } else {
-        next({
-          name: "404",
-        });
-      }
-    },
   },
   {
+    name: "404",
     path: "/:catchAll(.*)",
-    component: () => import("@/layouts/MainLayout.vue"),
-    children: [
-      {
-        name: "404",
-        path: "",
-        component: () => import("@/pages/404.vue"),
-        meta: {
-          title: "Page not found",
-        },
-      },
-    ],
+    meta: {
+      title: "Page not found",
+    },
+    component: () => import("@/pages/404.vue"),
   },
 ];
 
@@ -157,6 +112,14 @@ const router = new VueRouter({
 router.beforeEach((to, from, next) => {
   if (to.meta.title) {
     document.title = to.meta.title;
+  }
+  if (to.meta.authForbidden) {
+    isAuthenticated() ? next({ name: "Home" }) : next();
+  } else if (to.meta.authRequired) {
+    isAuthenticated() ? next() : next({ name: "Login" });
+  } else if (to.meta.isAdmin) {
+    isAuthenticated() && isAdmin() ? next() : next({ name: "404" });
+  } else {
     next();
   }
 });

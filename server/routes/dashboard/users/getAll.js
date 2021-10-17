@@ -2,7 +2,7 @@ const { db } = require("../../../lib/firebase.js");
 
 const getAll = async (req, res) => {
   const users = [];
-  const snapshot = await db.collection("organisations").get();
+  const snapshot = await db.collection("users").get();
 
   snapshot.forEach((doc) => {
     const user = doc.data();
