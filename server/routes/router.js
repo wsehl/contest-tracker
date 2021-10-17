@@ -1,13 +1,5 @@
 const express = require("express");
 const router = express.Router();
-const multer = require("multer");
-
-const upload = multer({
-  storage: multer.memoryStorage(),
-  limits: {
-    fileSize: 5 * 1024 * 1024, // 5mb
-  },
-});
 
 const middleware = require("../middleware");
 const route = require("./index.js");
@@ -41,8 +33,6 @@ router.get("/dashboard/organizations", route.organizations.getAll);
 router.post(
   "/dashboard/organizations",
   middleware.auth.isAdmin,
-  upload.single("file"),
-  middleware.dashboard.validateOrganizations,
   route.organizations.addNew
 );
 
