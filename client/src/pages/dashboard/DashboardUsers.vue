@@ -3,7 +3,7 @@
     <div class="col-lg-3 col-md-4 col-sm-12 col-xs-12">
       <q-card flat bordered>
         <q-card-section>
-          <div class="text-h6">Add new user</div>
+          <div class="text-h6">Добавить пользователя</div>
         </q-card-section>
         <q-separator inset></q-separator>
         <q-card-section>
@@ -77,89 +77,18 @@
           }"
           :loading="loading"
           row-key="username"
-          :hide-header="mode === 'grid'"
-          :grid="mode === 'grid'"
           :filter="filter"
           selection="multiple"
           :selected.sync="selected"
         >
           <template v-slot:top-left>
-            <q-input outlined dense v-model="filter" placeholder="Search">
+            <q-input outlined dense v-model="filter" placeholder="Поиск">
               <template v-slot:append>
                 <q-icon name="search" />
               </template>
             </q-input>
           </template>
           <template v-slot:top-right="props">
-            <q-dialog v-model="show_edit_dialog" class="q-pa-sm q-gutter-sm">
-              <q-card>
-                <q-card-section>
-                  <div class="text-h6">
-                    User Details
-                    <q-btn
-                      round
-                      flat
-                      dense
-                      icon="close"
-                      class="float-right"
-                      color="grey-8"
-                      v-close-popup
-                    />
-                  </div>
-                </q-card-section>
-                <q-card-section>
-                  <div class="col">
-                    <q-input v-model="editedItem.username" label="Username">
-                    </q-input>
-                    <q-input v-model="editedItem.email" label="Email"></q-input>
-                    <q-input v-model="editedItem.role" label="Role"></q-input>
-                  </div>
-                </q-card-section>
-                <q-card-actions align="right">
-                  <q-btn
-                    flat
-                    label="OK"
-                    color="primary"
-                    v-close-popup
-                    @click="editRow"
-                  />
-                </q-card-actions>
-              </q-card>
-            </q-dialog>
-            <q-dialog v-model="show_view_dialog" class="q-pa-sm q-gutter-sm">
-              <q-card flat bordered>
-                <q-card-section>
-                  <div class="text-h6">
-                    User Details
-                    <q-btn
-                      round
-                      flat
-                      dense
-                      icon="close"
-                      class="float-right"
-                      color="grey-8"
-                      v-close-popup
-                    />
-                  </div>
-                </q-card-section>
-                <q-card-section>
-                  <div class="col">
-                    <q-input readonly v-model="viewedItem.id" label="ID">
-                    </q-input>
-                    <q-input
-                      readonly
-                      v-model="viewedItem.username"
-                      label="Username"
-                    >
-                    </q-input>
-                    <q-input readonly v-model="viewedItem.email" label="Email">
-                    </q-input>
-                    <q-input readonly v-model="viewedItem.role" label="Role">
-                    </q-input>
-                  </div>
-                </q-card-section>
-              </q-card>
-            </q-dialog>
             <div v-if="selected.length > 1">
               <q-btn
                 flat
@@ -180,27 +109,11 @@
               dense
               :icon="props.inFullscreen ? 'fullscreen_exit' : 'fullscreen'"
               @click="props.toggleFullscreen"
-              v-if="mode === 'list'"
             >
               <q-tooltip :disable="$q.platform.is.mobile" v-close-popup>
                 {{
                   props.inFullscreen ? "Exit Fullscreen" : "Toggle Fullscreen"
                 }}
-              </q-tooltip>
-            </q-btn>
-            <q-btn
-              flat
-              round
-              dense
-              :icon="mode === 'grid' ? 'list' : 'grid_on'"
-              @click="
-                mode = mode === 'grid' ? 'list' : 'grid';
-                separator = mode === 'grid' ? 'none' : 'horizontal';
-              "
-              v-if="!props.inFullscreen"
-            >
-              <q-tooltip :disable="$q.platform.is.mobile" v-close-popup>
-                {{ mode === "grid" ? "List" : "Grid" }}
               </q-tooltip>
             </q-btn>
           </template>
@@ -218,12 +131,6 @@
               <q-td key="role" :props="props">
                 {{ props.row.role }}
               </q-td>
-              <!-- <q-td key="registered" :props="props">
-                {{ props.row.registered }}
-              </q-td>
-              <q-td key="last_login" :props="props">
-                {{ props.row.last_login }}
-              </q-td> -->
               <q-td key="actions" :props="props">
                 <q-btn
                   @click="viewItem(props.row)"
@@ -250,6 +157,74 @@
             </q-tr>
           </template>
         </q-table>
+        <q-dialog v-model="show_edit_dialog" class="q-pa-sm q-gutter-sm">
+          <q-card>
+            <q-card-section>
+              <div class="text-h6">
+                User Details
+                <q-btn
+                  round
+                  flat
+                  dense
+                  icon="close"
+                  class="float-right"
+                  color="grey-8"
+                  v-close-popup
+                />
+              </div>
+            </q-card-section>
+            <q-card-section>
+              <div class="col">
+                <q-input v-model="editedItem.username" label="Username">
+                </q-input>
+                <q-input v-model="editedItem.email" label="Email"></q-input>
+                <q-input v-model="editedItem.role" label="Role"></q-input>
+              </div>
+            </q-card-section>
+            <q-card-actions align="right">
+              <q-btn
+                flat
+                label="OK"
+                color="primary"
+                v-close-popup
+                @click="editRow"
+              />
+            </q-card-actions>
+          </q-card>
+        </q-dialog>
+        <q-dialog v-model="show_view_dialog" class="q-pa-sm q-gutter-sm">
+          <q-card flat bordered>
+            <q-card-section>
+              <div class="text-h6">
+                User Details
+                <q-btn
+                  round
+                  flat
+                  dense
+                  icon="close"
+                  class="float-right"
+                  color="grey-8"
+                  v-close-popup
+                />
+              </div>
+            </q-card-section>
+            <q-card-section>
+              <div class="col">
+                <q-input readonly v-model="viewedItem.id" label="ID"> </q-input>
+                <q-input
+                  readonly
+                  v-model="viewedItem.username"
+                  label="Username"
+                >
+                </q-input>
+                <q-input readonly v-model="viewedItem.email" label="Email">
+                </q-input>
+                <q-input readonly v-model="viewedItem.role" label="Role">
+                </q-input>
+              </div>
+            </q-card-section>
+          </q-card>
+        </q-dialog>
       </q-card>
     </div>
   </div>
@@ -275,7 +250,6 @@ export default {
       role: "",
       role_options: ["User", "Curator", "Teacher", "Admin"],
 
-      mode: "list",
       filter: "",
       data: [],
       selected: [],
@@ -312,12 +286,6 @@ export default {
       show_edit_dialog: false,
       show_view_dialog: false,
 
-      defaultItem: {
-        id: "",
-        username: "",
-        email: "",
-        role: "",
-      },
       editedItem: {
         id: "",
         username: "",

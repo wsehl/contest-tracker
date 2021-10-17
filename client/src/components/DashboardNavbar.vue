@@ -13,25 +13,25 @@
       }"
       exact
       icon="people"
-      label="Users"
+      label="Пользователи"
     />
     <q-route-tab
       :ripple="false"
       :to="{
-        name: 'DashboardUsers',
+        name: 'DashboardOrganizations',
       }"
       exact
       icon="corporate_fare"
-      label="Organizations"
+      label="Организации"
     />
     <q-route-tab
       :ripple="false"
       :to="{
-        name: 'DashboardUsers',
+        name: 'DashboardEvents',
       }"
       exact
       icon="event"
-      label="Events"
+      label="Конкурсы"
     />
   </q-tabs>
 </template>

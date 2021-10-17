@@ -20,7 +20,7 @@ const routes = [
     path: "/login",
     name: "Login",
     meta: {
-      title: "Login",
+      title: "Вход",
       authForbidden: true,
     },
     component: () => import("@/pages/Login.vue"),
@@ -29,7 +29,7 @@ const routes = [
     path: "/signup",
     name: "Signup",
     meta: {
-      title: "Sign Up",
+      title: "Регистрация",
       authForbidden: true,
     },
     component: () => import("@/pages/Signup.vue"),
@@ -38,7 +38,7 @@ const routes = [
     path: "/about",
     name: "About",
     meta: {
-      title: "About",
+      title: "О проекте",
     },
     component: () => import("@/pages/About.vue"),
   },
@@ -46,7 +46,7 @@ const routes = [
     path: "/account",
     name: "Account",
     meta: {
-      title: "Account",
+      title: "Аккаунт",
       authRequired: true,
     },
     component: () => import("@/pages/Account.vue"),
@@ -55,7 +55,7 @@ const routes = [
     path: "/help",
     name: "Help",
     meta: {
-      title: "Help",
+      title: "Помощь",
     },
     component: () => import("@/pages/Help.vue"),
   },
@@ -63,7 +63,7 @@ const routes = [
     path: "/events",
     name: "Events",
     meta: {
-      title: "Events",
+      title: "Конкурсы",
     },
     component: () => import("@/pages/Events.vue"),
   },
@@ -71,7 +71,7 @@ const routes = [
     path: "/event/:id",
     name: "Event",
     meta: {
-      title: "Event",
+      title: "Конкурс",
     },
     component: () => import("@/pages/Event.vue"),
   },
@@ -87,7 +87,25 @@ const routes = [
         name: "DashboardUsers",
         component: () => import("@/pages/dashboard/DashboardUsers.vue"),
         meta: {
-          title: "Dashboard - Users",
+          title: "[CRM] Пользователи",
+          isAdmin: true,
+        },
+      },
+      {
+        path: "/dashboard/organizations",
+        name: "DashboardOrganizations",
+        component: () => import("@/pages/dashboard/DashboardOrganizations.vue"),
+        meta: {
+          title: "[CRM] Организации",
+          isAdmin: true,
+        },
+      },
+      {
+        path: "/dashboard/events",
+        name: "DashboardEvents",
+        component: () => import("@/pages/dashboard/DashboardEvents.vue"),
+        meta: {
+          title: "[CRM] Конкурсы",
           isAdmin: true,
         },
       },

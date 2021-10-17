@@ -34,10 +34,10 @@
           "
         >
           <router-link :to="{ name: 'About' }" class="router-link">
-            About
+            О проекте
           </router-link>
           <router-link :to="{ name: 'Events' }" class="router-link">
-            Events
+            Конкурсы
           </router-link>
         </div>
         <q-space />
@@ -53,7 +53,7 @@
           >
             <template v-if="user && user.role === 'Admin'">
               <router-link :to="{ name: 'Dashboard' }" class="router-link">
-                Dashboard
+                Админ-панель
               </router-link>
             </template>
             <template v-if="user">
@@ -71,7 +71,7 @@
                         name: 'Account',
                       }"
                     >
-                      <q-item-section>Your profile</q-item-section>
+                      <q-item-section>Аккаунт</q-item-section>
                     </q-item>
                     <q-separator />
                     <q-item
@@ -81,10 +81,10 @@
                         name: 'Help',
                       }"
                     >
-                      <q-item-section>Help</q-item-section>
+                      <q-item-section>Помощь</q-item-section>
                     </q-item>
                     <q-item clickable class="GL__menu-link" @click="logout">
-                      <q-item-section>Sign out</q-item-section>
+                      <q-item-section>Выход</q-item-section>
                     </q-item>
                   </q-list>
                 </q-menu>
@@ -92,10 +92,10 @@
             </template>
             <template v-else>
               <router-link :to="{ name: 'Login' }" class="router-link">
-                Login
+                Войти
               </router-link>
               <router-link :to="{ name: 'Signup' }" class="router-link">
-                Sign up
+                Зарегистрироваться
               </router-link>
             </template>
           </div>

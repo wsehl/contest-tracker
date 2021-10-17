@@ -6,7 +6,7 @@
       </h3>
     </q-parallax>
     <div class="container mx-auto">
-      <div class="section-title">Upcoming Events</div>
+      <div class="section-title">Актуальные конкурсы</div>
     </div>
     <carousel
       paginationActiveColor="#3B82F6"

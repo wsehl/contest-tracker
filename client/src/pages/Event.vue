@@ -77,7 +77,6 @@ export default {
           } else {
             this.exists = true;
             this.event = response.data[0];
-            console.log(this.event);
           }
         })
         .finally(() => {
