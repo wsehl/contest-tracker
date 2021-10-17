@@ -3,9 +3,7 @@
     <q-layout class="bg-grey-1" view="hHh lpR fFf">
       <app-navbar />
       <q-page-container>
-        <keep-alive>
-          <router-view />
-        </keep-alive>
+        <router-view />
       </q-page-container>
     </q-layout>
   </div>
