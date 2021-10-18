@@ -13,8 +13,8 @@
         fill-opacity="0.2"
       />
     </svg>
-    <div class="text-subtitle1 q-mb-md">Page not found</div>
-    <q-btn color="primary" flat @click="goHome()" label="Go home" />
+    <div class="text-subtitle1 q-mb-md">Страница не найдена</div>
+    <q-btn color="primary" flat @click="goHome()" label="На главную" />
   </div>
 </template>
 
@@ -25,8 +25,8 @@ export default {
       this.$router.push({ name: "Home" });
     },
   },
-  created() {
-    this.$router.replace("/404");
-  },
+  // created() {
+  //   this.$router.replace("/404");
+  // },
 };
 </script>

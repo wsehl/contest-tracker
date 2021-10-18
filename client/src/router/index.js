@@ -142,9 +142,17 @@ const routes = [
     name: "404",
     path: "/:catchAll(.*)",
     meta: {
-      title: "Page not found",
+      title: "Страница не найдена",
     },
     component: () => import("@/pages/404.vue"),
+  },
+  {
+    name: "Restricted",
+    path: "/restricted",
+    meta: {
+      title: "Страница недоступна",
+    },
+    component: () => import("@/pages/Restricted.vue"),
   },
 ];
 
@@ -163,7 +171,7 @@ router.beforeEach((to, from, next) => {
   } else if (to.meta.authRequired) {
     isAuthenticated() ? next() : next({ name: "Login" });
   } else if (to.meta.isAdmin) {
-    isAuthenticated() && isAdmin() ? next() : next({ name: "404" });
+    isAuthenticated() && isAdmin() ? next() : next({ name: "Restricted" });
   } else {
     next();
   }
