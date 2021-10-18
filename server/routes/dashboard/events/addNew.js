@@ -19,13 +19,6 @@ const addNew = async (req, res) => {
 
   await db.collection("events").add(newEvent);
 
-  // if (err) {
-  //   console.error(err);
-  //   return res.status(400).send({
-  //     msg: "An error occured",
-  //   });
-  // }
-
   console.info(
     `Added event: [${newEvent.event_title}] at [${new Date().toLocaleString(
       "ru-RU",

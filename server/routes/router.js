@@ -20,6 +20,7 @@ router.post("/dashboard/delete/users", route.users.removeSeveralRows);
 
 // router.get("/dashboard/user/:id", route.users.getOne);
 
+// events
 router.get("/dashboard/events", route.events.getAll);
 router.post(
   "/dashboard/events",
@@ -29,6 +30,47 @@ router.post(
 );
 router.get("/dashboard/event/:id", route.events.getOne);
 
+// grades
+router.get("/dashboard/grades", route.grades.getAll);
+router.post(
+  "/dashboard/grades",
+  middleware.auth.isAdmin,
+  middleware.dashboard.validateGrades,
+  route.grades.addNew
+);
+router.get("/dashboard/grades/:id", route.grades.getOne);
+
+// students
+router.get("/dashboard/students", route.students.getAll);
+router.post(
+  "/dashboard/students",
+  middleware.auth.isAdmin,
+  middleware.dashboard.validateStudents,
+  route.students.addNew
+);
+router.get("/dashboard/students/:id", route.students.getOne);
+
+// teachers
+router.get("/dashboard/teachers", route.teachers.getAll);
+router.post(
+  "/dashboard/teachers",
+  middleware.auth.isAdmin,
+  middleware.dashboard.validateTeachers,
+  route.teachers.addNew
+);
+router.get("/dashboard/teachers/:id", route.teachers.getOne);
+
+// projects
+router.get("/dashboard/projects", route.projects.getAll);
+router.post(
+  "/dashboard/projects",
+  middleware.auth.isAdmin,
+  middleware.dashboard.validateProjects,
+  route.projects.addNew
+);
+router.get("/dashboard/projects/:id", route.projects.getOne);
+
+// organisations
 router.get("/dashboard/organizations", route.organizations.getAll);
 router.post(
   "/dashboard/organizations",
