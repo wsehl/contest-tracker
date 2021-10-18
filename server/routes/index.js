@@ -6,6 +6,7 @@ const grades = require("./dashboard/grades/index.js");
 const students = require("./dashboard/students/index.js");
 const teachers = require("./dashboard/teachers/index.js");
 const projects = require("./dashboard/projects/index.js");
+const curators = require("./dashboard/curators/index.js");
 
 module.exports = {
   auth,
@@ -16,4 +17,5 @@ module.exports = {
   students,
   teachers,
   projects,
+  curators,
 };

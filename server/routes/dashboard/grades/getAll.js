@@ -11,6 +11,18 @@ const getAll = async (req, res) => {
     grades.push(grade);
   });
 
+  await Promise.all(
+    grades.map((grade) =>
+      db
+        .collection("curators")
+        .doc(grade.curator_id)
+        .get()
+        .then((curator) => {
+          grade.curator = curator.data();
+        })
+    )
+  );
+
   res.status(200).send({ data: grades });
 };
 

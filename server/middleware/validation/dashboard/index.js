@@ -6,4 +6,5 @@ module.exports = {
   validateStudents: require("./students.js"),
   validateTeachers: require("./teachers.js"),
   validateProjects: require("./projects.js"),
+  validateCurators: require("./curators.js"),
 };

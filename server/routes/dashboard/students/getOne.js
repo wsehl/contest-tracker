@@ -13,7 +13,9 @@ const getOne = async (req, res) => {
 
   const student = doc.data();
   const grade = await db.collection("grades").doc(student.grade_id).get();
+  const curator = await db.collection("curators").doc(grade.curator_id).get();
   student.grade = grade.data();
+  student.grade.curator = curator.data();
 
   return res.status(200).send({ data: student });
 };

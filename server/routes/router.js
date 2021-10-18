@@ -60,6 +60,16 @@ router.post(
 );
 router.get("/dashboard/teachers/:id", route.teachers.getOne);
 
+// curators
+router.get("/dashboard/curators", route.curators.getAll);
+router.post(
+  "/dashboard/curators",
+  middleware.auth.isAdmin,
+  middleware.dashboard.validateCurators,
+  route.curators.addNew
+);
+router.get("/dashboard/curators/:id", route.curators.getOne);
+
 // projects
 router.get("/dashboard/projects", route.projects.getAll);
 router.post(
