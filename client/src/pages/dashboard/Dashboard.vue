@@ -1,9 +1,7 @@
 <template>
   <div class="container mx-auto">
     <dashboard-navbar />
-    <keep-alive>
-      <router-view />
-    </keep-alive>
+    <router-view />
   </div>
 </template>
 

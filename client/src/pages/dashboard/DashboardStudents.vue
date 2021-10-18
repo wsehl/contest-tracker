@@ -1,0 +1,238 @@
+<template>
+  <div class="row q-col-gutter-sm q-px-sm">
+    <div class="col-lg-3 col-md-4 col-sm-12 col-xs-12">
+      <q-card flat bordered>
+        <q-card-section>
+          <div class="text-h6">Добавить ученика</div>
+        </q-card-section>
+        <q-separator inset></q-separator>
+        <q-card-section class="q-gutter-md">
+          <q-input dense outlined label="Фамилия" v-model="last_name" />
+          <q-input dense outlined label="Имя" v-model="first_name" />
+          <q-input dense outlined label="Отчество" v-model="middle_name" />
+          <q-select
+            dense
+            outlined
+            v-model="grade"
+            :options="grades_options"
+            label="Класс"
+            input-debounce="0"
+          >
+            <template v-slot:no-option>
+              <q-item>
+                <q-item-section class="text-grey"> No results </q-item-section>
+              </q-item>
+            </template>
+          </q-select>
+          <q-select
+            dense
+            outlined
+            v-model="study_lang"
+            :options="study_lang_options"
+            label="Язык обучения"
+            input-debounce="0"
+          ></q-select>
+        </q-card-section>
+        <q-card-actions class="q-px-md q-mb-md">
+          <q-btn
+            color="primary"
+            size="md"
+            class="full-width"
+            label="Добавить"
+            @click="insertTo('events')"
+          />
+        </q-card-actions>
+      </q-card>
+    </div>
+    <div class="col-lg-9 col-md-8 col-sm-12 col-xs-12">
+      <q-card flat bordered>
+        <q-table
+          class="text-grey-8"
+          :data="data"
+          :columns="columns"
+          :pagination="{
+            rowsPerPage: 15,
+          }"
+          :loading="loading"
+          row-key="organization_name"
+        >
+          <template v-slot:top-left>
+            <q-input outlined dense v-model="filter" placeholder="Поиск">
+              <template v-slot:append>
+                <q-icon name="search" />
+              </template>
+            </q-input>
+          </template>
+          <template v-slot:top-right="props">
+            <q-btn
+              flat
+              round
+              dense
+              :icon="props.inFullscreen ? 'fullscreen_exit' : 'fullscreen'"
+              @click="props.toggleFullscreen"
+            >
+              <q-tooltip :disable="$q.platform.is.mobile" v-close-popup>
+                {{
+                  props.inFullscreen ? "Exit Fullscreen" : "Toggle Fullscreen"
+                }}
+              </q-tooltip>
+            </q-btn>
+          </template>
+        </q-table>
+      </q-card>
+    </div>
+  </div>
+</template>
+
+<script>
+/* eslint-disable no-unused-vars */
+import {
+  insertToTable,
+  removeRow,
+  getTable,
+  editRow as editRowInTable,
+  removeSeveralRows,
+} from "@/api";
+
+export default {
+  data() {
+    return {
+      loading: true,
+      first_name: "",
+      middle_name: "",
+      last_name: "",
+      study_lang: "",
+      study_lang_options: ["ru", "kz", "en"],
+      grades_options: [],
+      grade: null,
+
+      filter: "",
+      data: [],
+      columns: [
+        {
+          name: "last_name",
+          align: "left",
+          label: "Фамилия",
+          field: "last_name",
+          sortable: true,
+        },
+        {
+          name: "first_name",
+          align: "left",
+          label: "Имя",
+          field: "first_name",
+          sortable: true,
+        },
+        {
+          name: "middle_name",
+          align: "left",
+          label: "Отчество",
+          field: "middle_name",
+          sortable: true,
+        },
+        {
+          name: "study_lang",
+          align: "left",
+          label: "Язык обучения",
+          field: "study_lang",
+          sortable: true,
+        },
+        {
+          name: "grade_name",
+          align: "left",
+          label: "Класс",
+          field: (row) => row.grade.name,
+          sortable: true,
+        },
+      ],
+    };
+  },
+  created() {
+    this.getGradesList();
+    this.fetchData();
+  },
+  methods: {
+    renameObjectKey({ obj, old_key, new_key }) {
+      if (old_key !== new_key) {
+        Object.defineProperty(
+          obj,
+          new_key,
+          Object.getOwnPropertyDescriptor(obj, old_key)
+        );
+        delete obj[old_key];
+      }
+    },
+    async getGradesList() {
+      const response = await getTable("grades");
+      response.data.forEach((obj) =>
+        this.renameObjectKey({
+          obj,
+          old_key: "name",
+          new_key: "label",
+        })
+      );
+      this.grades_options = response.data;
+    },
+    async insertTo() {
+      try {
+        const response = await insertToTable(
+          {
+            grade_id: this.grade.id,
+            last_name: this.last_name,
+            first_name: this.first_name,
+            middle_name: this.middle_name,
+            study_lang: this.study_lang,
+          },
+          "students"
+        );
+
+        this.clearForm();
+        this.fetchData();
+
+        this.$q.notify({
+          color: "positive",
+          position: "bottom-left",
+          message: response.msg,
+          progress: true,
+          timeout: 1500,
+        });
+      } catch (error) {
+        this.$q.notify({
+          color: "negative",
+          position: "bottom-left",
+          message: error.response.data.msg,
+          progress: true,
+          timeout: 1500,
+        });
+      }
+    },
+    clearForm() {
+      this.grade_id = "";
+      this.first_name = "";
+      this.last_name = "";
+      this.middle_name = "";
+      this.study_lang = "";
+    },
+    fetchData() {
+      this.loading = true;
+      getTable("students")
+        .then((response) => {
+          console.log(response.data);
+          this.data = response.data;
+        })
+        .finally(() => {
+          this.loading = false;
+        })
+        .catch((error) => {
+          this.$q.notify({
+            color: "negative",
+            position: "bottom-left",
+            message: error.response.data.msg,
+            progress: true,
+            timeout: 1500,
+          });
+        });
+    },
+  },
+};
+</script>

@@ -7,12 +7,21 @@
       @row-click="goToEvent"
       :data="data"
       :columns="columns"
+      :filter="filter"
       :pagination="{
         rowsPerPage: 15,
       }"
       flat
       bordered
-    />
+    >
+      <template v-slot:top-left>
+        <q-input outlined dense v-model="filter" placeholder="Поиск">
+          <template v-slot:append>
+            <q-icon name="search" />
+          </template>
+        </q-input>
+      </template>
+    </q-table>
   </q-page>
 </template>
 
@@ -25,6 +34,7 @@ export default {
     return {
       loading: true,
       data: [],
+      filter: "",
       columns: [
         {
           name: "event_title",

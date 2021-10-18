@@ -109,6 +109,33 @@ const routes = [
           isAdmin: true,
         },
       },
+      {
+        path: "/dashboard/curators",
+        name: "DashboardCurators",
+        component: () => import("@/pages/dashboard/DashboardCurators.vue"),
+        meta: {
+          title: "[CRM] Кураторы",
+          isAdmin: true,
+        },
+      },
+      {
+        path: "/dashboard/grades",
+        name: "DashboardGrades",
+        component: () => import("@/pages/dashboard/DashboardGrades.vue"),
+        meta: {
+          title: "[CRM] Классы",
+          isAdmin: true,
+        },
+      },
+      {
+        path: "/dashboard/students",
+        name: "DashboardStudents",
+        component: () => import("@/pages/dashboard/DashboardStudents.vue"),
+        meta: {
+          title: "[CRM] Ученики",
+          isAdmin: true,
+        },
+      },
     ],
   },
   {
