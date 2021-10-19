@@ -92,6 +92,16 @@ export default {
       curator_options: [],
       curator: null,
 
+      mask: "@@&",
+      tokens: {
+        "@": {
+          pattern: /(?:^|(?<= ))(7|8|9|10|11|12|[1-9]\d*$)(?:(?= )|$)/,
+        },
+        "&": {
+          pattern: /(?:^|(?<= ))(A|B|C|D|E|F|G|H|[1-9]\d*$)(?:(?= )|$)/,
+        },
+      },
+
       filter: "",
       data: [],
       columns: [

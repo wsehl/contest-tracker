@@ -3,17 +3,15 @@
     <q-card flat bordered class="signup-card">
       <q-form @submit="register" greedy>
         <q-card-section class="bg-blue-9">
-          <h4 class="text-h5 text-white q-my-sm">Create an account</h4>
+          <h4 class="text-h5 text-white q-my-sm">Создание аккаунта</h4>
         </q-card-section>
         <q-card-section>
           <q-input
             autofocus
             unelevated
             v-model="user.username"
-            label="Username"
-            :rules="[
-              (val) => (val && val.length > 0) || 'Please type something',
-            ]"
+            label="Имя пользователя"
+            :rules="[(val) => (val && val.length > 0) || 'Заполните это поле']"
             :lazy-rules="'ondemand'"
             no-error-icon
           />
@@ -22,9 +20,7 @@
             unelevated
             v-model="user.email"
             label="Email"
-            :rules="[
-              (val) => (val && val.length > 0) || 'Please type something',
-            ]"
+            :rules="[(val) => (val && val.length > 0) || 'Заполните это поле']"
             :lazy-rules="'ondemand'"
             no-error-icon
           />
@@ -32,10 +28,8 @@
             type="password"
             unelevated
             v-model="user.password"
-            label="Password"
-            :rules="[
-              (val) => (val && val.length > 0) || 'Please type something',
-            ]"
+            label="Пароль"
+            :rules="[(val) => (val && val.length > 0) || 'Заполните это поле']"
             :lazy-rules="'ondemand'"
             no-error-icon
           />
@@ -43,10 +37,8 @@
             type="password"
             unelevated
             v-model="user.password_repeat"
-            label="Password (repeat)"
-            :rules="[
-              (val) => (val && val.length > 0) || 'Please type something',
-            ]"
+            label="Пароль (ещё раз)"
+            :rules="[(val) => (val && val.length > 0) || 'Заполните это поле']"
             :lazy-rules="'ondemand'"
             no-error-icon
           />
@@ -58,13 +50,13 @@
             color="primary"
             size="md"
             class="full-width"
-            label="Sign up"
+            label="Зарегистрироваться"
             ref="submitBtn"
           />
         </q-card-actions>
         <q-card-section class="text-center q-py-xs">
           <router-link to="/login" style="text-decoration: none">
-            <p class="text-grey-6">Already have an account? Login</p>
+            <p class="text-grey-6">Уже есть аккаунт? Войти</p>
           </router-link>
         </q-card-section>
       </q-form>

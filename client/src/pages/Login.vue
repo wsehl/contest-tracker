@@ -3,17 +3,15 @@
     <q-card flat bordered class="login-card">
       <q-form @submit="authenticate" greedy>
         <q-card-section class="bg-blue-9">
-          <h4 class="text-h5 text-white q-my-sm">Login</h4>
+          <h4 class="text-h5 text-white q-my-sm">Авторизация</h4>
         </q-card-section>
         <q-card-section>
           <q-input
             autofocus
             unelevated
             v-model="user.username"
-            label="Username"
-            :rules="[
-              (val) => (val && val.length > 0) || 'Please type something',
-            ]"
+            label="Имя пользователя"
+            :rules="[(val) => (val && val.length > 0) || 'Заполните это поле']"
             :lazy-rules="'ondemand'"
             no-error-icon
           />
@@ -21,10 +19,8 @@
             type="password"
             unelevated
             v-model="user.password"
-            label="Password"
-            :rules="[
-              (val) => (val && val.length > 0) || 'Please type something',
-            ]"
+            label="Пароль"
+            :rules="[(val) => (val && val.length > 0) || 'Заполните это поле']"
             :lazy-rules="'ondemand'"
             no-error-icon
           />
@@ -36,13 +32,13 @@
             color="primary"
             size="md"
             class="full-width"
-            label="Login"
+            label="Войти"
             ref="submitBtn"
           />
         </q-card-actions>
         <q-card-section class="text-center q-py-xs">
           <router-link to="/signup" style="text-decoration: none">
-            <p class="text-grey-6">Not reigistered? Created an account</p>
+            <p class="text-grey-6">Не зарегестрированы? Создать аккаунт</p>
           </router-link>
         </q-card-section>
       </q-form>

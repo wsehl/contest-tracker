@@ -11,7 +11,7 @@ const login = async (req, res) => {
 
   if (!doc.exists) {
     return res.status(401).send({
-      msg: "Username or password is incorrect!", // Account not found
+      msg: "Неверное имя пользователя или пароль!", // Account not found
     });
   }
 
@@ -21,7 +21,7 @@ const login = async (req, res) => {
 
   if (!match) {
     return res.status(401).send({
-      msg: "Username or password is incorrect!", // Bcrypt error
+      msg: "Неверное имя пользователя или пароль!", // Bcrypt error
     });
   }
 
