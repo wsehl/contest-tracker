@@ -1,11 +1,11 @@
 const jwt = require("jsonwebtoken");
-const SECRETKEY = process.env.SECRET_KEY;
+const SECRET_KEY = process.env.SECRET_KEY;
 
 const isAdmin = (req, res, next) => {
   try {
     const token = req.headers.authorization.split(" ")[1];
 
-    const decoded = jwt.verify(token, SECRETKEY);
+    const decoded = jwt.verify(token, SECRET_KEY);
     if (decoded.role != "Admin") {
       console.info(
         `Permission denied: for [${decoded.username}] with role: [${

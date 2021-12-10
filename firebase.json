@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "contest-tracker-87dc8",
+  "private_key_id": "c41b53e39a5655709742da36f3333417965de414",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCfViZpPuvW2hcW\nG9py2yTvyYv5Al280CeufM/VVckYg0EEc5bhbQu1p3bFqjZmWB36IMd3GQ98jpnH\nO8mzOzQJYFz4Y1Iee3n9Y+irs1k+r6Tp4BHa/dHyniiUhJMNorUT1bL0cOuKawrY\nY0EkX6CZCi5VY1t/nt+KlyP9MTcs9eOTGCT33xO9gngBukh6/k2FR7oSVxXDEBxl\nDFhBaGcplU5QsTDiZKy9Pk3s/Tfrk4an6RwGgMNqcGpfydrEd4BXcKaPBPaE99yl\nowqZ6F+YwFTvx4O4p0anN+/NrGSYn3uQLTDqRzcwJttL7Vw0yOfOm3kUBZH05Fvh\nh4TATiYvAgMBAAECggEAQvu1lCMWhDEU6X92GzjTU1bYWCtNetXLCMiBmr7AlmR/\nTb7GHCh6drha7wf6bJX4rDFhiUjowMU2EpKo3Ycy/gobq3QdjqD8DLEWnC/+gaLX\nYlaHSxfPTf59Msp1A5N2Kkt5OtfJvVv4qDU5qm/lFNE53z2wtnr0oM+fGo65ElX2\nPICU0pZLvY+17ky+vAPGgyZmkVp9KjxSXx6ZjTN88paUORrrhZMx+N8/2FSeY6KE\n0yzGlb9Op3njnnK3QJtrnpRzkuX1AGPBo6+NMrGYoy3B5V2LcuoRdoJBonTq226b\nFcH6l/xi9TR4T+8CfDB4pg3FULi2llpiqEC2etPjSQKBgQDZUyInoCDZCiTK9NUE\nv2WzmSD8GkNFYgSE2CK5q9LVDp8woqd2TW2A6QwBCE5xxee7vMAdzsmMobPXSc0U\nXd7d1lTWQBziRY5bRoHrXBpetSURJQt2n59JGf6s9bzIXK4Cpt1tp9So/2m/wFii\nxMEWBo0CmmTIVXGTBWG8qmKWrQKBgQC7sTF0We9TDlHaJyhJVCeGE2REHi7K78Xj\nW84so92QCrR9QkKp3HpxBlVS8jnWrM2tAGxx4xriUFijxVvcgyv24jn7ogbO5jsq\npYXRqVKdIj+gt/rBHS4L39S2axYFGUyEt8tvIaNbVv+kTI+B+2GGSh66uoDp5JId\n3YAxoHe3ywKBgQCZilCRKmLKtI32DjAJ4Keb0c4qDuwEMxH6QTGXeDvGZ0Q0+lXS\nETYSY5QljpbNbwMf8mTRKm3fO8dxjSSlBQUWOf1KOZWuj3HaLuBPRo0i6Fw91qxY\nrMG+xezWie9Mp54RJY8/j9mBZKJz5RM6PEQmqY4qjqYxm5xYQO8iekaZKQKBgAEM\nVkheEDYYiGB9g34VWDspdI/k00IS4LoKUzZwm9YoGSXx7slgD9b9wBA8hhIq2OM0\nc2aXbBkDddtESOUMXnx8evJqzzrskjwEvKCVH379J/nPzTiy3wT19QwnwPG6WHEN\nTbeLKoxiCf9y5gJF0x+a3l0QmZO00RQVnpeoW8LNAoGAU3GymKQvPCIlK7mShCCL\nqCHBiDBrDulYmYlOKo387MR4VSX86ZKHg8eqbJvSHAjJgdEVTrw9n3dBCr5wWZhd\npcloA7bYf4Y489g7nU0r3HIBbOoay+ToXcoNZIq47c+GqGi74IYA8klDPFfLhGtT\ngqyl01v8qsgVeoyByaCZ6C4=\n-----END PRIVATE KEY-----\n",
+  "client_email": "firebase-adminsdk-rz37l@contest-tracker-87dc8.iam.gserviceaccount.com",
+  "client_id": "112702578011201634654",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-rz37l%40contest-tracker-87dc8.iam.gserviceaccount.com"
+}

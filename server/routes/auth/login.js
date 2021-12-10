@@ -1,6 +1,7 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const firebase = require("../../lib/firebase.js");
+const logger = require("../../utils/logger");
 
 const login = async (req, res) => {
   const { username, password } = req.body;
@@ -42,13 +43,7 @@ const login = async (req, res) => {
   user.last_login = user.last_login.toDate();
   user.registered = user.registered.toDate();
 
-  console.info(
-    `Logged in user: [${user.username}] with role: [${
-      user.role
-    }] at [${new Date().toLocaleString("ru-RU", {
-      timeZone: "Asia/Almaty",
-    })}]`
-  );
+  logger.info(`Logged in user: [${user.username}] with role: [${user.role}]`);
 
   return res.status(200).send({
     msg: "Logged in successfully",

@@ -1,5 +1,6 @@
 const bcrypt = require("bcryptjs");
 const firebase = require("../../lib/firebase.js");
+const logger = require("../../utils/logger");
 
 const register = async (req, res) => {
   const { username, email, password } = req.body;
@@ -30,12 +31,8 @@ const register = async (req, res) => {
 
   await userRef.doc(username).set(newUser);
 
-  console.info(
-    `Registered user: [${newUser.username}] with role: [${
-      newUser.role
-    }] at [${new Date().toLocaleString("ru-RU", {
-      timeZone: "Asia/Almaty",
-    })}]`
+  logger.info(
+    `Registered user: [${newUser.username}] with role: [${newUser.role}] `
   );
 
   res.status(201).send({
