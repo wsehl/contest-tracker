@@ -4,8 +4,7 @@
       :loading="loading"
       title="Конкурсы"
       color="primary"
-      @row-click="goToEvent"
-      :data="data"
+      :rows="data"
       :columns="columns"
       :filter="filter"
       :pagination="{
@@ -13,10 +12,11 @@
       }"
       flat
       bordered
+      @row-click="goToEvent"
     >
-      <template v-slot:top-left>
-        <q-input outlined dense v-model="filter" placeholder="Поиск">
-          <template v-slot:append>
+      <template #top-left>
+        <q-input v-model="filter" outlined dense placeholder="Поиск">
+          <template #append>
             <q-icon name="search" />
           </template>
         </q-input>
@@ -69,6 +69,9 @@ export default {
       ],
     };
   },
+  mounted() {
+    this.fetchData();
+  },
   methods: {
     formatDate(d) {
       return format(new Date(d), "PP");
@@ -98,9 +101,6 @@ export default {
           });
         });
     },
-  },
-  created() {
-    this.fetchData();
   },
 };
 </script>

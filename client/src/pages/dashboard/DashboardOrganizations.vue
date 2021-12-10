@@ -8,18 +8,18 @@
         <q-separator inset></q-separator>
         <q-card-section class="q-gutter-md">
           <q-input
+            v-model="organization_name"
             dense
             outlined
             label="Название"
-            v-model="organization_name"
           />
           <q-uploader
+            ref="organization_uploader"
             :factory="uploadFile"
             auto-upload
             flat
             bordered
             accept=".jpg, image/*"
-            ref="organization_uploader"
             :hide-upload-btn="true"
             @rejected="onRejected"
           />
@@ -39,7 +39,7 @@
       <q-card flat bordered>
         <q-table
           class="text-grey-8"
-          :data="data"
+          :rows="data"
           :columns="columns"
           :pagination="{
             rowsPerPage: 15,
@@ -47,14 +47,14 @@
           :loading="loading"
           row-key="organization_name"
         >
-          <template v-slot:top-left>
-            <q-input outlined dense v-model="filter" placeholder="Поиск">
-              <template v-slot:append>
+          <template #top-left>
+            <q-input v-model="filter" outlined dense placeholder="Поиск">
+              <template #append>
                 <q-icon name="search" />
               </template>
             </q-input>
           </template>
-          <template v-slot:top-right="props">
+          <template #top-right="props">
             <q-btn
               flat
               round
@@ -62,14 +62,14 @@
               :icon="props.inFullscreen ? 'fullscreen_exit' : 'fullscreen'"
               @click="props.toggleFullscreen"
             >
-              <q-tooltip :disable="$q.platform.is.mobile" v-close-popup>
+              <q-tooltip v-close-popup :disable="$q.platform.is.mobile">
                 {{
                   props.inFullscreen ? "Exit Fullscreen" : "Toggle Fullscreen"
                 }}
               </q-tooltip>
             </q-btn>
           </template>
-          <template v-slot:body="props">
+          <template #body="props">
             <q-tr :props="props">
               <q-td key="organization_name" :props="props">
                 {{ props.row.organization_name }}

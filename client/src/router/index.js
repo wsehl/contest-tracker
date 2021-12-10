@@ -1,11 +1,8 @@
-import Vue from "vue";
-import VueRouter from "vue-router";
-import store from "../store/index";
+import { createRouter, createWebHistory } from "vue-router";
+import store from "@/store";
 
 const isAuthenticated = () => store.getters.isLoggedIn;
 const isAdmin = () => store.getters.isAdmin;
-
-Vue.use(VueRouter);
 
 const routes = [
   {
@@ -156,9 +153,8 @@ const routes = [
   },
 ];
 
-const router = new VueRouter({
-  mode: "history",
-  base: process.env.BASE_URL,
+const router = createRouter({
+  history: createWebHistory(),
   routes,
 });
 

@@ -24,14 +24,7 @@
         </router-link>
         <div
           v-if="$q.screen.gt.xs"
-          class="
-            GL__toolbar-link
-            q-ml-xs q-gutter-md
-            text-body2 text-weight-medium
-            row
-            items-center
-            no-wrap
-          "
+          class="GL__toolbar-link q-ml-xs q-gutter-md text-body2 text-weight-medium row items-center no-wrap"
         >
           <router-link :to="{ name: 'About' }" class="router-link">
             О проекте
@@ -43,13 +36,7 @@
         <q-space />
         <div class="q-pl-sm row items-center no-wrap">
           <div
-            class="
-              q-gutter-md
-              text-body2 text-weight-medium
-              row
-              items-center
-              no-wrap
-            "
+            class="q-gutter-md text-body2 text-weight-medium row items-center no-wrap"
           >
             <template v-if="user && user.role === 'Admin'">
               <router-link :to="{ name: 'Dashboard' }" class="router-link">
@@ -109,14 +96,14 @@
 import { mapActions, mapGetters } from "vuex";
 
 export default {
-  methods: {
-    ...mapActions({
-      logout: "logout",
-    }),
-  },
   computed: {
     ...mapGetters({
       user: "getUser",
+    }),
+  },
+  methods: {
+    ...mapActions({
+      logout: "logout",
     }),
   },
 };

@@ -7,9 +7,9 @@
         </q-card-section>
         <q-separator inset></q-separator>
         <q-card-section class="q-gutter-md">
-          <q-input dense outlined label="Фамилия" v-model="last_name" />
-          <q-input dense outlined label="Имя" v-model="first_name" />
-          <q-input dense outlined label="Отчество" v-model="middle_name" />
+          <q-input v-model="last_name" dense outlined label="Фамилия" />
+          <q-input v-model="first_name" dense outlined label="Имя" />
+          <q-input v-model="middle_name" dense outlined label="Отчество" />
         </q-card-section>
         <q-card-actions class="q-px-md q-mb-md">
           <q-btn
@@ -26,7 +26,7 @@
       <q-card flat bordered>
         <q-table
           class="text-grey-8"
-          :data="data"
+          :rows="data"
           :columns="columns"
           :pagination="{
             rowsPerPage: 15,
@@ -34,14 +34,14 @@
           :loading="loading"
           row-key="organization_name"
         >
-          <template v-slot:top-left>
-            <q-input outlined dense v-model="filter" placeholder="Поиск">
-              <template v-slot:append>
+          <template #top-left>
+            <q-input v-model="filter" outlined dense placeholder="Поиск">
+              <template #append>
                 <q-icon name="search" />
               </template>
             </q-input>
           </template>
-          <template v-slot:top-right="props">
+          <template #top-right="props">
             <q-btn
               flat
               round
@@ -49,7 +49,7 @@
               :icon="props.inFullscreen ? 'fullscreen_exit' : 'fullscreen'"
               @click="props.toggleFullscreen"
             >
-              <q-tooltip :disable="$q.platform.is.mobile" v-close-popup>
+              <q-tooltip v-close-popup :disable="$q.platform.is.mobile">
                 {{
                   props.inFullscreen ? "Exit Fullscreen" : "Toggle Fullscreen"
                 }}

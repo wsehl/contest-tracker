@@ -1,10 +1,11 @@
 import axios from "axios";
 import store from "@/store";
 
-const BACKEND_URL = process.env.VUE_APP_BACKEND_URL || "http://localhost:8889";
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:8889";
 
 const api = axios.create({
   baseURL: `${BACKEND_URL}/api`,
+  withCredentials: true,
 });
 
 api.interceptors.response.use(

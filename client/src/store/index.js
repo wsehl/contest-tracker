@@ -1,9 +1,6 @@
-import Vue from "vue";
-import Vuex from "vuex";
+import { createStore } from "vuex";
 import createPersistedState from "vuex-persistedstate";
 import router from "@/router";
-
-Vue.use(Vuex);
 
 const getDefaultState = () => {
   return {
@@ -12,7 +9,7 @@ const getDefaultState = () => {
   };
 };
 
-export default new Vuex.Store({
+export default createStore({
   strict: true,
   plugins: [createPersistedState()],
   state: getDefaultState(),

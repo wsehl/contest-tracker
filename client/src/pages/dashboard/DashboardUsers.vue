@@ -7,23 +7,23 @@
         </q-card-section>
         <q-separator inset></q-separator>
         <q-card-section class="q-gutter-md">
-          <q-input dense outlined label="Имя пользователя" v-model="username" />
-          <q-input dense outlined label="Почта" v-model="email" />
+          <q-input v-model="username" dense outlined label="Имя пользователя" />
+          <q-input v-model="email" dense outlined label="Почта" />
           <q-select
+            v-model="role"
             dense
             outlined
-            v-model="role"
             :options="role_options"
             label="Роль"
           />
-          <q-input dense outlined label="Пароль" v-model="password" />
+          <q-input v-model="password" dense outlined label="Пароль" />
           <q-input
+            v-model="generatedPassword"
             dense
             outlined
             type="text"
             autocomplete="off"
             readonly
-            v-model="generatedPassword"
             label="Предложенный пароль"
           >
           </q-input>
@@ -39,6 +39,7 @@
               <div>
                 <q-badge :color="strengthColor">Сложность пароля:</q-badge>
                 <q-slider
+                  v-model="strengthLevel"
                   snap
                   label
                   :step="12"
@@ -46,7 +47,6 @@
                   :max="48"
                   :color="strengthColor"
                   :label-value="strengthLabel"
-                  v-model="strengthLevel"
                 />
               </div>
             </q-item-section>
@@ -66,8 +66,9 @@
     <div class="col-lg-9 col-md-8 col-sm-12 col-xs-12">
       <q-card flat bordered>
         <q-table
+          v-model:selected="selected"
           class="text-grey-8"
-          :data="data"
+          :rows="data"
           :columns="columns"
           :pagination="{
             rowsPerPage: 15,
@@ -76,26 +77,25 @@
           row-key="username"
           :filter="filter"
           selection="multiple"
-          :selected.sync="selected"
         >
-          <template v-slot:top-left>
-            <q-input outlined dense v-model="filter" placeholder="Поиск">
-              <template v-slot:append>
+          <template #top-left>
+            <q-input v-model="filter" outlined dense placeholder="Поиск">
+              <template #append>
                 <q-icon name="search" />
               </template>
             </q-input>
           </template>
-          <template v-slot:top-right="props">
+          <template #top-right="props">
             <div v-if="selected.length > 1">
               <q-btn
                 flat
                 round
                 dense
                 icon="delete"
-                @click="deleteSeveral"
                 no-caps
+                @click="deleteSeveral"
               >
-                <q-tooltip :disable="$q.platform.is.mobile" v-close-popup>
+                <q-tooltip v-close-popup :disable="$q.platform.is.mobile">
                   Удалить несколько строк
                 </q-tooltip>
               </q-btn>
@@ -107,7 +107,7 @@
               :icon="props.inFullscreen ? 'fullscreen_exit' : 'fullscreen'"
               @click="props.toggleFullscreen"
             >
-              <q-tooltip :disable="$q.platform.is.mobile" v-close-popup>
+              <q-tooltip v-close-popup :disable="$q.platform.is.mobile">
                 {{
                   props.inFullscreen
                     ? "Выйти из полноэкранного режима"
@@ -116,10 +116,10 @@
               </q-tooltip>
             </q-btn>
           </template>
-          <template v-slot:body="props">
+          <template #body="props">
             <q-tr :props="props">
               <q-td @click="props.selected = true">
-                <q-checkbox dense v-model="props.selected" color="primary" />
+                <q-checkbox v-model="props.selected" dense color="primary" />
               </q-td>
               <q-td key="username" :props="props">
                 {{ props.row.username }}
@@ -132,25 +132,25 @@
               </q-td>
               <q-td key="actions" :props="props">
                 <q-btn
-                  @click="viewItem(props.row)"
                   icon="visibility"
                   size="sm"
                   no-caps
                   unelevated
+                  @click="viewItem(props.row)"
                 />
                 <q-btn
-                  @click="editItem(props.row)"
                   icon="edit"
                   size="sm"
                   no-caps
                   unelevated
+                  @click="editItem(props.row)"
                 />
                 <q-btn
-                  @click="deleteRow(props.row)"
                   icon="delete"
                   size="sm"
                   no-caps
                   unelevated
+                  @click="deleteRow(props.row)"
                 />
               </q-td>
             </q-tr>
@@ -162,35 +162,35 @@
               <div class="text-h6">
                 Данные пользователя
                 <q-btn
+                  v-close-popup
                   round
                   flat
                   dense
                   icon="close"
                   class="float-right"
                   color="grey-8"
-                  v-close-popup
                 />
               </div>
             </q-card-section>
             <q-card-section>
               <div class="q-gutter-md">
                 <q-input
+                  v-model="editedItem.username"
                   outlined
                   dense
-                  v-model="editedItem.username"
                   label="Имя пользователя"
                 >
                 </q-input>
                 <q-input
+                  v-model="editedItem.email"
                   outlined
                   dense
-                  v-model="editedItem.email"
                   label="Почта"
                 ></q-input>
                 <q-select
+                  v-model="editedItem.role"
                   outlined
                   dense
-                  v-model="editedItem.role"
                   :options="role_options"
                   label="Роль"
                 />
@@ -198,10 +198,10 @@
             </q-card-section>
             <q-card-actions align="center">
               <q-btn
+                v-close-popup
                 flat
                 label="Обновить"
                 color="primary"
-                v-close-popup
                 @click="editRow"
               />
             </q-card-actions>
@@ -213,39 +213,39 @@
               <div class="text-h6">
                 Данные пользователя
                 <q-btn
+                  v-close-popup
                   round
                   flat
                   dense
                   icon="close"
                   class="float-right"
                   color="grey-8"
-                  v-close-popup
                 />
               </div>
             </q-card-section>
             <q-card-section>
               <div class="q-gutter-md">
                 <q-input
+                  v-model="viewedItem.username"
                   readonly
                   dense
                   outlined
-                  v-model="viewedItem.username"
                   label="Имя пользователя"
                 >
                 </q-input>
                 <q-input
+                  v-model="viewedItem.email"
                   readonly
                   dense
                   outlined
-                  v-model="viewedItem.email"
                   label="Почта"
                 >
                 </q-input>
                 <q-input
+                  v-model="viewedItem.role"
                   readonly
                   outlined
                   dense
-                  v-model="viewedItem.role"
                   label="Роль"
                 >
                 </q-input>
@@ -327,6 +327,79 @@ export default {
         role: "",
       },
     };
+  },
+  computed: {
+    generatedPassword() {
+      let charactersArray = "a-z".split(",");
+      let CharacterSet = "";
+      let password = "";
+      let size = 8;
+      switch (this.strengthLevel) {
+        case 12:
+          size = 10;
+          charactersArray = "a-z,A-Z".split(",");
+          break;
+        case 24:
+          size = 12;
+          charactersArray = "a-z,A-Z,0-9".split(",");
+          break;
+        case 36:
+          size = 14;
+          charactersArray = "a-z,A-Z,0-9,#".split(",");
+          break;
+        case 48:
+          size = 16;
+          charactersArray = "a-z,A-Z,0-9,#".split(",");
+          break;
+      }
+      if (charactersArray.indexOf("a-z") >= 0) {
+        CharacterSet += "abcdefghijklmnopqrstuvwxyz";
+      }
+      if (charactersArray.indexOf("A-Z") >= 0) {
+        CharacterSet += "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+      }
+
+      if (charactersArray.indexOf("0-9") >= 0) {
+        CharacterSet += "0123456789";
+      }
+      if (charactersArray.indexOf("#") >= 0) {
+        CharacterSet += "![]{}()%&*$#^<>~@|";
+      }
+      for (let i = 0; i < size; i++) {
+        password += CharacterSet.charAt(
+          Math.floor(Math.random() * CharacterSet.length)
+        );
+      }
+      return password;
+    },
+    strengthLabel() {
+      switch (this.strengthLevel) {
+        case 12:
+          return "poor";
+        case 24:
+          return "fair";
+        case 36:
+          return "good";
+        case 48:
+          return "excellent";
+        default:
+          return "weak";
+      }
+    },
+    strengthColor() {
+      switch (this.strengthLevel) {
+        case 12:
+          return "amber-10";
+        case 24:
+          return "blue-5";
+        case 36:
+          return "primary";
+        case 48:
+          return "positive";
+        default:
+          return "blue-grey-3";
+      }
+    },
   },
   created() {
     this.fetchData();
@@ -471,79 +544,6 @@ export default {
             timeout: 1500,
           });
         });
-    },
-  },
-  computed: {
-    generatedPassword() {
-      let charactersArray = "a-z".split(",");
-      let CharacterSet = "";
-      let password = "";
-      let size = 8;
-      switch (this.strengthLevel) {
-        case 12:
-          size = 10;
-          charactersArray = "a-z,A-Z".split(",");
-          break;
-        case 24:
-          size = 12;
-          charactersArray = "a-z,A-Z,0-9".split(",");
-          break;
-        case 36:
-          size = 14;
-          charactersArray = "a-z,A-Z,0-9,#".split(",");
-          break;
-        case 48:
-          size = 16;
-          charactersArray = "a-z,A-Z,0-9,#".split(",");
-          break;
-      }
-      if (charactersArray.indexOf("a-z") >= 0) {
-        CharacterSet += "abcdefghijklmnopqrstuvwxyz";
-      }
-      if (charactersArray.indexOf("A-Z") >= 0) {
-        CharacterSet += "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-      }
-
-      if (charactersArray.indexOf("0-9") >= 0) {
-        CharacterSet += "0123456789";
-      }
-      if (charactersArray.indexOf("#") >= 0) {
-        CharacterSet += "![]{}()%&*$#^<>~@|";
-      }
-      for (let i = 0; i < size; i++) {
-        password += CharacterSet.charAt(
-          Math.floor(Math.random() * CharacterSet.length)
-        );
-      }
-      return password;
-    },
-    strengthLabel() {
-      switch (this.strengthLevel) {
-        case 12:
-          return "poor";
-        case 24:
-          return "fair";
-        case 36:
-          return "good";
-        case 48:
-          return "excellent";
-        default:
-          return "weak";
-      }
-    },
-    strengthColor() {
-      switch (this.strengthLevel) {
-        case 12:
-          return "amber-10";
-        case 24:
-          return "blue-5";
-        case 36:
-          return "primary";
-        case 48:
-          return "positive";
-        default:
-          return "blue-grey-3";
-      }
     },
   },
 };

@@ -7,29 +7,29 @@
         </q-card-section>
         <q-separator inset></q-separator>
         <q-card-section class="q-gutter-md">
-          <q-input dense outlined label="Название" v-model="event_title" />
+          <q-input v-model="event_title" dense outlined label="Название" />
           <q-select
+            v-model="event_organization"
             dense
             outlined
-            v-model="event_organization"
             :options="event_organization_options"
             label="Организация"
             input-debounce="0"
           >
-            <template v-slot:no-option>
+            <template #no-option>
               <q-item>
                 <q-item-section class="text-grey"> No results </q-item-section>
               </q-item>
             </template>
           </q-select>
           <q-input
+            v-model="event_description"
             dense
             outlined
             label="Описание"
-            v-model="event_description"
             type="textarea"
           />
-          <q-date flat bordered v-model="event_range" range />
+          <q-date v-model="event_range" flat bordered range />
         </q-card-section>
         <q-card-actions class="q-px-md q-mb-md">
           <q-btn
@@ -46,7 +46,7 @@
       <q-card flat bordered>
         <q-table
           class="text-grey-8"
-          :data="data"
+          :rows="data"
           :columns="columns"
           :pagination="{
             rowsPerPage: 15,
@@ -54,14 +54,14 @@
           :loading="loading"
           row-key="organization_name"
         >
-          <template v-slot:top-left>
-            <q-input outlined dense v-model="filter" placeholder="Поиск">
-              <template v-slot:append>
+          <template #top-left>
+            <q-input v-model="filter" outlined dense placeholder="Поиск">
+              <template #append>
                 <q-icon name="search" />
               </template>
             </q-input>
           </template>
-          <template v-slot:top-right="props">
+          <template #top-right="props">
             <q-btn
               flat
               round
@@ -69,14 +69,14 @@
               :icon="props.inFullscreen ? 'fullscreen_exit' : 'fullscreen'"
               @click="props.toggleFullscreen"
             >
-              <q-tooltip :disable="$q.platform.is.mobile" v-close-popup>
+              <q-tooltip v-close-popup :disable="$q.platform.is.mobile">
                 {{
                   props.inFullscreen ? "Exit Fullscreen" : "Toggle Fullscreen"
                 }}
               </q-tooltip>
             </q-btn>
           </template>
-          <template v-slot:body="props">
+          <template #body="props">
             <q-tr :props="props">
               <q-td key="event_title" :props="props">
                 {{ props.row.event_title }}

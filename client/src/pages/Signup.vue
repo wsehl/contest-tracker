@@ -1,42 +1,42 @@
 <template>
   <q-page class="flex flex-center items-center">
     <q-card flat bordered class="signup-card">
-      <q-form @submit="register" greedy>
+      <q-form greedy @submit="register">
         <q-card-section class="bg-blue-9">
           <h4 class="text-h5 text-white q-my-sm">Создание аккаунта</h4>
         </q-card-section>
         <q-card-section>
           <q-input
+            v-model="user.username"
             autofocus
             unelevated
-            v-model="user.username"
             label="Имя пользователя"
             :rules="[(val) => (val && val.length > 0) || 'Заполните это поле']"
             :lazy-rules="'ondemand'"
             no-error-icon
           />
           <q-input
+            v-model="user.email"
             type="email"
             unelevated
-            v-model="user.email"
             label="Email"
             :rules="[(val) => (val && val.length > 0) || 'Заполните это поле']"
             :lazy-rules="'ondemand'"
             no-error-icon
           />
           <q-input
+            v-model="user.password"
             type="password"
             unelevated
-            v-model="user.password"
             label="Пароль"
             :rules="[(val) => (val && val.length > 0) || 'Заполните это поле']"
             :lazy-rules="'ondemand'"
             no-error-icon
           />
           <q-input
+            v-model="user.password_repeat"
             type="password"
             unelevated
-            v-model="user.password_repeat"
             label="Пароль (ещё раз)"
             :rules="[(val) => (val && val.length > 0) || 'Заполните это поле']"
             :lazy-rules="'ondemand'"
@@ -45,13 +45,13 @@
         </q-card-section>
         <q-card-actions class="q-px-md">
           <q-btn
+            ref="submitBtn"
             type="submit"
             unelevated
             color="primary"
             size="md"
             class="full-width"
             label="Зарегистрироваться"
-            ref="submitBtn"
           />
         </q-card-actions>
         <q-card-section class="text-center q-py-xs">

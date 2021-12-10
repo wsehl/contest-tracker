@@ -65,6 +65,10 @@ export default {
       return `https://firebasestorage.googleapis.com/v0/b/contest-tracker-87dc8.appspot.com/o`;
     },
   },
+  created() {
+    this.$q.loading.show();
+    this.fetchData();
+  },
   methods: {
     formatDate(d) {
       return format(new Date(d), "PP");
@@ -93,10 +97,6 @@ export default {
           });
         });
     },
-  },
-  created() {
-    this.$q.loading.show();
-    this.fetchData();
   },
 };
 </script>

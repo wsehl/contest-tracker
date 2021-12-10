@@ -14,7 +14,7 @@
       />
     </svg>
     <div class="text-subtitle1 q-mb-md">Страница не найдена</div>
-    <q-btn color="primary" flat @click="goHome()" label="На главную" />
+    <q-btn color="primary" flat label="На главную" @click="goHome()" />
   </div>
 </template>
 

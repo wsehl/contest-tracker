@@ -7,27 +7,27 @@
         </q-card-section>
         <q-separator inset></q-separator>
         <q-card-section class="q-gutter-md">
-          <q-input dense outlined label="Фамилия" v-model="last_name" />
-          <q-input dense outlined label="Имя" v-model="first_name" />
-          <q-input dense outlined label="Отчество" v-model="middle_name" />
+          <q-input v-model="last_name" dense outlined label="Фамилия" />
+          <q-input v-model="first_name" dense outlined label="Имя" />
+          <q-input v-model="middle_name" dense outlined label="Отчество" />
           <q-select
+            v-model="grade"
             dense
             outlined
-            v-model="grade"
             :options="grades_options"
             label="Класс"
             input-debounce="0"
           >
-            <template v-slot:no-option>
+            <template #no-option>
               <q-item>
                 <q-item-section class="text-grey"> No results </q-item-section>
               </q-item>
             </template>
           </q-select>
           <q-select
+            v-model="study_lang"
             dense
             outlined
-            v-model="study_lang"
             :options="study_lang_options"
             label="Язык обучения"
             input-debounce="0"
@@ -48,7 +48,7 @@
       <q-card flat bordered>
         <q-table
           class="text-grey-8"
-          :data="data"
+          :rows="data"
           :columns="columns"
           :pagination="{
             rowsPerPage: 15,
@@ -56,14 +56,14 @@
           :loading="loading"
           row-key="organization_name"
         >
-          <template v-slot:top-left>
-            <q-input outlined dense v-model="filter" placeholder="Поиск">
-              <template v-slot:append>
+          <template #top-left>
+            <q-input v-model="filter" outlined dense placeholder="Поиск">
+              <template #append>
                 <q-icon name="search" />
               </template>
             </q-input>
           </template>
-          <template v-slot:top-right="props">
+          <template #top-right="props">
             <q-btn
               flat
               round
@@ -71,7 +71,7 @@
               :icon="props.inFullscreen ? 'fullscreen_exit' : 'fullscreen'"
               @click="props.toggleFullscreen"
             >
-              <q-tooltip :disable="$q.platform.is.mobile" v-close-popup>
+              <q-tooltip v-close-popup :disable="$q.platform.is.mobile">
                 {{
                   props.inFullscreen ? "Exit Fullscreen" : "Toggle Fullscreen"
                 }}

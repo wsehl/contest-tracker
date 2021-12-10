@@ -1,6 +1,6 @@
 <template>
   <q-page v-if="!loading">
-    <q-parallax src="images/hero.jpg">
+    <q-parallax src="@/assets/hero.jpg" :height="420">
       <h3 class="text-white text-center">
         Проектная деятельность НИШ Павлодар
       </h3>
@@ -8,64 +8,62 @@
     <div class="container mx-auto">
       <div class="section-title">Актуальные конкурсы</div>
     </div>
-    <carousel
-      paginationActiveColor="#3B82F6"
-      paginationColor="#BFDBFE"
-      easing="ease-out"
-      class="carousel"
-      :scrollPerPage="true"
-      :autoplay="true"
-      :speed="300"
-      :autoplayHoverPause="true"
-      :perPageCustom="[
-        [768, 3],
-        [1024, 3],
-      ]"
-    >
-      <slide v-for="item in events" :key="item.id" class="carousel-item">
-        <div class="title">
-          <router-link
-            class="link"
-            :to="{
-              name: 'Event',
-              params: {
-                id: item.id,
-              },
-            }"
-          >
-            {{ item.event_title }}
-          </router-link>
-        </div>
-        <div class="body">
-          <q-img
-            class="image"
-            spinner-color="blue"
-            :src="`${url}/${item.organization_image}?alt=media`"
-          />
-          <span class="organization">
-            {{ item.organization_name }}
-          </span>
-        </div>
-        <div class="footer">
-          <p class="date">
-            {{ formatDate(item.start_date) }} -
-            {{ formatDate(item.end_date) }}
-          </p>
-        </div>
-      </slide>
-    </carousel>
+    <div class="carousel-wrapper">
+      <carousel class="carousel" :items-to-show="3" :wrap-around="true">
+        <slide v-for="item in events" :key="item.id" class="carousel-item">
+          <div class="title">
+            <router-link
+              class="link"
+              :to="{
+                name: 'Event',
+                params: {
+                  id: item.id,
+                },
+              }"
+            >
+              {{ item.event_title }}
+            </router-link>
+          </div>
+          <div class="body">
+            <q-img
+              class="image"
+              spinner-color="blue"
+              :src="`${url}/${item.organization_image}?alt=media`"
+            />
+            <span class="organization">
+              {{ item.organization_name }}
+            </span>
+          </div>
+          <div class="footer">
+            <p class="date">
+              {{ formatDate(item.start_date) }} -
+              {{ formatDate(item.end_date) }}
+            </p>
+          </div>
+        </slide>
+        <template #addons>
+          <navigation />
+          <pagination />
+        </template>
+      </carousel>
+    </div>
   </q-page>
 </template>
 
 <script>
 import { getTable } from "@/api";
-import { Carousel, Slide } from "vue-carousel";
-const { format } = require("date-fns");
+import "vue3-carousel/dist/carousel.css";
+import { Carousel, Slide, Pagination, Navigation } from "vue3-carousel";
+// const { format } = require("date-fns");
+
+import { format } from "date-fns";
 
 export default {
   components: {
     Carousel,
     Slide,
+    Pagination,
+    Navigation,
   },
   data() {
     return {
@@ -78,6 +76,10 @@ export default {
     url() {
       return `https://firebasestorage.googleapis.com/v0/b/contest-tracker-87dc8.appspot.com/o`;
     },
+  },
+  created() {
+    this.$q.loading.show();
+    this.fetchData();
   },
   methods: {
     formatDate(d) {
@@ -98,10 +100,6 @@ export default {
         });
     },
   },
-  created() {
-    this.$q.loading.show();
-    this.fetchData();
-  },
 };
 </script>
 
@@ -117,53 +115,56 @@ export default {
   display: flex
   flex-direction: column
   align-items: center
-  font-size: 32px
+  font-size: 28px
   font-weight: 400
-  padding: 15px 0 5px 0
+  padding: 10px 0 10px 0
 
-.carousel
-  border-bottom: 1px solid #ebeaeb
-  .carousel-item
-    display: flex
-    flex-direction: column
-    align-items: center
-    margin-top: 20px
-    margin-bottom: -20px
-    .title
+.carousel-wrapper
+  display: flex
+  justify-content: center
+  text-align: center
+  .carousel
+    border-bottom: 1px solid #ebeaeb
+    max-width: 90%
+    .carousel-item
       display: flex
-      justify-content: center
-      text-align: center
-      .link
-        font-size: 26px
-        text-decoration: none
-        color: #4a4a4a
-        width: 400px
-        white-space: nowrap
-        overflow: hidden
-        text-overflow: ellipsis
-        &:hover
-          text-decoration: underline
-    .body
-      display: flex
+      flex-direction: column
       align-items: center
-      justify-content: center
-      margin: 10px 0px 10px 0px
-      .image
-        width: 55px
-        height: 55px
-        border-radius: 50%
-        object-fit: cover
-        object-position: center
-        margin-right: 5px
-      .organization
-        font-size: 20px
-        margin-left: 5px
-    .footer
-      display: flex
-      flex-direction: row
-      justify-content: center
-      align-items: center
-      .date
-        font-size: 14px
-        font-weight: 500
+      .title
+        display: flex
+        justify-content: center
+        text-align: center
+        .link
+          font-size: 26px
+          text-decoration: none
+          color: #4a4a4a
+          width: 400px
+          white-space: nowrap
+          overflow: hidden
+          text-overflow: ellipsis
+          &:hover
+            text-decoration: underline
+      .body
+        display: flex
+        align-items: center
+        justify-content: center
+        margin: 10px 0px 10px 0px
+        .image
+          width: 55px
+          height: 55px
+          border-radius: 50%
+          object-fit: cover
+          object-position: center
+          margin-right: 5px
+        .organization
+          font-size: 20px
+          margin-left: 5px
+      .footer
+        display: flex
+        flex-direction: row
+        justify-content: center
+        align-items: center
+        .date
+          font-size: 14px
+          font-weight: 500
 </style>

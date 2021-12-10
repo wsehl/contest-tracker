@@ -3,9 +3,9 @@
     <div class="text-h3">Аккаунт</div>
     <div style="max-width: 400px">
       <q-form class="q-mt-md q-gutter-md">
-        <q-input outlined v-model="user.username" label="Имя пользователя" />
-        <q-input outlined v-model="user.role" readonly label="Роль" />
-        <q-input outlined v-model="user.email" label="Почта" />
+        <q-input v-model="user.username" outlined label="Имя пользователя" />
+        <q-input v-model="user.role" outlined readonly label="Роль" />
+        <q-input v-model="user.email" outlined label="Почта" />
         <div>
           <q-btn
             label="Обновить"
