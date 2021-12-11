@@ -1,19 +1,13 @@
 const jwt = require("jsonwebtoken");
 const SECRET_KEY = process.env.SECRET_KEY;
+const logger = require("~utils/logger");
 
 const isAdmin = (req, res, next) => {
   try {
     const token = req.headers.authorization.split(" ")[1];
-
-    const decoded = jwt.verify(token, SECRET_KEY);
-    if (decoded.role != "Admin") {
-      console.info(
-        `Permission denied: for [${decoded.username}] with role: [${
-          decoded.role
-        }] at [${new Date().toLocaleString("ru-RU", {
-          timeZone: "Asia/Almaty",
-        })}]`
-      );
+    const { role, username } = jwt.verify(token, SECRET_KEY);
+    if (role != "Admin") {
+      logger.info(`Permission denied: for [${username}] with role: [${role}]`);
       return res.status(403).send({
         msg: "Permission denied!",
       });
@@ -21,11 +15,7 @@ const isAdmin = (req, res, next) => {
       next();
     }
   } catch (err) {
-    console.info(
-      `Session is not valid denied at [${new Date().toLocaleString("ru-RU", {
-        timeZone: "Asia/Almaty",
-      })}]`
-    );
+    logger.info(`Session is not valid`);
     return res.status(401).send({
       msg: "Your session is not valid!",
     });

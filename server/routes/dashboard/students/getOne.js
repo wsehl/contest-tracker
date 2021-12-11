@@ -1,4 +1,4 @@
-const { db } = require("../../../lib/firebase.js");
+const { db } = require("~libs/firebase.js");
 
 const getOne = async (req, res) => {
   const studentId = req.params.id;

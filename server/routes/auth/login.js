@@ -1,7 +1,7 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const firebase = require("../../lib/firebase.js");
-const logger = require("../../utils/logger");
+const firebase = require("~libs/firebase.js");
+const logger = require("~utils/logger");
 
 const login = async (req, res) => {
   const { username, password } = req.body;

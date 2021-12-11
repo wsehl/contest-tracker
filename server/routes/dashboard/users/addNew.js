@@ -1,6 +1,6 @@
 const bcrypt = require("bcryptjs");
-const firebase = require("../../../lib/firebase.js");
-const { mailer, mail_user } = require("../../../lib/mailer.js");
+const firebase = require("~libs/firebase.js");
+const { mailer, mail_user } = require("~libs/mailer.js");
 
 const addNew = async (req, res) => {
   const { username, email, password, role } = req.body;

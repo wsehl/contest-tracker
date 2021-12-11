@@ -1,4 +1,4 @@
-const { db } = require("../../../lib/firebase.js");
+const { db } = require("~libs/firebase.js");
 
 const removeSeveralRows = async (req, res) => {
   await Promise.all(

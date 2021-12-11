@@ -1,4 +1,5 @@
 const nodemailer = require("nodemailer");
+const logger = require("~utils/logger");
 
 const mail_user = process.env.MAIL_USER || "contest-tracker@mail.ru";
 const mail_pass = process.env.MAIL_PASS || "SR1eOP2tcya";
@@ -17,6 +18,6 @@ module.exports = {
 };
 
 mailer.verify((error, success) => {
-  if (error) return console.log(error);
-  if (success) console.log("[module] Mailer is ready");
+  if (error) return logger.module("Mailer", false, error);
+  if (success) logger.module("Mailer", true);
 });

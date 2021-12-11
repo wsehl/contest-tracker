@@ -1,8 +1,10 @@
 require("dotenv").config();
+require("module-alias/register");
 const express = require("express");
 const cors = require("cors");
 const path = require("path");
 const router = require("./routes/router");
+const logger = require("~utils/logger.js");
 
 const PORT = process.env.PORT || 8889;
 const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:3001";
@@ -23,5 +25,5 @@ app.get("/health", (req, res) => {
 app.use("/api", router);
 
 app.listen(PORT, () => {
-  console.info(`[up] App is running on: http://localhost:${PORT}`);
+  logger.info(`App is running on: http://localhost:${PORT}`);
 });

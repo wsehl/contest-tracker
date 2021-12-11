@@ -1,4 +1,4 @@
-const firebase = require("../../../lib/firebase.js");
+const firebase = require("~libs/firebase.js");
 const multer = require("multer");
 
 const upload = multer({

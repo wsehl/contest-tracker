@@ -1,6 +1,7 @@
 const firebaseAdmin = require("firebase-admin");
+const firebaseConfing = require("~root/firebase.json");
 
-const firebaseConfing = require("../../firebase.json");
+const logger = require("~utils/logger");
 
 firebaseAdmin.initializeApp({
   credential: firebaseAdmin.credential.cert(firebaseConfing),
@@ -10,6 +11,6 @@ firebaseAdmin.initializeApp({
 const bucket = firebaseAdmin.storage().bucket();
 const db = firebaseAdmin.firestore();
 
-console.log("[module] Firebase succesfully connected");
+logger.module("Firebase", true);
 
 module.exports = { bucket, db };

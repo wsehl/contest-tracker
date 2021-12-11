@@ -1,6 +1,6 @@
 const bcrypt = require("bcryptjs");
-const firebase = require("../../lib/firebase.js");
-const logger = require("../../utils/logger");
+const firebase = require("~libs/firebase.js");
+const logger = require("~utils/logger");
 
 const register = async (req, res) => {
   const { username, email, password } = req.body;

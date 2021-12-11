@@ -1,4 +1,4 @@
-const { db } = require("../../../lib/firebase.js");
+const { db } = require("~libs/firebase.js");
 
 const addNew = async (req, res) => {
   const { name, description, start_date, end_date, teacher_id, students_ids } =
