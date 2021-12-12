@@ -1,6 +1,6 @@
 import { createApp } from "vue";
 import App from "./App.vue";
-import "./assets/styles.css";
+import "virtual:windi.css";
 import "quasar/dist/quasar.css";
 import "@quasar/extras/roboto-font/roboto-font.css";
 import "@quasar/extras/material-icons/material-icons.css";
