@@ -1,68 +1,64 @@
 <template>
-  <div class="row q-col-gutter-sm q-px-sm">
-    <div class="col-lg-3 col-md-4 col-sm-12 col-xs-12">
-      <q-card flat bordered>
-        <q-card-section>
-          <div class="text-h6">Добавить куратора</div>
-        </q-card-section>
-        <q-separator inset></q-separator>
-        <q-card-section class="q-gutter-md">
-          <q-input v-model="last_name" dense outlined label="Фамилия" />
-          <q-input v-model="first_name" dense outlined label="Имя" />
-          <q-input v-model="middle_name" dense outlined label="Отчество" />
-        </q-card-section>
-        <q-card-actions class="q-px-md q-mb-md">
+  <dashboard-template>
+    <template #form>
+      <q-card-section>
+        <div class="text-h6">Добавить куратора</div>
+      </q-card-section>
+      <q-separator inset></q-separator>
+      <q-card-section class="q-gutter-md">
+        <q-input v-model="last_name" dense outlined label="Фамилия" />
+        <q-input v-model="first_name" dense outlined label="Имя" />
+        <q-input v-model="middle_name" dense outlined label="Отчество" />
+      </q-card-section>
+      <q-card-actions class="q-px-md q-mb-md">
+        <q-btn
+          color="primary"
+          size="md"
+          class="full-width"
+          label="Добавить"
+          @click="insertTo('events')"
+        />
+      </q-card-actions>
+    </template>
+    <template #table>
+      <q-table
+        class="text-grey-8"
+        :rows="data"
+        :columns="columns"
+        :pagination="{
+          rowsPerPage: 15,
+        }"
+        :loading="loading"
+        row-key="organization_name"
+      >
+        <template #top-left>
+          <q-input v-model="filter" outlined dense placeholder="Поиск">
+            <template #append>
+              <q-icon name="search" />
+            </template>
+          </q-input>
+        </template>
+        <template #top-right="props">
           <q-btn
-            color="primary"
-            size="md"
-            class="full-width"
-            label="Добавить"
-            @click="insertTo('events')"
-          />
-        </q-card-actions>
-      </q-card>
-    </div>
-    <div class="col-lg-9 col-md-8 col-sm-12 col-xs-12">
-      <q-card flat bordered>
-        <q-table
-          class="text-grey-8"
-          :rows="data"
-          :columns="columns"
-          :pagination="{
-            rowsPerPage: 15,
-          }"
-          :loading="loading"
-          row-key="organization_name"
-        >
-          <template #top-left>
-            <q-input v-model="filter" outlined dense placeholder="Поиск">
-              <template #append>
-                <q-icon name="search" />
-              </template>
-            </q-input>
-          </template>
-          <template #top-right="props">
-            <q-btn
-              flat
-              round
-              dense
-              :icon="props.inFullscreen ? 'fullscreen_exit' : 'fullscreen'"
-              @click="props.toggleFullscreen"
-            >
-              <q-tooltip v-close-popup :disable="$q.platform.is.mobile">
-                {{
-                  props.inFullscreen ? "Exit Fullscreen" : "Toggle Fullscreen"
-                }}
-              </q-tooltip>
-            </q-btn>
-          </template>
-        </q-table>
-      </q-card>
-    </div>
-  </div>
+            flat
+            round
+            dense
+            :icon="props.inFullscreen ? 'fullscreen_exit' : 'fullscreen'"
+            @click="props.toggleFullscreen"
+          >
+            <q-tooltip v-close-popup :disable="$q.platform.is.mobile">
+              {{ props.inFullscreen ? "Exit Fullscreen" : "Toggle Fullscreen" }}
+            </q-tooltip>
+          </q-btn>
+        </template>
+      </q-table>
+    </template>
+  </dashboard-template>
 </template>
 
 <script>
+import DashboardTemplate from "@/components/DashboardTemplate.vue";
+
 /* eslint-disable no-unused-vars */
 import {
   insertToTable,
@@ -73,6 +69,9 @@ import {
 } from "@/api";
 
 export default {
+  components: {
+    DashboardTemplate,
+  },
   data() {
     return {
       loading: true,

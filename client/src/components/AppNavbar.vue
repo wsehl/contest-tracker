@@ -60,6 +60,16 @@
                     >
                       <q-item-section>Аккаунт</q-item-section>
                     </q-item>
+                    <q-item
+                      clickable
+                      class="GL__menu-link"
+                      :to="{
+                        name: 'MyProjects',
+                      }"
+                    >
+                      <q-item-section>Мои проекты</q-item-section>
+                    </q-item>
+
                     <q-separator />
                     <q-item
                       clickable

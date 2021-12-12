@@ -29,7 +29,7 @@ const routes = [
       title: "Регистрация",
       authForbidden: true,
     },
-    component: () => import("@/pages/Signup.vue"),
+    component: () => import("@/pages/Register.vue"),
   },
   {
     path: "/about",
@@ -72,17 +72,18 @@ const routes = [
     },
     component: () => import("@/pages/Event.vue"),
   },
-
   {
     path: "/dashboard",
     name: "Dashboard",
-    redirect: { name: "DashboardUsers" },
-    component: () => import("@/pages/dashboard/Dashboard.vue"),
+    redirect: {
+      name: "DashboardUsers",
+    },
+    component: () => import("@/layouts/DashboardLayout.vue"),
     children: [
       {
         path: "/dashboard/users",
         name: "DashboardUsers",
-        component: () => import("@/pages/dashboard/DashboardUsers.vue"),
+        component: () => import("@/pages/dashboard/Users.vue"),
         meta: {
           title: "[CRM] Пользователи",
           isAdmin: true,
@@ -91,7 +92,7 @@ const routes = [
       {
         path: "/dashboard/organizations",
         name: "DashboardOrganizations",
-        component: () => import("@/pages/dashboard/DashboardOrganizations.vue"),
+        component: () => import("@/pages/dashboard/Organizations.vue"),
         meta: {
           title: "[CRM] Организации",
           isAdmin: true,
@@ -100,7 +101,7 @@ const routes = [
       {
         path: "/dashboard/events",
         name: "DashboardEvents",
-        component: () => import("@/pages/dashboard/DashboardEvents.vue"),
+        component: () => import("@/pages/dashboard/Events.vue"),
         meta: {
           title: "[CRM] Конкурсы",
           isAdmin: true,
@@ -109,7 +110,7 @@ const routes = [
       {
         path: "/dashboard/curators",
         name: "DashboardCurators",
-        component: () => import("@/pages/dashboard/DashboardCurators.vue"),
+        component: () => import("@/pages/dashboard/Curators.vue"),
         meta: {
           title: "[CRM] Кураторы",
           isAdmin: true,
@@ -118,7 +119,7 @@ const routes = [
       {
         path: "/dashboard/grades",
         name: "DashboardGrades",
-        component: () => import("@/pages/dashboard/DashboardGrades.vue"),
+        component: () => import("@/pages/dashboard/Grades.vue"),
         meta: {
           title: "[CRM] Классы",
           isAdmin: true,
@@ -127,9 +128,45 @@ const routes = [
       {
         path: "/dashboard/students",
         name: "DashboardStudents",
-        component: () => import("@/pages/dashboard/DashboardStudents.vue"),
+        component: () => import("@/pages/dashboard/Students.vue"),
         meta: {
           title: "[CRM] Ученики",
+          isAdmin: true,
+        },
+      },
+      {
+        path: "/dashboard/projects",
+        name: "DashboardProjects",
+        component: () => import("@/pages/dashboard/Projects.vue"),
+        meta: {
+          title: "[CRM] Проекты",
+          isAdmin: true,
+        },
+      },
+      {
+        path: "/dashboard/winners",
+        name: "DashboardWinners",
+        component: () => import("@/pages/dashboard/Winners.vue"),
+        meta: {
+          title: "[CRM] Победители",
+          isAdmin: true,
+        },
+      },
+      {
+        path: "/dashboard/teachers",
+        name: "DashboardTeachers",
+        component: () => import("@/pages/dashboard/Teachers.vue"),
+        meta: {
+          title: "[CRM] Учителя",
+          isAdmin: true,
+        },
+      },
+      {
+        path: "/dashboard/subjects",
+        name: "DashboardSubjects",
+        component: () => import("@/pages/dashboard/Subjects.vue"),
+        meta: {
+          title: "[CRM] Предметы",
           isAdmin: true,
         },
       },

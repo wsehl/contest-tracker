@@ -1,81 +1,77 @@
 <template>
-  <div class="row q-col-gutter-sm q-px-sm">
-    <div class="col-lg-3 col-md-4 col-sm-12 col-xs-12">
-      <q-card flat bordered>
-        <q-card-section>
-          <div class="text-h6">Добавить класс</div>
-        </q-card-section>
-        <q-separator inset></q-separator>
-        <q-card-section class="q-gutter-md">
-          <q-input v-model="name" dense outlined label="Название" />
-          <q-select
-            v-model="curator"
-            dense
-            outlined
-            :options="curator_options"
-            label="Куратор"
-            input-debounce="0"
-          >
-            <template #no-option>
-              <q-item>
-                <q-item-section class="text-grey"> No results </q-item-section>
-              </q-item>
-            </template>
-          </q-select>
-        </q-card-section>
-        <q-card-actions class="q-px-md q-mb-md">
-          <q-btn
-            color="primary"
-            size="md"
-            class="full-width"
-            label="Добавить"
-            @click="insertTo('grades')"
-          />
-        </q-card-actions>
-      </q-card>
-    </div>
-    <div class="col-lg-9 col-md-8 col-sm-12 col-xs-12">
-      <q-card flat bordered>
-        <q-table
-          class="text-grey-8"
-          :rows="data"
-          :columns="columns"
-          :pagination="{
-            rowsPerPage: 15,
-          }"
-          :loading="loading"
-          row-key="organization_name"
+  <dashboard-template>
+    <template #form>
+      <q-card-section>
+        <div class="text-h6">Добавить класс</div>
+      </q-card-section>
+      <q-separator inset></q-separator>
+      <q-card-section class="q-gutter-md">
+        <q-input v-model="name" dense outlined label="Название" />
+        <q-select
+          v-model="curator"
+          dense
+          outlined
+          :options="curator_options"
+          label="Куратор"
+          input-debounce="0"
         >
-          <template #top-left>
-            <q-input v-model="filter" outlined dense placeholder="Поиск">
-              <template #append>
-                <q-icon name="search" />
-              </template>
-            </q-input>
+          <template #no-option>
+            <q-item>
+              <q-item-section class="text-grey"> No results </q-item-section>
+            </q-item>
           </template>
-          <template #top-right="props">
-            <q-btn
-              flat
-              round
-              dense
-              :icon="props.inFullscreen ? 'fullscreen_exit' : 'fullscreen'"
-              @click="props.toggleFullscreen"
-            >
-              <q-tooltip v-close-popup :disable="$q.platform.is.mobile">
-                {{
-                  props.inFullscreen ? "Exit Fullscreen" : "Toggle Fullscreen"
-                }}
-              </q-tooltip>
-            </q-btn>
-          </template>
-        </q-table>
-      </q-card>
-    </div>
-  </div>
+        </q-select>
+      </q-card-section>
+      <q-card-actions class="q-px-md q-mb-md">
+        <q-btn
+          color="primary"
+          size="md"
+          class="full-width"
+          label="Добавить"
+          @click="insertTo('grades')"
+        />
+      </q-card-actions>
+    </template>
+    <template #table>
+      <q-table
+        class="text-grey-8"
+        :rows="data"
+        :columns="columns"
+        :pagination="{
+          rowsPerPage: 15,
+        }"
+        :loading="loading"
+        row-key="organization_name"
+      >
+        <template #top-left>
+          <q-input v-model="filter" outlined dense placeholder="Поиск">
+            <template #append>
+              <q-icon name="search" />
+            </template>
+          </q-input>
+        </template>
+        <template #top-right="props">
+          <q-btn
+            flat
+            round
+            dense
+            :icon="props.inFullscreen ? 'fullscreen_exit' : 'fullscreen'"
+            @click="props.toggleFullscreen"
+          >
+            <q-tooltip v-close-popup :disable="$q.platform.is.mobile">
+              {{ props.inFullscreen ? "Exit Fullscreen" : "Toggle Fullscreen" }}
+            </q-tooltip>
+          </q-btn>
+        </template>
+      </q-table>
+    </template>
+  </dashboard-template>
 </template>
 
 <script>
 /* eslint-disable no-unused-vars */
+import DashboardTemplate from "@/components/DashboardTemplate.vue";
+
 import {
   insertToTable,
   removeRow,
@@ -85,6 +81,9 @@ import {
 } from "@/api";
 
 export default {
+  components: {
+    DashboardTemplate,
+  },
   data() {
     return {
       loading: true,
