@@ -52,3 +52,40 @@
     </q-card>
   </q-page>
 </template>
+
+<script>
+import { askQuestion } from "@/api";
+import { reactive } from "vue";
+
+export default {
+  setup() {
+    let question = reactive("");
+
+    const ask = async () => {
+      try {
+        const response = await askQuestion(question);
+        this.$q.notify({
+          color: "positive",
+          position: "bottom-left",
+          message: response.msg,
+          progress: true,
+          timeout: 1500,
+        });
+      } catch (error) {
+        this.$q.notify({
+          color: "negative",
+          position: "bottom-left",
+          message: error.response.data.msg,
+          progress: true,
+          timeout: 1500,
+        });
+      }
+    };
+
+    return {
+      question,
+      ask,
+    };
+  },
+};
+</script>

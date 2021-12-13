@@ -15,7 +15,7 @@
         label="All events"
         :to="{ name: 'Events' }"
       />
-      <div class="w-50 flex column q-mt-md">
+      <div class="flex column q-mt-md">
         <div class="text-h4 q-mb-md">
           {{ event.event_title }}
         </div>
