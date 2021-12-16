@@ -1,4 +1,5 @@
 const { db } = require("~libs/firebase.js");
+const logger = require("~utils/logger");
 
 const addNew = async (req, res) => {
   const {
@@ -19,14 +20,7 @@ const addNew = async (req, res) => {
 
   await db.collection("events").add(newEvent);
 
-  console.info(
-    `Added event: [${newEvent.event_title}] at [${new Date().toLocaleString(
-      "ru-RU",
-      {
-        timeZone: "Asia/Almaty",
-      }
-    )}]`
-  );
+  logger.info(`Added event: [${newEvent.event_title}]`);
 
   res.status(201).send({
     msg: "Successfully added event",

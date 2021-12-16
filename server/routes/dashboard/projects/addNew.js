@@ -1,4 +1,5 @@
 const { db } = require("~libs/firebase.js");
+const logger = require("~utils/logger");
 
 const addNew = async (req, res) => {
   const {
@@ -23,12 +24,7 @@ const addNew = async (req, res) => {
 
   await db.collection("projects").add(newProject);
 
-  console.info(
-    `Added project: [${newProject.name}] at [${new Date().toLocaleString(
-      "ru-RU",
-      { timeZone: "Asia/Almaty" }
-    )}]`
-  );
+  logger.info(`Added project: [${newProject.name}]`);
 
   res.status(201).send({
     msg: "Successfully added project",

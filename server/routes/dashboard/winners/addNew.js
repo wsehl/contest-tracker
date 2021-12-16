@@ -1,4 +1,5 @@
 const firebase = require("~libs/firebase.js");
+const logger = require("~utils/logger");
 const multer = require("multer");
 
 const upload = multer({
@@ -75,13 +76,7 @@ const addNew = async (req, res) => {
 
       await firebase.db.collection("winners").set(newWinner);
 
-      console.info(
-        `Added winner: [${
-          newWinner.project_id
-        }] at [${new Date().toLocaleString("ru-RU", {
-          timeZone: "Asia/Almaty",
-        })}]`
-      );
+      logger.info(`Added winner: [${newWinner.project_id}]`);
 
       res.status(201).send({
         msg: "Successfully added winner",

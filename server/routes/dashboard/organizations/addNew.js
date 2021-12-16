@@ -1,4 +1,5 @@
 const firebase = require("~libs/firebase.js");
+const logger = require("~utils/logger");
 const multer = require("multer");
 
 const upload = multer({
@@ -56,12 +57,8 @@ const addNew = async (req, res) => {
           .doc(req.body.name)
           .set(newOrganization);
 
-        console.info(
-          `Added organization: [${
-            newOrganization.organization_name
-          }] at [${new Date().toLocaleString("ru-RU", {
-            timeZone: "Asia/Almaty",
-          })}]`
+        logger.info(
+          `Added organization: [${newOrganization.organization_name}]`
         );
 
         res.status(201).send({

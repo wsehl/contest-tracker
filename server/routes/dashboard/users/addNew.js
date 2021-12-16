@@ -1,6 +1,7 @@
 const bcrypt = require("bcryptjs");
 const firebase = require("~libs/firebase.js");
 const { mailer, mail_user } = require("~libs/mailer.js");
+const logger = require("~utils/logger");
 
 const addNew = async (req, res) => {
   const {
@@ -56,12 +57,8 @@ const addNew = async (req, res) => {
 
     await userRef.doc(username).set(newUser);
 
-    console.info(
-      `Registered user: [${newUser.username}] with role: [${
-        newUser.role
-      }] at [${new Date().toLocaleString("ru-RU", {
-        timeZone: "Asia/Almaty",
-      })}]`
+    logger.info(
+      `Registered user: [${newUser.username}] with role: [${newUser.role}]`
     );
 
     res.status(201).send({ msg: "Successfully registered", status: 201 });

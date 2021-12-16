@@ -1,4 +1,5 @@
 const { db } = require("~libs/firebase.js");
+const logger = require("~utils/logger");
 
 const addNew = async (req, res) => {
   const { first_name, middle_name, last_name, phone } = req.body;
@@ -12,12 +13,7 @@ const addNew = async (req, res) => {
 
   await db.collection("curators").add(newCurator);
 
-  console.info(
-    `Added curator: [${newCurator.name}] at [${new Date().toLocaleString(
-      "ru-RU",
-      { timeZone: "Asia/Almaty" }
-    )}]`
-  );
+  logger.info(`Added curator: [${newCurator.name}]`);
 
   res.status(201).send({
     msg: "Successfully added curator",
