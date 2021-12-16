@@ -1,5 +1,6 @@
 const users = {
   getAll: require("./getAll.js"),
+  getOne: require("./getOne.js"),
   removeOne: require("./removeOne.js"),
   removeSeveralRows: require("./removeSeveralRows.js"),
   updateOne: require("./updateOne.js"),

@@ -39,9 +39,16 @@ const addNew = async (req, res) => {
       });
 
       blobWriter.on("finish", async () => {
+        const newFile = {
+          url: `https://firebasestorage.googleapis.com/v0/b/contest-tracker-87dc8.appspot.com/o/${newFileName}`,
+          name: newFileName,
+        };
+
+        const file = await firebase.db.collection("files").add(newFile);
+
         const newOrganization = {
           organization_name: req.body.name,
-          organization_image: newFileName,
+          file_id: file._path.segments[1],
         };
 
         await firebase.db

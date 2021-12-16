@@ -1,5 +1,6 @@
 module.exports = {
   validateUsers: require("./users.js"),
+  validateSubjects: require("./subjects.js"),
   validateOrganizations: require("./organisations.js"),
   validateEvents: require("./events.js"),
   validateGrades: require("./grades.js"),

@@ -1,12 +1,14 @@
 const { db } = require("~libs/firebase.js");
 
 const addNew = async (req, res) => {
-  const { first_name, middle_name, last_name } = req.body;
+  const { first_name, middle_name, last_name, phone, subject_id } = req.body;
 
   const newTeacher = {
     first_name,
     middle_name,
     last_name,
+    phone,
+    subject_id,
   };
 
   await db.collection("teachers").add(newTeacher);

@@ -13,6 +13,9 @@ const getOne = async (req, res) => {
 
   const teacher = doc.data();
 
+  const subject = db.collection("subjects").doc(teacher.subject_id).get();
+  teacher.subject = subject.data();
+
   return res.status(200).send({ data: teacher });
 };
 

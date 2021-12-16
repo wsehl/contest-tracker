@@ -14,6 +14,16 @@ const validateTeachers = (req, res, next) => {
       msg: "Please enter a valid last name",
     });
   }
+  if (!req.body.phone || req.body.phone.length === 10) {
+    return res.status(400).send({
+      msg: "Please enter a valid phone number",
+    });
+  }
+  if (!req.body.subject_id) {
+    return res.status(400).send({
+      msg: "Please enter a valid project subject id",
+    });
+  }
 
   next();
 };

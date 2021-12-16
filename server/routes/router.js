@@ -16,9 +16,8 @@ router.post(
 );
 router.delete("/dashboard/user/:id", route.users.removeOne);
 router.put("/dashboard/user/:id", route.users.updateOne);
+router.get("/dashboard/user/:id", route.users.getOne);
 router.post("/dashboard/delete/users", route.users.removeSeveralRows);
-
-// router.get("/dashboard/user/:id", route.users.getOne);
 
 // events
 router.get("/dashboard/events", route.events.getAll);
@@ -85,7 +84,26 @@ router.get("/dashboard/organizations", route.organizations.getAll);
 router.post(
   "/dashboard/organizations",
   middleware.auth.isAdmin,
+  // middleware.dashboard.validateOrganizations,
   route.organizations.addNew
 );
+
+// subjects
+router.get("/dashboard/subjects", route.subjects.getAll);
+router.post(
+  "/dashboard/subjects",
+  middleware.auth.isAdmin,
+  middleware.dashboard.validateSubjects,
+  route.subjects.addNew
+);
+
+// winners
+router.get("/dashboard/winners", route.winners.getAll);
+router.post(
+  "/dashboard/winners",
+  middleware.auth.isAdmin,
+  route.winners.addNew
+);
+router.get("/dashboard/winners/:id", route.winners.getOne);
 
 module.exports = router;

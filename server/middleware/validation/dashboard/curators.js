@@ -14,6 +14,11 @@ const validateCurators = (req, res, next) => {
       msg: "Please enter a valid last name",
     });
   }
+  if (!req.body.phone || req.body.phone.length === 10) {
+    return res.status(400).send({
+      msg: "Please enter a valid phone number",
+    });
+  }
 
   next();
 };

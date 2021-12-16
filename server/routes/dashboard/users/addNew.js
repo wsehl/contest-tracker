@@ -3,7 +3,15 @@ const firebase = require("~libs/firebase.js");
 const { mailer, mail_user } = require("~libs/mailer.js");
 
 const addNew = async (req, res) => {
-  const { username, email, password, role } = req.body;
+  const {
+    username,
+    email,
+    password,
+    role,
+    student_id,
+    teacher_id,
+    curator_id,
+  } = req.body;
 
   const userRef = firebase.db.collection("users");
 
@@ -29,6 +37,9 @@ const addNew = async (req, res) => {
     last_login: new Date(),
     role,
     email,
+    ...(!!student_id && { student_id }),
+    ...(!!teacher_id && { teacher_id }),
+    ...(!!curator_id && { curator_id }),
   };
 
   const mailOptions = {

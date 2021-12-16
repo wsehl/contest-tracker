@@ -21,8 +21,12 @@ const getAll = async (req, res) => {
         .get()
         .then((org_doc) => {
           const org = org_doc.data();
-          event.organization_image = org.organization_image;
           event.organization_name = org.organization_name;
+          return db.collection("files").doc(org.file_id).get();
+        })
+        .then((file) => {
+          const image = file.data().name;
+          event.organization_image = image;
         })
     )
   );

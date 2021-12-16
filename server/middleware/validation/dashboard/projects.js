@@ -36,6 +36,12 @@ const validateProjects = (req, res, next) => {
       msg: "Please enter a valid project students list",
     });
   }
+  if (!req.body.subject_id) {
+    return res.status(400).send({
+      msg: "Please enter a valid project subject id",
+    });
+  }
+
   next();
 };
 
