@@ -47,3 +47,7 @@ export function removeSeveralRows(table, cred) {
 export function editRow(table, id, cred) {
   return api.put(`/dashboard/${table}/${id}`, cred);
 }
+
+export function askQuestion(q) {
+  return api.post("/help", q);
+}
