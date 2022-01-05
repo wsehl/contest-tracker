@@ -19,11 +19,11 @@ const getOne = async (req, res) => {
     .doc(event.organization_id)
     .get();
 
-  const file = await db.collection("organizations").doc(org.file_id).get();
+  const file = await db.collection("files").doc(org.data().file_id).get();
 
-  org.organization_image = file.data().name;
-
-  return res.status(200).send({ data: [{ ...event, ...org.data() }] });
+  return res.send({
+    data: [{ ...event, ...org.data(), organization_image: file.data().name }],
+  });
 };
 
 module.exports = getOne;
