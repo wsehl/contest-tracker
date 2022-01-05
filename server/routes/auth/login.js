@@ -45,6 +45,7 @@ const login = async (req, res) => {
 
   logger.info(`Logged in user: [${user.username}] with role: [${user.role}]`);
 
+  delete user.password;
   return res.status(200).send({
     msg: "Logged in successfully",
     token,
