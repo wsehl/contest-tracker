@@ -5,13 +5,12 @@ const { add } = require("../validations/user.validation");
 
 const router = express.Router();
 
+router.route("/").get(controller.getAll).post(validate(add), controller.addNew);
+
 router
-  .route("/")
-  .get(controller.getAll)
-  .post(validate(add), controller.addNew)
+  .route("/:id")
+  .get(controller.getOne)
   .put(controller.updateOne)
   .delete(controller.removeOne);
-
-router.get("/:id", controller.getOne);
 
 module.exports = router;

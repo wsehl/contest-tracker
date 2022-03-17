@@ -1,9 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
 import store from "@/store";
 
-const isAuthenticated = () => store.getters.isLoggedIn;
-const isAdmin = () => store.getters.isAdmin;
-
 const routes = [
   {
     path: "/",
@@ -194,6 +191,9 @@ const router = createRouter({
   history: createWebHistory(),
   routes,
 });
+
+const isAuthenticated = () => store.getters.isLoggedIn;
+const isAdmin = () => store.getters.isAdmin;
 
 router.beforeEach((to, from, next) => {
   if (to.meta.title) {

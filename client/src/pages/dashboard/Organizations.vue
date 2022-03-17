@@ -15,6 +15,9 @@
           bordered
           accept=".jpg, image/*"
           :hide-upload-btn="true"
+          style="max-width: 300px"
+          multiple
+          batch
           @rejected="onRejected"
         />
       </q-card-section>
@@ -110,6 +113,7 @@ export default {
   },
   methods: {
     uploadFile(files) {
+      console.log(files);
       this.organization_file = files[0];
     },
     onRejected(rejectedEntries) {

@@ -63,7 +63,10 @@ export default {
 
     const ask = async () => {
       try {
+        // send request to server
         const response = await askQuestion(question);
+
+        // show answer to user
         this.$q.notify({
           color: "positive",
           position: "bottom-left",

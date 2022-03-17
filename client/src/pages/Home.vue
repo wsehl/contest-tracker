@@ -73,25 +73,30 @@ export default {
     };
   },
   computed: {
+    // firebase storage url
     url() {
       return `https://firebasestorage.googleapis.com/v0/b/contest-tracker-87dc8.appspot.com/o`;
     },
   },
   created() {
+    // show loader while fetching data from server
     this.$q.loading.show();
     this.fetchData();
   },
   methods: {
     formatDate(d) {
+      // format ISO date format into human-readable format
       return format(new Date(d), "PP");
     },
     fetchData() {
+      // get data from server (organizations and events tables)
       Promise.all([getTable("organizations"), getTable("events")])
         .then((results) => {
           this.organizations = results[0].data;
           this.events = results[1].data;
         })
         .finally(() => {
+          // hide loader when date is fetched
           this.loading = false;
           this.$q.loading.hide();
         })

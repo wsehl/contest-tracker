@@ -1,6 +1,6 @@
 const bcrypt = require("bcryptjs");
 const logger = require("~services/logger");
-const { db, default: firebase } = require("~config/firebase.js");
+const firebase = require("~config/firebase.js");
 const { mailer, mail_user } = require("~config/mailer.js");
 
 exports.addNew = async (req, res) => {
@@ -22,11 +22,15 @@ exports.addNew = async (req, res) => {
   ]);
 
   if (!doc[0].empty) {
-    return res.status(409).send({ msg: "This username is already in use!" });
+    return res
+      .status(409)
+      .send({ msg: "Аккаунт с таким логином уже существует" });
   }
 
   if (!doc[1].empty) {
-    return res.status(409).send({ msg: "This email is already in use!" });
+    return res
+      .status(409)
+      .send({ msg: "Аккаунт с такой почтой уже существует" });
   }
 
   const hash = await bcrypt.hash(password, 10);
@@ -67,7 +71,7 @@ exports.addNew = async (req, res) => {
 
 exports.getAll = async (req, res) => {
   const users = [];
-  const snapshot = await db.collection("users").get();
+  const snapshot = await firebase.db.collection("users").get();
 
   snapshot.forEach((doc) => {
     const user = doc.data();
@@ -81,7 +85,7 @@ exports.getAll = async (req, res) => {
 
 exports.getOne = async (req, res) => {
   const userId = req.params.id;
-  const doc = await db.collection("users").doc(userId).get();
+  const doc = await firebase.db.collection("users").doc(userId).get();
 
   if (!doc.exists) {
     return res.status(404).send({
@@ -96,11 +100,11 @@ exports.getOne = async (req, res) => {
 
   let info = {};
   if (user.teacher_id)
-    info = await db.collection("teachers").doc(user.teacher_id).get();
+    info = await firebase.db.collection("teachers").doc(user.teacher_id).get();
   if (user.student_id)
-    info = await db.collection("students").doc(user.student_id).get();
+    info = await firebase.db.collection("students").doc(user.student_id).get();
   if (user.curator_id)
-    info = await db.collection("curators").doc(user.curator_id).get();
+    info = await firebase.db.collection("curators").doc(user.curator_id).get();
 
   user.info = info.data();
 
@@ -109,13 +113,13 @@ exports.getOne = async (req, res) => {
 
 exports.removeOne = async (req, res) => {
   const userId = req.params.id;
-  await db.collection("users").doc(userId).delete();
+  await firebase.db.collection("users").doc(userId).delete();
   res.status(200).send({ msg: "Succefully Removed" });
 };
 
 exports.removeSeveralRows = async (req, res) => {
   await Promise.all(
-    req.body.map((id) => db.collection("users").doc(id).delete())
+    req.body.map((id) => firebase.db.collection("users").doc(id).delete())
   );
   res.status(200).send({ msg: "Succefully Removed" });
 };
@@ -126,7 +130,7 @@ exports.updateOne = async (req, res) => {
   const { username, email, role } = req.body;
   const newUser = { username, role, email };
 
-  await db.collection("users").doc(userId).set(newUser);
+  await firebase.db.collection("users").doc(userId).set(newUser);
 
   res.status(200).send({ msg: "Succesfully updated" });
 };

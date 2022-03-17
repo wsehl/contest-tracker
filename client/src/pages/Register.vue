@@ -81,23 +81,10 @@ export default {
   methods: {
     async register() {
       try {
-        const response = await signup(this.user);
+        await signup(this.user);
         this.$router.push({ name: "Login" });
-        this.$q.notify({
-          color: "positive",
-          position: "bottom-left",
-          message: response.msg,
-          progress: true,
-          timeout: 1500,
-        });
       } catch (error) {
-        this.$q.notify({
-          color: "negative",
-          position: "bottom-left",
-          message: error.response.data.msg,
-          progress: true,
-          timeout: 1500,
-        });
+        console.log(error);
       }
     },
   },
