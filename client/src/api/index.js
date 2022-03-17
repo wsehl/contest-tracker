@@ -24,10 +24,10 @@ api.interceptors.request.use((request) => {
 });
 
 export function login(credentials) {
-  return api.post(`/login`, credentials);
+  return api.post(`/auth/login`, credentials);
 }
 export function signup(credentials) {
-  return api.post(`/signup`, credentials);
+  return api.post(`/auth/register`, credentials);
 }
 export function getTable(table) {
   return api.get(`/dashboard/${table}`);
@@ -36,7 +36,7 @@ export function insertToTable(credentials, table) {
   return api.post(`/dashboard/${table}`, credentials);
 }
 export function getRow(table, id) {
-  return api.get(`/dashboard/${table}/${id}`);
+  return api.get(`/dashboard/${table}s/${id}`);
 }
 export function removeRow(table, id) {
   return api.delete(`/dashboard/${table}/${id}`);
