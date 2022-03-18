@@ -17,7 +17,7 @@ const routes = [
       title: "Вход",
       authForbidden: true,
     },
-    component: () => import("@/pages/Login.vue"),
+    component: () => import("@/pages/auth/Login.vue"),
   },
   {
     path: "/signup",
@@ -26,7 +26,7 @@ const routes = [
       title: "Регистрация",
       authForbidden: true,
     },
-    component: () => import("@/pages/Register.vue"),
+    component: () => import("@/pages/auth/Register.vue"),
   },
   {
     path: "/about",
@@ -75,7 +75,7 @@ const routes = [
     redirect: {
       name: "DashboardUsers",
     },
-    component: () => import("@/layouts/DashboardLayout.vue"),
+    component: () => import("@/pages/Dashboard.vue"),
     children: [
       {
         path: "/dashboard/users",
@@ -175,7 +175,7 @@ const routes = [
     meta: {
       title: "Страница не найдена",
     },
-    component: () => import("@/pages/404.vue"),
+    component: () => import("@/pages/service/404.vue"),
   },
   {
     name: "Restricted",
@@ -183,7 +183,7 @@ const routes = [
     meta: {
       title: "Страница недоступна",
     },
-    component: () => import("@/pages/Restricted.vue"),
+    component: () => import("@/pages/service/Restricted.vue"),
   },
 ];
 

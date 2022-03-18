@@ -12,9 +12,3 @@
     </div>
   </div>
 </template>
-
-<script>
-export default {
-  name: "DashboardTemplate",
-};
-</script>

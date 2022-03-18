@@ -6,14 +6,14 @@
       </q-card-section>
       <q-separator inset></q-separator>
       <q-card-section class="q-gutter-md">
-        <q-input v-model="last_name" dense outlined label="Фамилия" />
-        <q-input v-model="first_name" dense outlined label="Имя" />
-        <q-input v-model="middle_name" dense outlined label="Отчество" />
+        <q-input v-model="form.last_name" dense outlined label="Фамилия" />
+        <q-input v-model="form.first_name" dense outlined label="Имя" />
+        <q-input v-model="form.middle_name" dense outlined label="Отчество" />
         <q-select
-          v-model="grade"
+          v-model="form.grade"
           dense
           outlined
-          :options="grades_options"
+          :options="gradeOptions"
           label="Класс"
           input-debounce="0"
         >
@@ -24,10 +24,10 @@
           </template>
         </q-select>
         <q-select
-          v-model="study_lang"
+          v-model="form.study_lang"
           dense
           outlined
-          :options="study_lang_options"
+          :options="langOptions"
           label="Язык обучения"
           input-debounce="0"
         ></q-select>
@@ -38,7 +38,7 @@
           size="md"
           class="full-width"
           label="Добавить"
-          @click="insertTo('events')"
+          @click="onSubmit"
         />
       </q-card-actions>
     </template>
@@ -46,7 +46,7 @@
       <q-table
         class="text-grey-8"
         :rows="data"
-        :columns="columns"
+        :columns="COLUMNS"
         :pagination="{
           rowsPerPage: 15,
         }"
@@ -60,178 +60,133 @@
             </template>
           </q-input>
         </template>
-        <template #top-right="props">
-          <q-btn
-            flat
-            round
-            dense
-            :icon="props.inFullscreen ? 'fullscreen_exit' : 'fullscreen'"
-            @click="props.toggleFullscreen"
-          >
-            <q-tooltip v-close-popup :disable="$q.platform.is.mobile">
-              {{ props.inFullscreen ? "Exit Fullscreen" : "Toggle Fullscreen" }}
-            </q-tooltip>
-          </q-btn>
-        </template>
       </q-table>
     </template>
   </dashboard-template>
 </template>
 
-<script>
-/* eslint-disable no-unused-vars */
-import DashboardTemplate from "@/components/DashboardTemplate.vue";
+<script setup>
+import { ref } from "vue";
+import { Api } from "@/api";
+import { renameObjectKey } from "@/utils";
+import { useDashboard } from "@/composable/useDashboard";
 
-import {
-  insertToTable,
-  removeRow,
-  getTable,
-  editRow as editRowInTable,
-  removeSeveralRows,
-} from "@/api";
-
-export default {
-  components: {
-    DashboardTemplate,
+const TABLE = "students";
+const COLUMNS = [
+  {
+    name: "last_name",
+    align: "left",
+    label: "Фамилия",
+    field: "last_name",
+    sortable: true,
   },
-  data() {
-    return {
-      loading: true,
+  {
+    name: "first_name",
+    align: "left",
+    label: "Имя",
+    field: "first_name",
+    sortable: true,
+  },
+  {
+    name: "middle_name",
+    align: "left",
+    label: "Отчество",
+    field: "middle_name",
+    sortable: true,
+  },
+  {
+    name: "study_lang",
+    align: "left",
+    label: "Язык обучения",
+    field: "study_lang",
+    sortable: true,
+  },
+  {
+    name: "grade_name",
+    align: "left",
+    label: "Класс",
+    field: (row) => {
+      return row.grade?.name;
+    },
+    sortable: true,
+  },
+];
+const langOptions = ["ru", "kz", "en"];
+
+const form = ref({
+  first_name: "",
+  middle_name: "",
+  last_name: "",
+  grade: null,
+  study_lang: "",
+});
+const gradeOptions = ref([]);
+
+const {
+  data,
+  loading,
+  filter,
+  showEditDialog,
+  showViewDialog,
+  editedItem,
+  viewedItem,
+  onSubmit,
+  fetchData,
+  editRow,
+  removeRow,
+  editItem,
+  viewItem,
+} = useDashboard({
+  submit: async () => {
+    console.log(form.value);
+    await Api.insertToTable(TABLE, {
+      grade_id: form.value.grade?.value,
+      first_name: form.value.first_name,
+      middle_name: form.value.middle_name,
+      last_name: form.value.last_name,
+      study_lang: form.value.study_lang,
+    });
+  },
+  reset: () => {
+    form.value = {
       first_name: "",
       middle_name: "",
       last_name: "",
-      study_lang: "",
-      study_lang_options: ["ru", "kz", "en"],
-      grades_options: [],
       grade: null,
-
-      filter: "",
-      data: [],
-      columns: [
-        {
-          name: "last_name",
-          align: "left",
-          label: "Фамилия",
-          field: "last_name",
-          sortable: true,
-        },
-        {
-          name: "first_name",
-          align: "left",
-          label: "Имя",
-          field: "first_name",
-          sortable: true,
-        },
-        {
-          name: "middle_name",
-          align: "left",
-          label: "Отчество",
-          field: "middle_name",
-          sortable: true,
-        },
-        {
-          name: "study_lang",
-          align: "left",
-          label: "Язык обучения",
-          field: "study_lang",
-          sortable: true,
-        },
-        {
-          name: "grade_name",
-          align: "left",
-          label: "Класс",
-          field: (row) => row.grade.name,
-          sortable: true,
-        },
-      ],
+      study_lang: "",
     };
   },
-  created() {
-    this.getGradesList();
-    this.fetchData();
+  fetch: async () => {
+    const repsonse = await Api.getTable(TABLE);
+    data.value = repsonse.data;
   },
-  methods: {
-    renameObjectKey({ obj, old_key, new_key }) {
-      if (old_key !== new_key) {
-        Object.defineProperty(
-          obj,
-          new_key,
-          Object.getOwnPropertyDescriptor(obj, old_key)
-        );
-        delete obj[old_key];
-      }
-    },
-    async getGradesList() {
-      const response = await getTable("grades");
-      response.data.forEach((obj) =>
-        this.renameObjectKey({
-          obj,
-          old_key: "name",
-          new_key: "label",
-        })
-      );
-      this.grades_options = response.data;
-    },
-    async insertTo() {
-      try {
-        const response = await insertToTable(
-          {
-            grade_id: this.grade.id,
-            last_name: this.last_name,
-            first_name: this.first_name,
-            middle_name: this.middle_name,
-            study_lang: this.study_lang,
-          },
-          "students"
-        );
-
-        this.clearForm();
-        this.fetchData();
-
-        this.$q.notify({
-          color: "positive",
-          position: "bottom-left",
-          message: response.msg,
-          progress: true,
-          timeout: 1500,
-        });
-      } catch (error) {
-        this.$q.notify({
-          color: "negative",
-          position: "bottom-left",
-          message: error.response.data.msg,
-          progress: true,
-          timeout: 1500,
-        });
-      }
-    },
-    clearForm() {
-      this.grade_id = "";
-      this.first_name = "";
-      this.last_name = "";
-      this.middle_name = "";
-      this.study_lang = "";
-    },
-    fetchData() {
-      this.loading = true;
-      getTable("students")
-        .then((response) => {
-          console.log(response.data);
-          this.data = response.data;
-        })
-        .finally(() => {
-          this.loading = false;
-        })
-        .catch((error) => {
-          this.$q.notify({
-            color: "negative",
-            position: "bottom-left",
-            message: error.response.data.msg,
-            progress: true,
-            timeout: 1500,
-          });
-        });
-    },
+  edit: async () => {
+    await Api.editRow(TABLE, editedItem.value.id, editedItem.value);
   },
+  remove: async (item) => {
+    await Api.removeRow(TABLE, item);
+  },
+});
+
+const fetchGrades = async () => {
+  const response = await Api.getTable("grades");
+  response.data.forEach((obj) =>
+    renameObjectKey({
+      obj,
+      old_key: "name",
+      new_key: "label",
+    })
+  );
+  response.data.forEach((obj) =>
+    renameObjectKey({
+      obj,
+      old_key: "curator_id",
+      new_key: "value",
+    })
+  );
+  gradeOptions.value = response.data;
 };
+
+await fetchGrades();
+await fetchData();
 </script>

@@ -6,9 +6,9 @@
       </q-card-section>
       <q-separator inset></q-separator>
       <q-card-section class="q-gutter-md">
-        <q-input v-model="last_name" dense outlined label="Фамилия" />
-        <q-input v-model="first_name" dense outlined label="Имя" />
-        <q-input v-model="middle_name" dense outlined label="Отчество" />
+        <q-input v-model="form.last_name" dense outlined label="Фамилия" />
+        <q-input v-model="form.first_name" dense outlined label="Имя" />
+        <q-input v-model="form.middle_name" dense outlined label="Отчество" />
       </q-card-section>
       <q-card-actions class="q-px-md q-mb-md">
         <q-btn
@@ -16,7 +16,7 @@
           size="md"
           class="full-width"
           label="Добавить"
-          @click="insertTo('events')"
+          @click="onSubmit"
         />
       </q-card-actions>
     </template>
@@ -24,12 +24,12 @@
       <q-table
         class="text-grey-8"
         :rows="data"
-        :columns="columns"
+        :columns="COLUMNS"
         :pagination="{
           rowsPerPage: 15,
         }"
         :loading="loading"
-        row-key="organization_name"
+        row-key="full_name"
       >
         <template #top-left>
           <q-input v-model="filter" outlined dense placeholder="Поиск">
@@ -38,133 +38,71 @@
             </template>
           </q-input>
         </template>
-        <template #top-right="props">
-          <q-btn
-            flat
-            round
-            dense
-            :icon="props.inFullscreen ? 'fullscreen_exit' : 'fullscreen'"
-            @click="props.toggleFullscreen"
-          >
-            <q-tooltip v-close-popup :disable="$q.platform.is.mobile">
-              {{ props.inFullscreen ? "Exit Fullscreen" : "Toggle Fullscreen" }}
-            </q-tooltip>
-          </q-btn>
-        </template>
       </q-table>
     </template>
   </dashboard-template>
 </template>
 
-<script>
-import DashboardTemplate from "@/components/DashboardTemplate.vue";
+<script setup>
+import { ref } from "vue";
+import { Api } from "@/api";
+import { useDashboard } from "@/composable/useDashboard";
 
-/* eslint-disable no-unused-vars */
-import {
-  insertToTable,
-  removeRow,
-  getTable,
-  editRow as editRowInTable,
-  removeSeveralRows,
-} from "@/api";
-
-export default {
-  components: {
-    DashboardTemplate,
+const TABLE = "curators";
+const COLUMNS = [
+  {
+    name: "full_name",
+    align: "left",
+    label: "Имя",
+    field: "full_name",
   },
-  data() {
-    return {
-      loading: true,
+];
+
+const form = ref({
+  first_name: "",
+  middle_name: "",
+  last_name: "",
+});
+
+const {
+  data,
+  loading,
+  filter,
+  showEditDialog,
+  showViewDialog,
+  editedItem,
+  viewedItem,
+  onSubmit,
+  fetchData,
+  editRow,
+  removeRow,
+  editItem,
+  viewItem,
+} = useDashboard({
+  submit: async () => {
+    await Api.insertToTable(TABLE, form.value);
+  },
+  reset: () => {
+    form.value = {
       first_name: "",
       middle_name: "",
       last_name: "",
-
-      filter: "",
-      data: [],
-      columns: [
-        {
-          name: "last_name",
-          align: "left",
-          label: "Фамилия",
-          field: "last_name",
-          sortable: true,
-        },
-        {
-          name: "first_name",
-          align: "left",
-          label: "Имя",
-          field: "first_name",
-          sortable: true,
-        },
-        {
-          name: "middle_name",
-          align: "right",
-          label: "Отчество",
-          field: "middle_name",
-          sortable: true,
-        },
-      ],
     };
   },
-  created() {
-    this.fetchData();
+  fetch: async () => {
+    const response = await Api.getTable(TABLE);
+    response.data.forEach((row) => {
+      row.full_name = `${row.last_name} ${row.first_name} ${row.middle_name}`;
+    });
+    data.value = response.data;
   },
-  methods: {
-    async insertTo() {
-      try {
-        const response = await insertToTable(
-          {
-            last_name: this.last_name,
-            first_name: this.first_name,
-            middle_name: this.middle_name,
-          },
-          "curators"
-        );
-
-        this.clearForm();
-        this.fetchData();
-
-        this.$q.notify({
-          color: "positive",
-          position: "bottom-left",
-          message: response.msg,
-          progress: true,
-          timeout: 1500,
-        });
-      } catch (error) {
-        this.$q.notify({
-          color: "negative",
-          position: "bottom-left",
-          message: error.response.data.msg,
-          progress: true,
-          timeout: 1500,
-        });
-      }
-    },
-    clearForm() {
-      this.first_name = "";
-      this.last_name = "";
-      this.middle_name = "";
-    },
-    fetchData() {
-      this.loading = true;
-      getTable("curators")
-        .then((response) => {
-          this.data = response.data;
-        })
-        .finally(() => {
-          this.loading = false;
-        })
-        .catch((error) => {
-          this.$q.notify({
-            color: "negative",
-            position: "bottom-left",
-            message: error.response.data.msg,
-            progress: true,
-            timeout: 1500,
-          });
-        });
-    },
+  edit: async () => {
+    await Api.editRow(TABLE, editedItem.value.id, editedItem.value);
   },
-};
+  remove: async (item) => {
+    await Api.removeRow(TABLE, item);
+  },
+});
+
+await fetchData();
 </script>

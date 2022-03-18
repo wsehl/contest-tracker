@@ -90,7 +90,7 @@
       </q-table>
     </template>
   </dashboard-template>
-  <q-dialog v-model="showEditDialog" class="q-pa-sm q-gutter-sm">
+  <q-dialog v-model="showEditDialog">
     <q-card style="min-width: 350px">
       <q-card-section>
         <div class="text-h6">
@@ -135,7 +135,7 @@
       </q-card-actions>
     </q-card>
   </q-dialog>
-  <q-dialog v-model="showViewDialog" class="q-pa-sm q-gutter-sm">
+  <q-dialog v-model="showViewDialog">
     <q-card style="min-width: 350px">
       <q-card-section>
         <div class="text-h6">

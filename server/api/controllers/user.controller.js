@@ -50,22 +50,22 @@ exports.addNew = async (req, res) => {
   const mailOptions = {
     from: mail_user,
     to: email,
-    subject: "Your new account on Contest Tracker",
+    subject: "Вам создали учётную запись в системе Contest Tracker",
     html: `Username: ${username} <br />Password: ${password}<br />Role: ${role}`,
   };
 
   mailer.sendMail(mailOptions, async function (error) {
     if (error) {
-      return res.status(403).send({ msg: "Email not valid!" });
+      console.log(error);
+      // return res.status(403).send({ msg: "Проблема с отправкой письма!" });
     }
-
     await userRef.doc(username).set(newUser);
 
     logger.info(
       `Registered user: [${newUser.username}] with role: [${newUser.role}]`
     );
 
-    res.status(201).send({ msg: "Successfully registered", status: 201 });
+    res.status(201).send({ msg: "Пользователь создан", status: 201 });
   });
 };
 
@@ -89,7 +89,7 @@ exports.getOne = async (req, res) => {
 
   if (!doc.exists) {
     return res.status(404).send({
-      msg: "Not Found",
+      msg: "Не найден пользователь с таким id",
       status: 404,
     });
   }
@@ -114,14 +114,14 @@ exports.getOne = async (req, res) => {
 exports.removeOne = async (req, res) => {
   const userId = req.params.id;
   await firebase.db.collection("users").doc(userId).delete();
-  res.status(200).send({ msg: "Succefully Removed" });
+  res.status(200).send({ msg: "Пользователь удалён" });
 };
 
 exports.removeSeveralRows = async (req, res) => {
   await Promise.all(
     req.body.map((id) => firebase.db.collection("users").doc(id).delete())
   );
-  res.status(200).send({ msg: "Succefully Removed" });
+  res.status(200).send({ msg: "Пользователи удалены" });
 };
 
 exports.updateOne = async (req, res) => {
@@ -132,5 +132,5 @@ exports.updateOne = async (req, res) => {
 
   await firebase.db.collection("users").doc(userId).set(newUser);
 
-  res.status(200).send({ msg: "Succesfully updated" });
+  res.status(200).send({ msg: "Пользователь обновлён" });
 };

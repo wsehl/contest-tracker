@@ -6,12 +6,12 @@
       </q-card-section>
       <q-separator inset></q-separator>
       <q-card-section class="q-gutter-md">
-        <q-input v-model="event_title" dense outlined label="Название" />
+        <q-input v-model="form.event_title" dense outlined label="Название" />
         <q-select
-          v-model="event_organization"
+          v-model="form.event_organization"
           dense
           outlined
-          :options="event_organization_options"
+          :options="organizationOptions"
           label="Организация"
           input-debounce="0"
         >
@@ -22,13 +22,13 @@
           </template>
         </q-select>
         <q-input
-          v-model="event_description"
+          v-model="form.event_description"
           dense
           outlined
           label="Описание"
           type="textarea"
         />
-        <q-date v-model="event_range" flat bordered range />
+        <q-date v-model="form.event_range" flat bordered range />
       </q-card-section>
       <q-card-actions class="q-px-md q-mb-md">
         <q-btn
@@ -36,7 +36,7 @@
           size="md"
           class="full-width"
           label="Добавить"
-          @click="insertTo('events')"
+          @click="onSubmit"
         />
       </q-card-actions>
     </template>
@@ -44,7 +44,7 @@
       <q-table
         class="text-grey-8"
         :rows="data"
-        :columns="columns"
+        :columns="COLUMNS"
         :pagination="{
           rowsPerPage: 15,
         }"
@@ -57,19 +57,6 @@
               <q-icon name="search" />
             </template>
           </q-input>
-        </template>
-        <template #top-right="props">
-          <q-btn
-            flat
-            round
-            dense
-            :icon="props.inFullscreen ? 'fullscreen_exit' : 'fullscreen'"
-            @click="props.toggleFullscreen"
-          >
-            <q-tooltip v-close-popup :disable="$q.platform.is.mobile">
-              {{ props.inFullscreen ? "Exit Fullscreen" : "Toggle Fullscreen" }}
-            </q-tooltip>
-          </q-btn>
         </template>
         <template #body="props">
           <q-tr :props="props">
@@ -86,134 +73,101 @@
   </dashboard-template>
 </template>
 
-<script>
-/* eslint-disable no-unused-vars */
-import DashboardTemplate from "@/components/DashboardTemplate.vue";
-import {
-  insertToTable,
-  removeRow,
-  getTable,
-  editRow as editRowInTable,
-  removeSeveralRows,
-} from "@/api";
+<script setup>
+import { ref } from "vue";
+import { Api } from "@/api";
+import { useDashboard } from "@/composable/useDashboard";
+import { renameObjectKey } from "@/utils";
 
-export default {
-  components: {
-    DashboardTemplate,
+const TABLE = "events";
+const COLUMNS = [
+  {
+    name: "event_title",
+    align: "left",
+    label: "Название",
+    field: "event_title",
+    sortable: true,
   },
-  data() {
-    return {
-      loading: true,
+  {
+    name: "organization_name",
+    align: "left",
+    label: "Организация",
+    field: "organization_name",
+    sortable: true,
+  },
+];
+
+const organizationOptions = ref([]);
+
+const form = ref({
+  event_title: "",
+  event_organization: "",
+  event_description: "",
+  event_range: { from: "", to: "" },
+});
+
+const {
+  data,
+  loading,
+  filter,
+  showEditDialog,
+  showViewDialog,
+  editedItem,
+  viewedItem,
+  onSubmit,
+  fetchData,
+  editRow,
+  removeRow,
+  editItem,
+  viewItem,
+} = useDashboard({
+  submit: async () => {
+    const event_credentials = {
+      event_organization: form.value.event_organization.value,
+      event_title: form.value.event_title,
+      event_description: form.value.event_description,
+      event_start_date: form.value.event_range.from,
+      event_end_date: form.value.event_range.to,
+    };
+    await Api.insertToTable(TABLE, event_credentials);
+  },
+  reset: () => {
+    form.value = {
       event_title: "",
       event_organization: "",
       event_description: "",
-      event_organization_options: [],
       event_range: { from: "", to: "" },
-
-      filter: "",
-      data: [],
-      columns: [
-        {
-          name: "event_title",
-          align: "left",
-          label: "Название",
-          field: "event_title",
-          sortable: true,
-        },
-        {
-          name: "organization_name",
-          align: "left",
-          label: "Организация",
-          field: "organization_name",
-          sortable: true,
-        },
-      ],
     };
   },
-  created() {
-    this.getOrganizationsList();
-    this.fetchData();
+  fetch: async () => {
+    const response = await Api.getTable(TABLE);
+    data.value = response.data;
   },
-  methods: {
-    renameObjectKey({ obj, old_key, new_key }) {
-      if (old_key !== new_key) {
-        Object.defineProperty(
-          obj,
-          new_key,
-          Object.getOwnPropertyDescriptor(obj, old_key)
-        );
-        delete obj[old_key];
-      }
-    },
-    async getOrganizationsList() {
-      const response = await getTable("organizations");
-      response.data.forEach((obj) =>
-        this.renameObjectKey({
-          obj,
-          old_key: "organization_name",
-          new_key: "label",
-        })
-      );
-      this.event_organization_options = response.data;
-    },
-    async insertTo() {
-      try {
-        const event_credentials = {
-          event_organization: this.event_organization.id,
-          event_title: this.event_title,
-          event_description: this.event_description,
-          event_start_date: this.event_range.from,
-          event_end_date: this.event_range.to,
-        };
-        const response = await insertToTable(event_credentials, "events");
-
-        this.clearForm();
-        this.fetchData();
-
-        this.$q.notify({
-          color: "positive",
-          position: "bottom-left",
-          message: response.msg,
-          progress: true,
-          timeout: 1500,
-        });
-      } catch (error) {
-        this.$q.notify({
-          color: "negative",
-          position: "bottom-left",
-          message: error.response.data.msg,
-          progress: true,
-          timeout: 1500,
-        });
-      }
-    },
-    clearForm() {
-      this.event_title = "";
-      this.event_organization = "";
-      this.event_description = "";
-      this.event_range.from = "";
-      this.event_range.to = "";
-    },
-    fetchData() {
-      this.loading = true;
-      getTable("events")
-        .then((response) => {
-          this.data = response.data;
-        })
-        .finally(() => {
-          this.loading = false;
-          this.$q.loading.hide();
-        })
-        .catch((error) => {
-          this.$q.notify({
-            color: "negative",
-            position: "bottom-left",
-            message: error.response.data.msg,
-            progress: true,
-            timeout: 1500,
-          });
-        });
-    },
+  edit: async () => {
+    await Api.editRow(TABLE, editedItem.value.id, editedItem.value);
   },
+  remove: async (item) => {
+    await Api.removeRow(TABLE, item);
+  },
+});
+
+const fetchOrganizations = async () => {
+  const response = await Api.getTable("organizations");
+  response.data.forEach((obj) => {
+    renameObjectKey({
+      obj,
+      old_key: "organization_name",
+      new_key: "label",
+    });
+    renameObjectKey({
+      obj,
+      old_key: "id",
+      new_key: "value",
+    });
+  });
+  organizationOptions.value = response.data;
 };
+
+await fetchOrganizations();
+await fetchData();
 </script>

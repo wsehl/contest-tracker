@@ -6,7 +6,12 @@
       </q-card-section>
       <q-separator inset></q-separator>
       <q-card-section class="q-gutter-md">
-        <q-input v-model="organization_name" dense outlined label="Название" />
+        <q-input
+          v-model="form.organization_name"
+          dense
+          outlined
+          label="Название"
+        />
         <q-uploader
           ref="organization_uploader"
           :factory="uploadFile"
@@ -15,7 +20,7 @@
           bordered
           accept=".jpg, image/*"
           :hide-upload-btn="true"
-          style="max-width: 300px"
+          style="max-width: 280px"
           multiple
           batch
           @rejected="onRejected"
@@ -27,7 +32,7 @@
           size="md"
           class="full-width"
           label="Добавить"
-          @click="insertTo('organizations')"
+          @click="onSubmit"
         />
       </q-card-actions>
     </template>
@@ -35,7 +40,7 @@
       <q-table
         class="text-grey-8"
         :rows="data"
-        :columns="columns"
+        :columns="COLUMNS"
         :pagination="{
           rowsPerPage: 15,
         }"
@@ -49,19 +54,6 @@
             </template>
           </q-input>
         </template>
-        <template #top-right="props">
-          <q-btn
-            flat
-            round
-            dense
-            :icon="props.inFullscreen ? 'fullscreen_exit' : 'fullscreen'"
-            @click="props.toggleFullscreen"
-          >
-            <q-tooltip v-close-popup :disable="$q.platform.is.mobile">
-              {{ props.inFullscreen ? "Exit Fullscreen" : "Toggle Fullscreen" }}
-            </q-tooltip>
-          </q-btn>
-        </template>
         <template #body="props">
           <q-tr :props="props">
             <q-td key="organization_name" :props="props">
@@ -74,108 +66,80 @@
   </dashboard-template>
 </template>
 
-<script>
-import DashboardTemplate from "@/components/DashboardTemplate.vue";
-/* eslint-disable no-unused-vars */
-import {
-  insertToTable,
+<script setup>
+import { ref } from "vue";
+import { Api } from "@/api";
+import { useDashboard } from "@/composable/useDashboard";
+import { useQuasar } from "quasar";
+
+const $q = useQuasar();
+
+const TABLE = "organizations";
+const COLUMNS = [
+  {
+    name: "organization_name",
+    align: "left",
+    label: "Название",
+    field: "organization_name",
+    sortable: true,
+  },
+];
+
+const organization_uploader = ref();
+
+const form = ref({
+  first_name: "",
+  middle_name: "",
+  last_name: "",
+});
+
+const {
+  data,
+  loading,
+  filter,
+  showEditDialog,
+  showViewDialog,
+  editedItem,
+  viewedItem,
+  onSubmit,
+  fetchData,
+  editRow,
   removeRow,
-  getTable,
-  editRow as editRowInTable,
-  removeSeveralRows,
-} from "@/api";
+  editItem,
+  viewItem,
+} = useDashboard({
+  submit: async () => {
+    const organization_credentials = new FormData();
+    organization_credentials.append("name", form.value.organization_name);
+    organization_credentials.append("file", form.value.organization_file);
 
-export default {
-  components: {
-    DashboardTemplate,
+    await Api.insertToTable(TABLE, organization_credentials);
   },
-  data() {
-    return {
-      loading: true,
-      organization_name: "",
-      organization_file: null,
-
-      filter: "",
-      data: [],
-      columns: [
-        {
-          name: "organization_name",
-          align: "left",
-          label: "Название",
-          field: "organization_name",
-          sortable: true,
-        },
-      ],
-    };
+  reset: () => {
+    form.value.organization_name = "";
+    organization_uploader.value.reset();
   },
-  created() {
-    this.fetchData();
+  fetch: async () => {
+    const response = await Api.getTable(TABLE);
+    data.value = response.data;
   },
-  methods: {
-    uploadFile(files) {
-      console.log(files);
-      this.organization_file = files[0];
-    },
-    onRejected(rejectedEntries) {
-      this.$q.notify({
-        type: "negative",
-        message: `${rejectedEntries.length} file(s) did not pass validation constraints`,
-      });
-    },
-    async insertTo() {
-      try {
-        const organization_credentials = new FormData();
-        organization_credentials.append("name", this.organization_name);
-        organization_credentials.append("file", this.organization_file);
-
-        const response = await insertToTable(
-          organization_credentials,
-          "organizations"
-        );
-
-        this.clearForm();
-        this.fetchData();
-
-        this.$q.notify({
-          color: "positive",
-          position: "bottom-left",
-          message: response.msg,
-          progress: true,
-          timeout: 1500,
-        });
-      } catch (error) {
-        this.$q.notify({
-          color: "negative",
-          position: "bottom-left",
-          message: error.response.data.msg,
-          progress: true,
-          timeout: 1500,
-        });
-      }
-    },
-    clearForm() {
-      this.organization_name = "";
-      this.$refs.organization_uploader.reset();
-    },
-    fetchData() {
-      this.loading = true;
-      getTable("organizations")
-        .then((response) => {
-          this.data = response.data;
-        })
-        .finally(() => {
-          this.loading = false;
-        })
-        .catch((error) => {
-          this.$q.notify({
-            color: "negative",
-            position: "bottom-left",
-            message: error.response.data.msg,
-            progress: true,
-            timeout: 1500,
-          });
-        });
-    },
+  edit: async () => {
+    await Api.editRow(TABLE, editedItem.value.id, editedItem.value);
   },
+  remove: async (item) => {
+    await Api.removeRow(TABLE, item);
+  },
+});
+
+const uploadFile = (files) => {
+  form.value.organization_file = files[0];
 };
+const onRejected = (rejectedEntries) => {
+  $q.notify({
+    type: "negative",
+    message: `${rejectedEntries.length} file(s) did not pass validation constraints`,
+  });
+};
+
+await fetchData();
 </script>

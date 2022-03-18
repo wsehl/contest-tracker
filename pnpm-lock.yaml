@@ -26,6 +26,7 @@ specifiers:
   multer: ^1.4.4
   node-fetch: ^3.2.3
   nodemailer: ^6.7.2
+  nodemailer-smtp-transport: ^2.7.4
   nodemon: ^2.0.15
   pinia: ^2.0.12
   prettier: ^2.6.0
@@ -62,6 +63,7 @@ dependencies:
   multer: 1.4.4
   node-fetch: 3.2.3
   nodemailer: 6.7.2
+  nodemailer-smtp-transport: 2.7.4
   nodemon: 2.0.15
   pinia: 2.0.12_vue@3.2.31
   quasar: 2.6.1
@@ -2044,6 +2046,19 @@ packages:
     dev: false
     optional: true
 
+  /httpntlm/1.6.1:
+    resolution: {integrity: sha1-rQFScUOi6Hc8+uapb1hla7UqNLI=}
+    engines: {node: '>=0.8.0'}
+    dependencies:
+      httpreq: 0.5.2
+      underscore: 1.7.0
+    dev: false
+
+  /httpreq/0.5.2:
+    resolution: {integrity: sha512-2Jm+x9WkExDOeFRrdBCBSpLPT5SokTcRHkunV3pjKmX/cx6av8zQ0WtHUMDrYb6O4hBFzNU6sxJEypvRUVYKnw==}
+    engines: {node: '>= 6.15.1'}
+    dev: false
+
   /https-proxy-agent/5.0.0:
     resolution: {integrity: sha512-EkYm5BcKUGiduxzSt3Eppko+PiNWNEpa4ySk9vTC6wDsQJW9rHSa+UhGNJoRYp7bz6Ht1eaRIa6QaJqO5rCFbA==}
     engines: {node: '>= 6'}
@@ -2594,6 +2609,28 @@ packages:
     engines: {node: '>= 6.13.0'}
     dev: false
 
+  /nodemailer-fetch/1.6.0:
+    resolution: {integrity: sha1-ecSQihwPXzdbc/6IjamCj23JY6Q=}
+    dev: false
+
+  /nodemailer-shared/1.1.0:
+    resolution: {integrity: sha1-z1mU4v0mjQD1zw+nZ6CBae2wfsA=}
+    dependencies:
+      nodemailer-fetch: 1.6.0
+    dev: false
+
+  /nodemailer-smtp-transport/2.7.4:
+    resolution: {integrity: sha1-DYmvAZoUSkgP2OzJmZfZ+DjxNoU=}
+    dependencies:
+      nodemailer-shared: 1.1.0
+      nodemailer-wellknown: 0.1.10
+      smtp-connection: 2.12.0
+    dev: false
+
+  /nodemailer-wellknown/0.1.10:
+    resolution: {integrity: sha1-WG24EB2zDLRDjrVGc3pBqtDPE9U=}
+    dev: false
+
   /nodemailer/6.7.2:
     resolution: {integrity: sha512-Dz7zVwlef4k5R71fdmxwR8Q39fiboGbu3xgswkzGwczUfjp873rVxt1O46+Fh0j1ORnAC6L9+heI8uUpO6DT7Q==}
     engines: {node: '>=6.0.0'}
@@ -3132,6 +3169,13 @@ packages:
     resolution: {integrity: sha512-wnD2ZE+l+SPC/uoS0vXeE9L1+0wuaMqKlfz9AMUo38JsyLSBWSFcHR1Rri62LZc12vLr1gb3jl7iwQhgwpAbGQ==}
     dev: false
 
+  /smtp-connection/2.12.0:
+    resolution: {integrity: sha1-1275EnyyPCJZ7bHoNJwujV4tdME=}
+    dependencies:
+      httpntlm: 1.6.1
+      nodemailer-shared: 1.1.0
+    dev: false
+
   /snakeize/0.1.0:
     resolution: {integrity: sha1-EMCI2LWOsHazIpu1oE4jLOEmQi0=}
     dev: false
@@ -3342,6 +3386,10 @@ packages:
 
   /undefsafe/2.0.5:
     resolution: {integrity: sha512-WxONCrssBM8TSPRqN5EmsjVrsv4A8X12J4ArBiiayv3DyyG3ZlIg6yysuuSYdZsVz3TKcTg2fd//Ujd4CHV1iA==}
+    dev: false
+
+  /underscore/1.7.0:
+    resolution: {integrity: sha1-a7rwh3UA02vjTsqlhODbn+8DUgk=}
     dev: false
 
   /unique-string/2.0.0:
