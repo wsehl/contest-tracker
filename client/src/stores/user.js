@@ -30,5 +30,5 @@ export const useUserStore = defineStore("user", () => {
     token.value = "";
   }
 
-  return { user, isAdmin, isAuthenticated, login, logout };
+  return { user, token, isAdmin, isAuthenticated, login, logout };
 });
