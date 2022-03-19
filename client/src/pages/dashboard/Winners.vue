@@ -74,8 +74,9 @@ import { ref } from "vue";
 import { Api } from "@/api";
 import { useDashboard } from "@/composable/useDashboard";
 import { renameObjectKey } from "@/utils";
+import { TABLES } from "@/config";
 
-const TABLE = "winners";
+const TABLE = TABLES.WINNERS;
 const COLUMNS = [
   {
     name: "project_id",
@@ -148,7 +149,7 @@ const {
 });
 
 const fetchProjects = async () => {
-  const projects = await Api.getTable("projects");
+  const projects = await Api.getTable(TABLES.PROJECTS);
   projects.data.forEach((obj) => {
     renameObjectKey({
       obj,

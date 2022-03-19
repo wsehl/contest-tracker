@@ -1,8 +1,7 @@
 import axios from "axios";
-import { useUserStore } from "@/stores/user";
 import { Notify } from "quasar";
-
-const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:8889";
+import { useUserStore } from "@/stores/user";
+import { BACKEND_URL } from "@/config";
 
 const api = axios.create({
   baseURL: `${BACKEND_URL}/api`,

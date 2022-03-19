@@ -194,8 +194,9 @@ import { ref } from "vue";
 import { Api } from "@/api";
 import { renameObjectKey } from "@/utils";
 import { useDashboard } from "@/composable/useDashboard";
+import { TABLES } from "@/config";
 
-const TABLE = "grades";
+const TABLE = TABLES.GRADES;
 const COLUMNS = [
   {
     name: "name",
@@ -273,7 +274,7 @@ const {
 });
 
 const fetchCurators = async () => {
-  const curators = await Api.getTable("curators");
+  const curators = await Api.getTable(TABLES.CURATORS);
   curators.data.forEach((row) => {
     row.full_name = `${row.last_name} ${row.first_name} ${row.middle_name}`;
   });

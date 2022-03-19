@@ -47,8 +47,9 @@
 import { ref } from "vue";
 import { Api } from "@/api";
 import { useDashboard } from "@/composable/useDashboard";
+import { TABLES } from "@/config";
 
-const TABLE = "curators";
+const TABLE = TABLES.CURATORS;
 const COLUMNS = [
   {
     name: "full_name",

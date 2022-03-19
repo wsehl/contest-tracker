@@ -30,6 +30,7 @@ import { ref } from "vue";
 import { formatDate } from "@/utils";
 import { useRouter } from "vue-router";
 import { Api } from "@/api";
+import { TABLES } from "@/config";
 import { createAsyncProcess } from "@/composable/useAsync";
 
 const router = useRouter();
@@ -78,7 +79,7 @@ function goToEvent(event, row) {
 }
 
 const { run: fetchData, loading } = createAsyncProcess(async () => {
-  const response = await Api.getTable("events");
+  const response = await Api.getTable(TABLES.EVENTS);
   data.value = response.data;
 });
 

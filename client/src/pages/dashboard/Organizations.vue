@@ -71,10 +71,11 @@ import { ref } from "vue";
 import { Api } from "@/api";
 import { useDashboard } from "@/composable/useDashboard";
 import { useQuasar } from "quasar";
+import { TABLES } from "@/config";
 
 const $q = useQuasar();
 
-const TABLE = "organizations";
+const TABLE = TABLES.ORGANIZATIONS;
 const COLUMNS = [
   {
     name: "organization_name",

@@ -189,8 +189,9 @@
 import { ref } from "vue";
 import { Api } from "@/api";
 import { useDashboard } from "@/composable/useDashboard";
+import { TABLES } from "@/config";
 
-const TABLE = "users";
+const TABLE = TABLES.USERS;
 const ROLE_OPTIONS = ["Admin", "User", "Teacher", "Curator"];
 const COLUMNS = [
   {

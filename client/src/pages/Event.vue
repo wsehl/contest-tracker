@@ -54,7 +54,7 @@ import { Api } from "@/api";
 import { formatDate } from "@/utils";
 import { createAsyncProcess } from "@/composable/useAsync";
 import { useQuasar } from "quasar";
-import { FIREBASE_STORAGE } from "@/config";
+import { FIREBASE_STORAGE, TABLES } from "@/config";
 
 const route = useRoute();
 const $q = useQuasar();
@@ -65,7 +65,7 @@ const event = ref(null);
 
 const fetchData = async () => {
   $q.loading.show();
-  const response = await Api.getRow("events", route.params.id);
+  const response = await Api.getRow(TABLES.EVENTS, route.params.id);
   if (response.status === 404) {
     exists.value = false;
     event.value = response.data;

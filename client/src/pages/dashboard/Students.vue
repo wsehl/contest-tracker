@@ -70,8 +70,9 @@ import { ref } from "vue";
 import { Api } from "@/api";
 import { renameObjectKey } from "@/utils";
 import { useDashboard } from "@/composable/useDashboard";
+import { TABLES } from "@/config";
 
-const TABLE = "students";
+const TABLE = TABLES.STUDENTS;
 const COLUMNS = [
   {
     name: "last_name",
@@ -169,7 +170,7 @@ const {
 });
 
 const fetchGrades = async () => {
-  const response = await Api.getTable("grades");
+  const response = await Api.getTable(TABLES.GRADES);
   response.data.forEach((obj) =>
     renameObjectKey({
       obj,

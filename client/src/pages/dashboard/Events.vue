@@ -78,8 +78,9 @@ import { ref } from "vue";
 import { Api } from "@/api";
 import { useDashboard } from "@/composable/useDashboard";
 import { renameObjectKey } from "@/utils";
+import { TABLES } from "@/config";
 
-const TABLE = "events";
+const TABLE = TABLES.EVENTS;
 const COLUMNS = [
   {
     name: "event_title",
@@ -152,7 +153,7 @@ const {
 });
 
 const fetchOrganizations = async () => {
-  const response = await Api.getTable("organizations");
+  const response = await Api.getTable(TABLES.ORGANIZATIONS);
   response.data.forEach((obj) => {
     renameObjectKey({
       obj,

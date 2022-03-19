@@ -60,8 +60,9 @@ import { ref } from "vue";
 import { Api } from "@/api";
 import { useDashboard } from "@/composable/useDashboard";
 import { renameObjectKey } from "@/utils";
+import { TABLES } from "@/config";
 
-const TABLE = "projects";
+const TABLE = TABLES.PROJECTS;
 const COLUMNS = [
   {
     name: "name",
