@@ -73,10 +73,37 @@ const routes = [
     path: "/dashboard",
     name: "Dashboard",
     redirect: {
-      name: "DashboardUsers",
+      name: "DashboardEvents",
     },
     component: () => import("@/pages/Dashboard.vue"),
     children: [
+      {
+        path: "/dashboard/events",
+        name: "DashboardEvents",
+        component: () => import("@/pages/dashboard/Events.vue"),
+        meta: {
+          title: "[CRM] Конкурсы",
+          isAdmin: true,
+        },
+      },
+      {
+        path: "/dashboard/projects",
+        name: "DashboardProjects",
+        component: () => import("@/pages/dashboard/Projects.vue"),
+        meta: {
+          title: "[CRM] Проекты",
+          isAdmin: true,
+        },
+      },
+      {
+        path: "/dashboard/winners",
+        name: "DashboardWinners",
+        component: () => import("@/pages/dashboard/Winners.vue"),
+        meta: {
+          title: "[CRM] Победители",
+          isAdmin: true,
+        },
+      },
       {
         path: "/dashboard/users",
         name: "DashboardUsers",
@@ -92,15 +119,6 @@ const routes = [
         component: () => import("@/pages/dashboard/Organizations.vue"),
         meta: {
           title: "[CRM] Организации",
-          isAdmin: true,
-        },
-      },
-      {
-        path: "/dashboard/events",
-        name: "DashboardEvents",
-        component: () => import("@/pages/dashboard/Events.vue"),
-        meta: {
-          title: "[CRM] Конкурсы",
           isAdmin: true,
         },
       },
@@ -128,24 +146,6 @@ const routes = [
         component: () => import("@/pages/dashboard/Students.vue"),
         meta: {
           title: "[CRM] Ученики",
-          isAdmin: true,
-        },
-      },
-      {
-        path: "/dashboard/projects",
-        name: "DashboardProjects",
-        component: () => import("@/pages/dashboard/Projects.vue"),
-        meta: {
-          title: "[CRM] Проекты",
-          isAdmin: true,
-        },
-      },
-      {
-        path: "/dashboard/winners",
-        name: "DashboardWinners",
-        component: () => import("@/pages/dashboard/Winners.vue"),
-        meta: {
-          title: "[CRM] Победители",
           isAdmin: true,
         },
       },

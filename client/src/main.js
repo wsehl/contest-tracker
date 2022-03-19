@@ -7,7 +7,7 @@ import "@quasar/extras/material-icons/material-icons.css";
 import "@quasar/extras/material-icons-outlined/material-icons-outlined.css";
 import "@quasar/extras/material-icons-round/material-icons-round.css";
 import "@quasar/extras/material-icons-sharp/material-icons-sharp.css";
-import { Quasar, Notify, Loading } from "quasar";
+import { Quasar, Notify, Loading, LoadingBar } from "quasar";
 import langRu from "quasar/lang/ru";
 import router from "./router";
 import store from "./store";
@@ -18,8 +18,16 @@ const quasarConfig = {
   plugins: {
     Notify,
     Loading,
+    LoadingBar,
   },
   lang: langRu,
+  config: {
+    loadingBar: {
+      color: "blue",
+      size: "3px",
+      position: "top",
+    },
+  },
 };
 
 app.use(Quasar, quasarConfig).use(router).use(store);

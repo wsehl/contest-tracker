@@ -6,11 +6,27 @@
       </q-card-section>
       <q-separator inset></q-separator>
       <q-card-section class="q-gutter-md">
-        <q-input
-          v-model="form.organization_name"
+        <q-input v-model="form.place" dense outlined label="Место" />
+        <q-select
+          v-model="form.project"
           dense
           outlined
-          label="Название"
+          :options="projectOptions"
+          label="Проект"
+          input-debounce="0"
+        >
+          <template #no-option>
+            <q-item>
+              <q-item-section class="text-grey"> No results </q-item-section>
+            </q-item>
+          </template>
+        </q-select>
+        <q-input
+          v-model="form.description"
+          dense
+          outlined
+          label="Описание"
+          type="textarea"
         />
       </q-card-section>
       <q-card-actions class="q-px-md q-mb-md">
@@ -32,7 +48,7 @@
           rowsPerPage: 15,
         }"
         :loading="loading"
-        row-key="organization_name"
+        row-key="name"
       >
         <template #top-left>
           <q-input v-model="filter" outlined dense placeholder="Поиск">
@@ -41,13 +57,13 @@
             </template>
           </q-input>
         </template>
-        <template #body="props">
+        <!-- <template #body="props">
           <q-tr :props="props">
             <q-td key="organization_name" :props="props">
               {{ props.row.organization_name }}
             </q-td>
           </q-tr>
-        </template>
+        </template> -->
       </q-table>
     </template>
   </dashboard-template>
@@ -57,25 +73,35 @@
 import { ref } from "vue";
 import { Api } from "@/api";
 import { useDashboard } from "@/composable/useDashboard";
+import { renameObjectKey } from "@/utils";
 
-const TABLE = "organizations";
+const TABLE = "winners";
 const COLUMNS = [
   {
-    name: "organization_name",
+    name: "project_id",
     align: "left",
     label: "Название",
-    field: "organization_name",
+    field: "project_id",
+    sortable: true,
+  },
+  {
+    name: "place",
+    align: "left",
+    label: "Место",
+    field: "place",
     sortable: true,
   },
 ];
 
-const organization_uploader = ref();
-
 const form = ref({
-  first_name: "",
-  middle_name: "",
-  last_name: "",
+  place: "",
+  description: "",
+  project: {
+    label: "",
+    value: "",
+  },
 });
+const projectOptions = ref([]);
 
 const {
   data,
@@ -93,15 +119,21 @@ const {
   viewItem,
 } = useDashboard({
   submit: async () => {
-    const organization_credentials = new FormData();
-    organization_credentials.append("name", form.value.organization_name);
-    organization_credentials.append("file", form.value.organization_file);
-
-    await Api.insertToTable(TABLE, organization_credentials);
+    await Api.insertToTable(TABLE, {
+      project_id: form.value.project.value,
+      place: form.value.place,
+      description: form.value.description,
+    });
   },
   reset: () => {
-    form.value.organization_name = "";
-    organization_uploader.value.reset();
+    form.value = {
+      place: "",
+      description: "",
+      project: {
+        label: "",
+        value: "",
+      },
+    };
   },
   fetch: async () => {
     const response = await Api.getTable(TABLE);
@@ -115,5 +147,23 @@ const {
   },
 });
 
+const fetchProjects = async () => {
+  const projects = await Api.getTable("projects");
+  projects.data.forEach((obj) => {
+    renameObjectKey({
+      obj,
+      old_key: "id",
+      new_key: "value",
+    });
+    renameObjectKey({
+      obj,
+      old_key: "name",
+      new_key: "label",
+    });
+  });
+  projectOptions.value = projects.data;
+};
+
+await fetchProjects();
 await fetchData();
 </script>
