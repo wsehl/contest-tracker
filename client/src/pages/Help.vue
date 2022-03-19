@@ -53,42 +53,13 @@
   </q-page>
 </template>
 
-<script>
-import { askQuestion } from "@/api";
-import { reactive } from "vue";
+<script setup>
+import { Api } from "@/api";
+import { ref } from "vue";
 
-export default {
-  setup() {
-    let question = reactive("");
+const question = ref("");
 
-    const ask = async () => {
-      try {
-        // send request to server
-        const response = await askQuestion(question);
-
-        // show answer to user
-        this.$q.notify({
-          color: "positive",
-          position: "bottom-left",
-          message: response.msg,
-          progress: true,
-          timeout: 1500,
-        });
-      } catch (error) {
-        this.$q.notify({
-          color: "negative",
-          position: "bottom-left",
-          message: error.response.data.msg,
-          progress: true,
-          timeout: 1500,
-        });
-      }
-    };
-
-    return {
-      question,
-      ask,
-    };
-  },
+const submitQuestion = async () => {
+  await Api.askQuestion(question.value);
 };
 </script>

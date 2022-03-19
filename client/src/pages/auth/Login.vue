@@ -1,13 +1,13 @@
 <template>
   <q-page class="flex flex-center items-center">
     <q-card flat bordered class="login-card">
-      <q-form greedy @submit="authenticate">
+      <q-form greedy @submit="login">
         <q-card-section class="bg-blue-9">
           <h4 class="text-h5 text-white q-my-sm">Авторизация</h4>
         </q-card-section>
         <q-card-section>
           <q-input
-            v-model="user.username"
+            v-model="form.username"
             autofocus
             unelevated
             label="Имя пользователя"
@@ -16,7 +16,7 @@
             no-error-icon
           />
           <q-input
-            v-model="user.password"
+            v-model="form.password"
             type="password"
             unelevated
             label="Пароль"
@@ -34,6 +34,7 @@
             size="md"
             class="full-width"
             label="Войти"
+            :disable="loading"
           />
         </q-card-actions>
         <q-card-section class="text-center q-py-xs">
@@ -46,36 +47,21 @@
   </q-page>
 </template>
 
-<script>
-import { login } from "@/api";
+<script setup>
+import { ref } from "vue";
+import { useUserStore } from "@/stores/user";
+import { createAsyncProcess } from "@/composable/useAsync";
 
-export default {
-  data() {
-    return {
-      user: {
-        username: "",
-        password: "",
-      },
-    };
-  },
-  methods: {
-    async authenticate() {
-      try {
-        const response = await login(this.user);
-        const token = response.token;
-        const user = response.user;
-        this.$store.dispatch("login", { token, user });
-        if (this.$store.state.user.role === "Admin") {
-          this.$router.push({ name: "Dashboard" });
-        } else {
-          this.$router.push("/");
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    },
-  },
-};
+const userStore = useUserStore();
+
+const form = ref({
+  username: "",
+  password: "",
+});
+
+const { run: login, loading } = createAsyncProcess(async () => {
+  await userStore.login(form.value);
+});
 </script>
 
 <style lang="sass" scoped>

@@ -1,5 +1,5 @@
 import axios from "axios";
-import store from "@/store";
+import { useUserStore } from "@/stores/user";
 import { Notify } from "quasar";
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:8889";
@@ -7,6 +7,13 @@ const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:8889";
 const api = axios.create({
   baseURL: `${BACKEND_URL}/api`,
   withCredentials: true,
+});
+
+api.interceptors.request.use((request) => {
+  const userStore = useUserStore();
+  const token = userStore.token;
+  request.headers.Authorization = `Bearer ${token}`;
+  return request;
 });
 
 api.interceptors.response.use(
@@ -36,12 +43,6 @@ api.interceptors.response.use(
   }
 );
 
-api.interceptors.request.use((request) => {
-  const token = store.getters.getToken;
-  request.headers.Authorization = `Bearer ${token}`;
-  return request;
-});
-
 export const Api = {
   login(credentials) {
     return api.post(`/auth/login`, credentials);
@@ -56,7 +57,7 @@ export const Api = {
     return api.post(`/dashboard/${table}`, credentials);
   },
   getRow(table, id) {
-    return api.get(`/dashboard/${table}s/${id}`);
+    return api.get(`/dashboard/${table}/${id}`);
   },
   editRow(table, id, form) {
     return api.put(`/dashboard/${table}/${id}`, form);

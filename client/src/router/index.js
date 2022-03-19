@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
-import store from "@/store";
+import { useUserStore } from "@/stores/user";
 
 const routes = [
   {
@@ -192,19 +192,21 @@ const router = createRouter({
   routes,
 });
 
-const isAuthenticated = () => store.getters.isLoggedIn;
-const isAdmin = () => store.getters.isAdmin;
-
 router.beforeEach((to, from, next) => {
   if (to.meta.title) {
     document.title = to.meta.title;
   }
+
+  const userStore = useUserStore();
+
   if (to.meta.authForbidden) {
-    isAuthenticated() ? next({ name: "Home" }) : next();
+    userStore.isAuthenticated ? next({ name: "Home" }) : next();
   } else if (to.meta.authRequired) {
-    isAuthenticated() ? next() : next({ name: "Login" });
+    userStore.isAuthenticated ? next() : next({ name: "Login" });
   } else if (to.meta.isAdmin) {
-    isAuthenticated() && isAdmin() ? next() : next({ name: "Restricted" });
+    userStore.isAuthenticated && userStore.isAdmin
+      ? next()
+      : next({ name: "Restricted" });
   } else {
     next();
   }

@@ -35,7 +35,7 @@
             <q-img
               spinner-color="blue"
               class="image"
-              :src="`${url}/${event.organization_image}?alt=media`"
+              :src="`${FIREBASE_STORAGE}/${event.organization_image}?alt=media`"
             />
             <span class="organization">
               {{ event.organization_name }}
@@ -47,58 +47,37 @@
   </q-page>
 </template>
 
-<script>
-import { getRow } from "@/api";
-import { format } from "date-fns";
+<script setup>
+import { ref } from "vue";
+import { useRoute } from "vue-router";
+import { Api } from "@/api";
+import { formatDate } from "@/utils";
+import { createAsyncProcess } from "@/composable/useAsync";
+import { useQuasar } from "quasar";
+import { FIREBASE_STORAGE } from "@/config";
 
-export default {
-  data() {
-    return {
-      loading: true,
-      exists: false,
+const route = useRoute();
+const $q = useQuasar();
 
-      event: {},
-    };
-  },
-  computed: {
-    url() {
-      return `https://firebasestorage.googleapis.com/v0/b/contest-tracker-87dc8.appspot.com/o`;
-    },
-  },
-  created() {
-    this.$q.loading.show();
-    this.fetchData();
-  },
-  methods: {
-    formatDate(d) {
-      return format(new Date(d), "PP");
-    },
-    fetchData() {
-      getRow("event", this.$route.params.id)
-        .then((response) => {
-          if (response.status === 404) {
-            this.exists = false;
-          } else {
-            this.exists = true;
-            this.event = response.data[0];
-          }
-        })
-        .finally(() => {
-          this.loading = false;
-          this.$q.loading.hide();
-        })
-        .catch((error) => {
-          this.$q.notify({
-            color: "negative",
-            position: "bottom-left",
-            message: error.response.data.msg,
-            progress: true,
-            timeout: 1500,
-          });
-        });
-    },
-  },
+const exists = ref(false);
+
+const event = ref(null);
+
+const fetchData = async () => {
+  $q.loading.show();
+  const response = await Api.getRow("events", route.params.id);
+  if (response.status === 404) {
+    exists.value = false;
+    event.value = response.data;
+  } else {
+    exists.value = true;
+    event.value = response.data[0];
+  }
+  $q.loading.hide();
 };
+
+const { run, loading } = createAsyncProcess(fetchData);
+run();
 </script>
 
 <style lang="sass" scoped>

@@ -7,7 +7,7 @@
         </q-card-section>
         <q-card-section>
           <q-input
-            v-model="user.username"
+            v-model="form.username"
             autofocus
             unelevated
             label="Имя пользователя"
@@ -16,7 +16,7 @@
             no-error-icon
           />
           <q-input
-            v-model="user.email"
+            v-model="form.email"
             type="email"
             unelevated
             label="Email"
@@ -25,7 +25,7 @@
             no-error-icon
           />
           <q-input
-            v-model="user.password"
+            v-model="form.password"
             type="password"
             unelevated
             label="Пароль"
@@ -34,7 +34,7 @@
             no-error-icon
           />
           <q-input
-            v-model="user.password_repeat"
+            v-model="form.password_repeat"
             type="password"
             unelevated
             label="Пароль (ещё раз)"
@@ -52,6 +52,7 @@
             size="md"
             class="full-width"
             label="Зарегистрироваться"
+            :disabled="loading"
           />
         </q-card-actions>
         <q-card-section class="text-center q-py-xs">
@@ -64,31 +65,25 @@
   </q-page>
 </template>
 
-<script>
-import { signup } from "@/api";
+<script setup>
+import { ref } from "vue";
+import { useRouter } from "vue-router";
+import { createAsyncProcess } from "@/composable/useAsync";
+import { Api } from "@/api";
 
-export default {
-  data() {
-    return {
-      user: {
-        username: "",
-        email: "",
-        password: "",
-        password_repeat: "",
-      },
-    };
-  },
-  methods: {
-    async register() {
-      try {
-        await signup(this.user);
-        this.$router.push({ name: "Login" });
-      } catch (error) {
-        console.log(error);
-      }
-    },
-  },
-};
+const router = useRouter();
+
+const form = ref({
+  username: "",
+  email: "",
+  password: "",
+  password_repeat: "",
+});
+
+const { run: register, loading } = createAsyncProcess(async () => {
+  await Api.signup(form.value);
+  router.push({ name: "Login" });
+});
 </script>
 
 <style lang="sass" scoped>

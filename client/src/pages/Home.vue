@@ -1,5 +1,5 @@
 <template>
-  <q-page v-if="!loading">
+  <q-page>
     <q-parallax src="@/assets/hero.jpg" :height="420">
       <h3 class="text-white text-center">
         Проектная деятельность НИШ Павлодар
@@ -8,7 +8,7 @@
     <div class="container mx-auto">
       <div class="section-title">Актуальные конкурсы</div>
     </div>
-    <div class="carousel-wrapper">
+    <div class="carousel-wrapper" v-if="!loading">
       <carousel class="carousel" :items-to-show="3" :wrap-around="true">
         <slide v-for="item in events" :key="item.id" class="carousel-item">
           <div class="title">
@@ -28,7 +28,7 @@
             <q-img
               class="image"
               spinner-color="blue"
-              :src="`${url}/${item.organization_image}?alt=media`"
+              :src="`${FIREBASE_STORAGE}/${item.organization_image}?alt=media`"
             />
             <span class="organization">
               {{ item.organization_name }}
@@ -50,62 +50,33 @@
   </q-page>
 </template>
 
-<script>
-import { getTable } from "@/api";
-import "vue3-carousel/dist/carousel.css";
+<script setup>
+import { ref } from "vue";
+import { useQuasar } from "quasar";
+import { Api } from "@/api";
+import { FIREBASE_STORAGE } from "@/config";
+import { formatDate } from "@/utils";
+import { createAsyncProcess } from "@/composable/useAsync";
 import { Carousel, Slide, Pagination, Navigation } from "vue3-carousel";
-// const { format } = require("date-fns");
+import "vue3-carousel/dist/carousel.css";
 
-import { format } from "date-fns";
+const $q = useQuasar();
 
-export default {
-  components: {
-    Carousel,
-    Slide,
-    Pagination,
-    Navigation,
-  },
-  data() {
-    return {
-      loading: true,
-      organizations: [],
-      events: [],
-    };
-  },
-  computed: {
-    // firebase storage url
-    url() {
-      return `https://firebasestorage.googleapis.com/v0/b/contest-tracker-87dc8.appspot.com/o`;
-    },
-  },
-  created() {
-    // show loader while fetching data from server
-    this.$q.loading.show();
-    this.fetchData();
-  },
-  methods: {
-    formatDate(d) {
-      // format ISO date format into human-readable format
-      return format(new Date(d), "PP");
-    },
-    fetchData() {
-      // get data from server (organizations and events tables)
-      Promise.all([getTable("organizations"), getTable("events")])
-        .then((results) => {
-          this.organizations = results[0].data;
-          this.events = results[1].data;
-        })
-        .finally(() => {
-          // hide loader when date is fetched
-          this.loading = false;
-          this.$q.loading.hide();
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    },
-  },
-};
+const events = ref(null);
+const organizations = ref(null);
+
+const { run, loading } = createAsyncProcess(async () => {
+  $q.loading.show();
+  const [orgsData, eventsData] = await Promise.all([
+    Api.getTable("organizations"),
+    Api.getTable("events"),
+  ]);
+  organizations.value = orgsData.data;
+  events.value = eventsData.data;
+  $q.loading.hide();
+});
+
+run();
 </script>
 
 <style lang="sass" scoped>

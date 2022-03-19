@@ -38,15 +38,15 @@
           <div
             class="q-gutter-md text-body2 text-weight-medium row items-center no-wrap"
           >
-            <template v-if="user && user.role === 'Admin'">
-              <router-link :to="{ name: 'Dashboard' }" class="router-link">
-                Админ-панель
-              </router-link>
-            </template>
-            <template v-if="user">
+            <template v-if="userStore.isAuthenticated">
+              <template v-if="userStore.isAdmin">
+                <router-link :to="{ name: 'Dashboard' }" class="router-link">
+                  Админ-панель
+                </router-link>
+              </template>
               <q-btn dense flat no-wrap>
                 <div class="q-body-2" style="text-transform: none">
-                  {{ user.username }}
+                  {{ userStore.user.username }}
                 </div>
                 <q-icon name="arrow_drop_down" size="16px" />
                 <q-menu auto-close>
@@ -69,7 +69,6 @@
                     >
                       <q-item-section>Мои проекты</q-item-section>
                     </q-item>
-
                     <q-separator />
                     <q-item
                       clickable
@@ -80,7 +79,11 @@
                     >
                       <q-item-section>Помощь</q-item-section>
                     </q-item>
-                    <q-item clickable class="GL__menu-link" @click="logout">
+                    <q-item
+                      clickable
+                      class="GL__menu-link"
+                      @click="userStore.logout"
+                    >
                       <q-item-section>Выход</q-item-section>
                     </q-item>
                   </q-list>
@@ -102,21 +105,10 @@
   </q-header>
 </template>
 
-<script>
-import { mapActions, mapGetters } from "vuex";
+<script setup>
+import { useUserStore } from "@/stores/user";
 
-export default {
-  computed: {
-    ...mapGetters({
-      user: "getUser",
-    }),
-  },
-  methods: {
-    ...mapActions({
-      logout: "logout",
-    }),
-  },
-};
+const userStore = useUserStore();
 </script>
 
 <style lang="sass" scoped>
