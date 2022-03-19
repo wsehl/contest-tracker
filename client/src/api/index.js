@@ -69,31 +69,3 @@ export const Api = {
     return api.post("/help", q);
   },
 };
-
-export function login(credentials) {
-  return api.post(`/auth/login`, credentials);
-}
-export function signup(credentials) {
-  return api.post(`/auth/register`, credentials);
-}
-export function getTable(table) {
-  return api.get(`/dashboard/${table}`);
-}
-export function insertToTable(table, credentials) {
-  return api.post(`/dashboard/${table}`, credentials);
-}
-export function getRow(table, id) {
-  return api.get(`/dashboard/${table}s/${id}`);
-}
-export function removeRow(table, id) {
-  return api.delete(`/dashboard/${table}s/${id}`);
-}
-export function removeSeveralRows(table, cred) {
-  return api.post(`/dashboard/delete/${table}`, cred);
-}
-export function editRow(table, id, cred) {
-  return api.put(`/dashboard/${table}/${id}`, cred);
-}
-export function askQuestion(q) {
-  return api.post("/help", q);
-}
