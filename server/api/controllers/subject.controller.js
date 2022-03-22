@@ -1,12 +1,12 @@
 const logger = require("~services/logger");
-const { db } = require("~config/firebase.js");
+const firebase = require("~config/firebase.js");
 
 exports.addNew = async (req, res) => {
   const { name } = req.body;
 
   const newSubject = { name };
 
-  await db.collection("subjects").add(newSubject);
+  await firebase.db.collection("subjects").add(newSubject);
 
   logger.info(`Added subject: [${newSubject.name}]`);
 
@@ -18,7 +18,7 @@ exports.addNew = async (req, res) => {
 
 exports.getAll = async (req, res) => {
   const subjects = [];
-  const snapshot = await db.collection("subjects").get();
+  const snapshot = await firebase.db.collection("subjects").get();
 
   snapshot.forEach(async (doc) => {
     const subject = doc.data();

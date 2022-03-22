@@ -126,6 +126,5 @@ const fetchSubjects = async () => {
   subjectOptions.value = subjects.data;
 };
 
-await fetchSubjects();
-await fetchData();
+Promise.all([fetchSubjects(), fetchData()]);
 </script>

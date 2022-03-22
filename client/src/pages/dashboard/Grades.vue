@@ -288,6 +288,5 @@ const fetchCurators = async () => {
   curatorOptions.value = curators.data;
 };
 
-await fetchCurators();
-await fetchData();
+Promise.all([fetchCurators(), fetchData()]);
 </script>

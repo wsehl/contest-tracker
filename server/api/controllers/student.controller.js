@@ -1,5 +1,5 @@
 const logger = require("~services/logger");
-const { db } = require("~config/firebase.js");
+const firebase = require("~config/firebase.js");
 
 exports.addNew = async (req, res) => {
   const { grade_id, first_name, middle_name, last_name, study_lang } = req.body;
@@ -12,7 +12,7 @@ exports.addNew = async (req, res) => {
     study_lang,
   };
 
-  await db.collection("students").add(newStudent);
+  await firebase.db.collection("students").add(newStudent);
 
   logger.info(`Added student: [${newStudent.name}]`);
 
@@ -24,7 +24,7 @@ exports.addNew = async (req, res) => {
 
 exports.getAll = async (req, res) => {
   const students = [];
-  const snapshot = await db.collection("students").get();
+  const snapshot = await firebase.db.collection("students").get();
 
   snapshot.forEach(async (doc) => {
     const project = doc.data();
@@ -35,7 +35,7 @@ exports.getAll = async (req, res) => {
 
   await Promise.all(
     students.map((student) =>
-      db
+      firebase.db
         .collection("grades")
         .doc(student.grade_id)
         .get()
@@ -50,7 +50,7 @@ exports.getAll = async (req, res) => {
 
 exports.getOne = async (req, res) => {
   const studentId = req.params.id;
-  const doc = await db.collection("students").doc(studentId).get();
+  const doc = await firebase.db.collection("students").doc(studentId).get();
 
   if (!doc.exists) {
     return res.status(404).send({
@@ -60,8 +60,14 @@ exports.getOne = async (req, res) => {
   }
 
   const student = doc.data();
-  const grade = await db.collection("grades").doc(student.grade_id).get();
-  const curator = await db.collection("curators").doc(grade.curator_id).get();
+  const grade = await firebase.db
+    .collection("grades")
+    .doc(student.grade_id)
+    .get();
+  const curator = await firebase.db
+    .collection("curators")
+    .doc(grade.curator_id)
+    .get();
   student.grade = grade.data();
   student.grade.curator = curator.data();
 

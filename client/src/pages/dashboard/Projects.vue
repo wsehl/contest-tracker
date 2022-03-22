@@ -14,6 +14,50 @@
           label="Описание"
           type="textarea"
         />
+        <q-select
+          v-model="form.teacher"
+          dense
+          outlined
+          :options="teacherOptions"
+          label="Учитель"
+          input-debounce="0"
+        >
+          <template #no-option>
+            <q-item>
+              <q-item-section class="text-grey"> No results </q-item-section>
+            </q-item>
+          </template>
+        </q-select>
+        <q-select
+          v-model="form.subject"
+          dense
+          outlined
+          :options="subjectOptions"
+          label="Предмет"
+          input-debounce="0"
+        >
+          <template #no-option>
+            <q-item>
+              <q-item-section class="text-grey"> No results </q-item-section>
+            </q-item>
+          </template>
+        </q-select>
+        <q-select
+          v-model="form.students"
+          dense
+          outlined
+          :options="studentOptions"
+          multiple
+          label="Ученики"
+          input-debounce="0"
+        >
+          <template #no-option>
+            <q-item>
+              <q-item-section class="text-grey"> No results </q-item-section>
+            </q-item>
+          </template>
+        </q-select>
+        <q-date v-model="form.range" minimal flat bordered range />
       </q-card-section>
       <q-card-actions class="q-px-md q-mb-md">
         <q-btn
@@ -44,10 +88,22 @@
           </q-input>
         </template>
         <template #body="props">
-          <q-tr :props="props">
+          <q-tr :props="props" :expand="true">
             <q-td key="name" :props="props">
               {{ props.row.name }}
             </q-td>
+            <q-td key="teacher_name" :props="props">
+              {{
+                `${props.row.teacher.middle_name} ${props.row.teacher.first_name} ${props.row.teacher.last_name}`
+              }}
+            </q-td>
+            <q-td key="start_date" :props="props">
+              {{ formatDate(props.row.start_date) }}
+            </q-td>
+            <q-td key="end_date" :props="props">
+              {{ formatDate(props.row.end_date) }}
+            </q-td>
+            <q-td key="actions" :props="props"> Посмотреть </q-td>
           </q-tr>
         </template>
       </q-table>
@@ -59,7 +115,7 @@
 import { ref } from "vue";
 import { Api } from "@/api";
 import { useDashboard } from "@/composable/useDashboard";
-import { renameObjectKey } from "@/utils";
+import { renameObjectKey, formatDate } from "@/utils";
 import { TABLES } from "@/config";
 
 const TABLE = TABLES.PROJECTS;
@@ -71,12 +127,43 @@ const COLUMNS = [
     field: "name",
     sortable: true,
   },
+  {
+    name: "teacher_name",
+    align: "left",
+    label: "Учитель",
+    field: (row) => row.teacher.first_name,
+    sortable: true,
+  },
+  {
+    name: "start_date",
+    align: "left",
+    label: "Дата начала",
+    field: "start_date",
+    sortable: true,
+  },
+  {
+    name: "end_date",
+    align: "left",
+    label: "Дата окончания",
+    field: "end_date",
+    sortable: true,
+  },
+  {
+    name: "actions",
+    align: "right",
+    label: "Действия",
+    field: "actions",
+  },
 ];
 
 const form = ref({
   name: "",
   description: "",
+  range: { from: "", to: "" },
 });
+const teacherOptions = ref([]);
+const studentOptions = ref([]);
+const subjectOptions = ref([]);
 
 const {
   data,
@@ -94,15 +181,22 @@ const {
   viewItem,
 } = useDashboard({
   submit: async () => {
+    const userIds = form.value.students.map((student) => student.value);
     await Api.insertToTable(TABLE, {
       name: form.value.name,
       description: form.value.description,
+      start_date: form.value.range.from,
+      end_date: form.value.range.to,
+      teacher_id: form.value.teacher.value,
+      students_ids: userIds,
+      subject_id: form.value.subject.value,
     });
   },
   reset: () => {
     form.value = {
       name: "",
       description: "",
+      range: { from: "", to: "" },
     };
   },
   fetch: async () => {
@@ -117,5 +211,29 @@ const {
   },
 });
 
-await fetchData();
+const fetchSubjects = async () => {
+  const response = await Api.getTable(TABLES.SUBJECTS);
+  subjectOptions.value = response.data.map((subject) => ({
+    label: subject.name,
+    value: subject.id,
+  }));
+};
+
+const fetchTeachers = async () => {
+  const teachers = await Api.getTable(TABLES.TEACHERS);
+  teacherOptions.value = teachers.data.map((teacher) => ({
+    label: `${teacher.last_name} ${teacher.first_name} ${teacher.middle_name}`,
+    value: teacher.id,
+  }));
+};
+
+const fetchStudents = async () => {
+  const students = await Api.getTable(TABLES.STUDENTS);
+  studentOptions.value = students.data.map((student) => ({
+    label: `${student.last_name} ${student.first_name} ${student.middle_name}`,
+    value: student.id,
+  }));
+};
+
+Promise.all([fetchSubjects(), fetchTeachers(), fetchStudents(), fetchData()]);
 </script>

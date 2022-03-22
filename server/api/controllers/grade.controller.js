@@ -1,12 +1,12 @@
 const logger = require("~services/logger");
-const { db } = require("~config/firebase.js");
+const firebase = require("~config/firebase.js");
 
 exports.addNew = async (req, res) => {
   const { name, curator_id } = req.body;
 
   const newGrade = { name, curator_id };
 
-  await db.collection("grades").add(newGrade);
+  await firebase.db.collection("grades").add(newGrade);
 
   logger.info(`Added grade: [${newGrade.name}]`);
 
@@ -18,7 +18,7 @@ exports.addNew = async (req, res) => {
 
 exports.getAll = async (req, res) => {
   const grades = [];
-  const snapshot = await db.collection("grades").get();
+  const snapshot = await firebase.db.collection("grades").get();
 
   snapshot.forEach(async (doc) => {
     const grade = doc.data();
@@ -29,7 +29,7 @@ exports.getAll = async (req, res) => {
 
   await Promise.all(
     grades.map((grade) =>
-      db
+      firebase.db
         .collection("curators")
         .doc(grade.curator_id)
         .get()
@@ -44,7 +44,7 @@ exports.getAll = async (req, res) => {
 
 exports.getOne = async (req, res) => {
   const gradeId = req.params.id;
-  const doc = await db.collection("grades").doc(gradeId).get();
+  const doc = await firebase.db.collection("grades").doc(gradeId).get();
 
   if (!doc.exists) {
     return res.status(404).send({
@@ -53,7 +53,10 @@ exports.getOne = async (req, res) => {
     });
   }
   const grade = doc.data();
-  const curator = await db.collection("curators").doc(grade.curator_id).get();
+  const curator = await firebase.db
+    .collection("curators")
+    .doc(grade.curator_id)
+    .get();
   grade.curator = curator.data();
 
   return res.status(200).send({ data: grade });

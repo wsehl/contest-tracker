@@ -1,5 +1,5 @@
 const logger = require("~services/logger");
-const { db } = require("~config/firebase.js");
+const firebase = require("~config/firebase.js");
 
 exports.addNew = async (req, res) => {
   const {
@@ -15,14 +15,14 @@ exports.addNew = async (req, res) => {
   const newProject = {
     name,
     description,
-    start_date,
-    end_date,
+    start_date: new Date(start_date),
+    end_date: new Date(end_date),
     teacher_id,
     students_ids,
     subject_id,
   };
 
-  await db.collection("projects").add(newProject);
+  await firebase.db.collection("projects").add(newProject);
 
   logger.info(`Added project: [${newProject.name}]`);
 
@@ -34,7 +34,7 @@ exports.addNew = async (req, res) => {
 
 exports.getAll = async (req, res) => {
   const projects = [];
-  const snapshot = await db.collection("projects").get();
+  const snapshot = await firebase.db.collection("projects").get();
 
   snapshot.forEach(async (doc) => {
     const project = doc.data();
@@ -45,12 +45,24 @@ exports.getAll = async (req, res) => {
     projects.push(project);
   });
 
+  await Promise.all(
+    projects.map((item) =>
+      firebase.db
+        .collection("teachers")
+        .doc(item.teacher_id)
+        .get()
+        .then((teacher) => {
+          item.teacher = teacher.data();
+        })
+    )
+  );
+
   res.status(200).send({ data: projects });
 };
 
 exports.getOne = async (req, res) => {
   const projectId = req.params.id;
-  const doc = await db.collection("projects").doc(projectId).get();
+  const doc = await firebase.db.collection("projects").doc(projectId).get();
 
   if (!doc.exists) {
     return res.status(404).send({
@@ -63,10 +75,10 @@ exports.getOne = async (req, res) => {
   project.end_date = project.end_date.toDate();
 
   const [teacher, subject, ...students] = await Promise.all([
-    db.collection("teachers").doc(project.teacher_id).get(),
-    db.collection("subjects").doc(project.subject_id).get(),
+    firebase.db.collection("teachers").doc(project.teacher_id).get(),
+    firebase.db.collection("subjects").doc(project.subject_id).get(),
     ...project.students_ids.map((id) =>
-      db.collection("students").doc(id).get()
+      firebase.db.collection("students").doc(id).get()
     ),
   ]);
   project.teacher = teacher.data();

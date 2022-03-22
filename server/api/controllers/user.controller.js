@@ -128,7 +128,15 @@ exports.updateOne = async (req, res) => {
   const userId = req.params.id;
 
   const { username, email, role } = req.body;
-  const newUser = { username, role, email };
+
+  const doc = await firebase.db.collection("users").doc(userId).get();
+
+  const newUser = {
+    ...doc.data(),
+    username,
+    email,
+    role,
+  };
 
   await firebase.db.collection("users").doc(userId).set(newUser);
 

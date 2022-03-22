@@ -75,25 +75,13 @@ import { TABLES } from "@/config";
 const TABLE = TABLES.STUDENTS;
 const COLUMNS = [
   {
-    name: "last_name",
+    name: "full_name",
     align: "left",
-    label: "Фамилия",
-    field: "last_name",
+    label: "ФИО",
     sortable: true,
-  },
-  {
-    name: "first_name",
-    align: "left",
-    label: "Имя",
-    field: "first_name",
-    sortable: true,
-  },
-  {
-    name: "middle_name",
-    align: "left",
-    label: "Отчество",
-    field: "middle_name",
-    sortable: true,
+    field: (row) => {
+      return `${row.last_name} ${row.first_name} ${row.middle_name}`;
+    },
   },
   {
     name: "study_lang",
@@ -188,6 +176,5 @@ const fetchGrades = async () => {
   gradeOptions.value = response.data;
 };
 
-await fetchGrades();
-await fetchData();
+Promise.all([fetchGrades(), fetchData()]);
 </script>

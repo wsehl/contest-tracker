@@ -1,5 +1,5 @@
 const logger = require("~services/logger");
-const { db } = require("~config/firebase.js");
+const firebase = require("~config/firebase.js");
 
 exports.addNew = async (req, res) => {
   const { first_name, middle_name, last_name, phone } = req.body;
@@ -11,7 +11,7 @@ exports.addNew = async (req, res) => {
     phone,
   };
 
-  await db.collection("curators").add(newCurator);
+  await firebase.db.collection("curators").add(newCurator);
 
   logger.info(`Added curator: [${newCurator.name}]`);
 
@@ -23,7 +23,7 @@ exports.addNew = async (req, res) => {
 
 exports.getAll = async (req, res) => {
   const curators = [];
-  const snapshot = await db.collection("curators").get();
+  const snapshot = await firebase.db.collection("curators").get();
 
   snapshot.forEach(async (doc) => {
     const curator = doc.data();
@@ -37,7 +37,7 @@ exports.getAll = async (req, res) => {
 
 exports.getOne = async (req, res) => {
   const curatorId = req.params.id;
-  const doc = await db.collection("curators").doc(curatorId).get();
+  const doc = await firebase.db.collection("curators").doc(curatorId).get();
 
   if (!doc.exists) {
     return res.status(404).send({

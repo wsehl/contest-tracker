@@ -28,7 +28,7 @@
           label="Описание"
           type="textarea"
         />
-        <q-date v-model="form.event_range" flat bordered range />
+        <q-date v-model="form.event_range" minimal flat bordered range />
       </q-card-section>
       <q-card-actions class="q-px-md q-mb-md">
         <q-btn
@@ -169,6 +169,5 @@ const fetchOrganizations = async () => {
   organizationOptions.value = response.data;
 };
 
-await fetchOrganizations();
-await fetchData();
+Promise.all([fetchOrganizations(), fetchData()]);
 </script>

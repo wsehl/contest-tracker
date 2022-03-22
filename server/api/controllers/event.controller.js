@@ -1,5 +1,5 @@
 const logger = require("~services/logger");
-const { db } = require("~config/firebase.js");
+const firebase = require("~config/firebase.js");
 
 exports.addNew = async (req, res) => {
   const {
@@ -14,11 +14,11 @@ exports.addNew = async (req, res) => {
     organization_id: event_organization,
     event_title,
     event_description,
-    start_date: event_start_date,
-    end_date: event_end_date,
+    start_date: new Date(event_start_date),
+    end_date: new Date(event_end_date),
   };
 
-  await db.collection("events").add(newEvent);
+  await firebase.db.collection("events").add(newEvent);
 
   logger.info(`Added event: [${newEvent.event_title}]`);
 
@@ -30,27 +30,26 @@ exports.addNew = async (req, res) => {
 
 exports.getAll = async (req, res) => {
   const events = [];
-  const snapshot = await db.collection("events").get();
+  const snapshot = await firebase.db.collection("events").get();
 
   snapshot.forEach(async (doc) => {
     const event = doc.data();
     event.start_date = event.start_date.toDate();
     event.end_date = event.end_date.toDate();
     event.id = doc.id;
-
     events.push(event);
   });
 
   await Promise.all(
     events.map((event) =>
-      db
+      firebase.db
         .collection("organizations")
         .doc(event.organization_id)
         .get()
         .then((org_doc) => {
           const org = org_doc.data();
           event.organization_name = org.organization_name;
-          return db.collection("files").doc(org.file_id).get();
+          return firebase.db.collection("files").doc(org.file_id).get();
         })
         .then((file) => {
           const image = file.data().name;
@@ -64,7 +63,7 @@ exports.getAll = async (req, res) => {
 
 exports.getOne = async (req, res) => {
   const eventId = req.params.id;
-  const doc = await db.collection("events").doc(eventId).get();
+  const doc = await firebase.db.collection("events").doc(eventId).get();
 
   if (!doc.exists) {
     return res.status(404).send({
@@ -76,12 +75,15 @@ exports.getOne = async (req, res) => {
   event.start_date = event.start_date.toDate();
   event.end_date = event.end_date.toDate();
 
-  const org = await db
+  const org = await firebase.db
     .collection("organizations")
     .doc(event.organization_id)
     .get();
 
-  const file = await db.collection("files").doc(org.data().file_id).get();
+  const file = await firebase.db
+    .collection("files")
+    .doc(org.data().file_id)
+    .get();
 
   return res.send({
     data: [{ ...event, ...org.data(), organization_image: file.data().name }],

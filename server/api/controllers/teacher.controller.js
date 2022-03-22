@@ -1,5 +1,5 @@
 const logger = require("~services/logger");
-const { db } = require("~config/firebase.js");
+const firebase = require("~config/firebase.js");
 
 exports.addNew = async (req, res) => {
   const { first_name, middle_name, last_name, phone, subject_id } = req.body;
@@ -12,7 +12,7 @@ exports.addNew = async (req, res) => {
     subject_id,
   };
 
-  await db.collection("teachers").add(newTeacher);
+  await firebase.db.collection("teachers").add(newTeacher);
 
   logger.info(`Added teacher: [${newTeacher.name}]`);
 
@@ -24,7 +24,7 @@ exports.addNew = async (req, res) => {
 
 exports.getAll = async (req, res) => {
   const teachers = [];
-  const snapshot = await db.collection("teachers").get();
+  const snapshot = await firebase.db.collection("teachers").get();
 
   snapshot.forEach(async (doc) => {
     const teacher = doc.data();
@@ -38,7 +38,7 @@ exports.getAll = async (req, res) => {
 
 exports.getOne = async (req, res) => {
   const teacherId = req.params.id;
-  const doc = await db.collection("teachers").doc(teacherId).get();
+  const doc = await firebase.db.collection("teachers").doc(teacherId).get();
 
   if (!doc.exists) {
     return res.status(404).send({
@@ -49,7 +49,10 @@ exports.getOne = async (req, res) => {
 
   const teacher = doc.data();
 
-  const subject = db.collection("subjects").doc(teacher.subject_id).get();
+  const subject = firebase.db
+    .collection("subjects")
+    .doc(teacher.subject_id)
+    .get();
   teacher.subject = subject.data();
 
   return res.status(200).send({ data: teacher });

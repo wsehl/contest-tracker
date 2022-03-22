@@ -99,5 +99,5 @@ const {
   },
 });
 
-await fetchData();
+fetchData();
 </script>

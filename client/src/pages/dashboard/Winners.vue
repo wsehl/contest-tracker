@@ -21,6 +21,20 @@
             </q-item>
           </template>
         </q-select>
+        <q-select
+          v-model="form.event"
+          dense
+          outlined
+          :options="eventOptions"
+          label="Конкурс"
+          input-debounce="0"
+        >
+          <template #no-option>
+            <q-item>
+              <q-item-section class="text-grey"> No results </q-item-section>
+            </q-item>
+          </template>
+        </q-select>
         <q-input
           v-model="form.description"
           dense
@@ -57,13 +71,19 @@
             </template>
           </q-input>
         </template>
-        <!-- <template #body="props">
+        <template #body="props">
           <q-tr :props="props">
-            <q-td key="organization_name" :props="props">
-              {{ props.row.organization_name }}
+            <q-td key="event_title" :props="props">
+              {{ props.row.event.event_title }}
+            </q-td>
+            <q-td key="project_title" :props="props">
+              {{ props.row.project.name }}
+            </q-td>
+            <q-td key="place" :props="props">
+              {{ props.row.place }}
             </q-td>
           </q-tr>
-        </template> -->
+        </template>
       </q-table>
     </template>
   </dashboard-template>
@@ -79,10 +99,17 @@ import { TABLES } from "@/config";
 const TABLE = TABLES.WINNERS;
 const COLUMNS = [
   {
-    name: "project_id",
+    name: "event_title",
     align: "left",
-    label: "Название",
-    field: "project_id",
+    label: "Конкурс",
+    field: "event_title",
+    sortable: true,
+  },
+  {
+    name: "project_title",
+    align: "left",
+    label: "Проект",
+    field: "project_title",
     sortable: true,
   },
   {
@@ -101,8 +128,13 @@ const form = ref({
     label: "",
     value: "",
   },
+  event: {
+    label: "",
+    value: "",
+  },
 });
 const projectOptions = ref([]);
+const eventOptions = ref([]);
 
 const {
   data,
@@ -122,6 +154,7 @@ const {
   submit: async () => {
     await Api.insertToTable(TABLE, {
       project_id: form.value.project.value,
+      event_id: form.value.event.value,
       place: form.value.place,
       description: form.value.description,
     });
@@ -131,6 +164,10 @@ const {
       place: "",
       description: "",
       project: {
+        label: "",
+        value: "",
+      },
+      event: {
         label: "",
         value: "",
       },
@@ -165,6 +202,22 @@ const fetchProjects = async () => {
   projectOptions.value = projects.data;
 };
 
-await fetchProjects();
-await fetchData();
+const fetchEvents = async () => {
+  const events = await Api.getTable(TABLES.EVENTS);
+  events.data.forEach((obj) => {
+    renameObjectKey({
+      obj,
+      old_key: "id",
+      new_key: "value",
+    });
+    renameObjectKey({
+      obj,
+      old_key: "event_title",
+      new_key: "label",
+    });
+  });
+  eventOptions.value = events.data;
+};
+
+Promise.all([fetchProjects(), fetchEvents(), fetchData()]);
 </script>

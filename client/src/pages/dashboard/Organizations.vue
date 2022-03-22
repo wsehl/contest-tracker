@@ -142,5 +142,5 @@ const onRejected = (rejectedEntries) => {
   });
 };
 
-await fetchData();
+fetchData();
 </script>

@@ -1,6 +1,6 @@
 const multer = require("multer");
 const logger = require("~services/logger");
-const { db, default: firebase } = require("~config/firebase.js");
+const firebase = require("~config/firebase.js");
 
 const upload = multer({
   limits: {
@@ -74,7 +74,7 @@ exports.addNew = async (req, res) => {
 
 exports.getAll = async (req, res) => {
   const orgs = [];
-  const snapshot = await db.collection("organizations").get();
+  const snapshot = await firebase.db.collection("organizations").get();
 
   snapshot.forEach(async (doc) => {
     const org = doc.data();
@@ -85,7 +85,7 @@ exports.getAll = async (req, res) => {
 
   await Promise.all(
     orgs.map((org) =>
-      db
+      firebase.db
         .collection("files")
         .doc(org.file_id)
         .get()
