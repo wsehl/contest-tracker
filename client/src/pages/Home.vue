@@ -52,7 +52,6 @@
 
 <script setup>
 import { ref } from "vue";
-import { useQuasar } from "quasar";
 import { Api } from "@/api";
 import { FIREBASE_STORAGE, TABLES } from "@/config";
 import { formatDate } from "@/utils";
@@ -60,21 +59,17 @@ import { createAsyncProcess } from "@/composable/useAsync";
 import { Carousel, Slide, Pagination, Navigation } from "vue3-carousel";
 import "vue3-carousel/dist/carousel.css";
 
-const $q = useQuasar();
-
 const events = ref(null);
 const organizations = ref(null);
 
 const { run, loading } = createAsyncProcess(async () => {
-  $q.loading.show();
   const [orgsData, eventsData] = await Promise.all([
     Api.getTable(TABLES.ORGANIZATIONS),
     Api.getTable(TABLES.EVENTS),
   ]);
   organizations.value = orgsData.data;
   events.value = eventsData.data;
-  $q.loading.hide();
-});
+}, true);
 
 run();
 </script>

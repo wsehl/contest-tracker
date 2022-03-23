@@ -46,11 +46,20 @@
     <q-route-tab
       :ripple="false"
       :to="{
-        name: 'DashboardCurators',
+        name: 'DashboardGrades',
       }"
       exact
-      icon="engineering"
-      label="Кураторы"
+      icon="school"
+      label="Классы"
+    />
+    <q-route-tab
+      :ripple="false"
+      :to="{
+        name: 'DashboardUsers',
+      }"
+      exact
+      icon="assignment_ind"
+      label="Пользователи"
     />
     <q-route-tab
       :ripple="false"
@@ -73,20 +82,11 @@
     <q-route-tab
       :ripple="false"
       :to="{
-        name: 'DashboardUsers',
+        name: 'DashboardCurators',
       }"
       exact
-      icon="assignment_ind"
-      label="Пользователи"
-    />
-    <q-route-tab
-      :ripple="false"
-      :to="{
-        name: 'DashboardGrades',
-      }"
-      exact
-      icon="school"
-      label="Классы"
+      icon="engineering"
+      label="Кураторы"
     />
     <q-route-tab
       :ripple="false"

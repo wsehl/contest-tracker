@@ -123,6 +123,12 @@
               :options="ROLE_OPTIONS"
               label="Роль"
             />
+            <q-input
+              v-model="editedItem.password"
+              outlined
+              dense
+              label="Новый пароль"
+            />
           </div>
         </q-card-section>
         <q-card-actions align="center">
@@ -154,30 +160,31 @@
         </q-card-section>
         <q-card-section>
           <div class="q-gutter-md">
-            <q-input
-              v-model="viewedItem.username"
-              readonly
-              dense
-              outlined
-              label="Имя пользователя"
-            >
-            </q-input>
-            <q-input
-              v-model="viewedItem.email"
-              readonly
-              dense
-              outlined
-              label="Почта"
-            >
-            </q-input>
-            <q-input
-              v-model="viewedItem.role"
-              readonly
-              outlined
-              dense
-              label="Роль"
-            >
-            </q-input>
+            <q-field label="Имя пользователя" stack-label outlined dense>
+              <template #control>
+                {{ viewedItem.username }}
+              </template>
+            </q-field>
+            <q-field label="Почта" stack-label outlined dense>
+              <template #control>
+                {{ viewedItem.email }}
+              </template>
+            </q-field>
+            <q-field label="Роль" stack-label outlined dense>
+              <template #control>
+                {{ viewedItem.role }}
+              </template>
+            </q-field>
+            <q-field label="Последний вход" stack-label outlined dense>
+              <template #control>
+                {{ shortenDate(viewedItem.last_login) }}
+              </template>
+            </q-field>
+            <q-field label="Зарегистрирован" stack-label outlined dense>
+              <template #control>
+                {{ shortenDate(viewedItem.registered) }}
+              </template>
+            </q-field>
           </div>
         </q-card-section>
       </q-card>
@@ -190,6 +197,7 @@ import { ref } from "vue";
 import { Api } from "@/api";
 import { useDashboard } from "@/composable/useDashboard";
 import { TABLES } from "@/config";
+import { shortenDate } from "@/utils";
 
 const TABLE = TABLES.USERS;
 const ROLE_OPTIONS = ["Admin", "User", "Teacher", "Curator"];
@@ -198,28 +206,22 @@ const COLUMNS = [
     name: "username",
     align: "left",
     label: "Имя пользователя",
-    field: "username",
-    sortable: true,
   },
   {
     name: "email",
     align: "left",
     label: "Почта",
-    field: "email",
-    sortable: true,
   },
   {
     name: "role",
     align: "left",
     label: "Роль",
-    field: "role",
     sortable: true,
   },
   {
     name: "actions",
     align: "right",
     label: "Действия",
-    field: "actions",
   },
 ];
 

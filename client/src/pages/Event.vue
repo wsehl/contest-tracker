@@ -53,18 +53,15 @@ import { useRoute } from "vue-router";
 import { Api } from "@/api";
 import { formatDate } from "@/utils";
 import { createAsyncProcess } from "@/composable/useAsync";
-import { useQuasar } from "quasar";
 import { FIREBASE_STORAGE, TABLES } from "@/config";
 
 const route = useRoute();
-const $q = useQuasar();
 
 const exists = ref(false);
 
 const event = ref(null);
 
 const fetchData = async () => {
-  $q.loading.show();
   const response = await Api.getRow(TABLES.EVENTS, route.params.id);
   if (response.status === 404) {
     exists.value = false;
@@ -73,10 +70,10 @@ const fetchData = async () => {
     exists.value = true;
     event.value = response.data[0];
   }
-  $q.loading.hide();
 };
 
-const { run, loading } = createAsyncProcess(fetchData);
+const { run, loading } = createAsyncProcess(fetchData, true);
+
 run();
 </script>
 

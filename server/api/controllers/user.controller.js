@@ -80,6 +80,12 @@ exports.getAll = async (req, res) => {
     users.push(user);
   });
 
+  users.map((user) => {
+    user.password = null;
+    user.last_login = user.last_login.toDate();
+    user.registered = user.registered.toDate();
+  });
+
   return res.status(200).send({ data: users });
 };
 
@@ -127,15 +133,18 @@ exports.removeSeveralRows = async (req, res) => {
 exports.updateOne = async (req, res) => {
   const userId = req.params.id;
 
-  const { username, email, role } = req.body;
+  const { username, email, role, password } = req.body;
 
   const doc = await firebase.db.collection("users").doc(userId).get();
+
+  const hash = await bcrypt.hash(password, 10);
 
   const newUser = {
     ...doc.data(),
     username,
     email,
     role,
+    password: hash,
   };
 
   await firebase.db.collection("users").doc(userId).set(newUser);

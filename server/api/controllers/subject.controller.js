@@ -35,3 +35,20 @@ exports.removeOne = async (req, res) => {
   await firebase.db.collection("subjects").doc(id).delete();
   res.status(200).send({ msg: "Предмет удалён" });
 };
+
+exports.updateOne = async (req, res) => {
+  const id = req.params.id;
+
+  const { name } = req.body;
+
+  const doc = await firebase.db.collection("subjects").doc(id).get();
+
+  const newSubject = {
+    ...doc.data(),
+    name,
+  };
+
+  await firebase.db.collection("subjects").doc(id).set(newSubject);
+
+  res.status(200).send({ msg: "Предмет обновлён" });
+};

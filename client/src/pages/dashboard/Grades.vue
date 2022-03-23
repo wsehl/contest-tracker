@@ -202,13 +202,11 @@ const COLUMNS = [
     name: "name",
     align: "left",
     label: "Название",
-    sortable: true,
   },
   {
     name: "curator",
     align: "right",
     label: "Куратор",
-    sortable: true,
   },
   {
     name: "actions",
@@ -260,7 +258,10 @@ const {
     data.value = grades.data;
   },
   edit: async () => {
-    await Api.editRow(TABLE, editedItem.value.id, editedItem.value);
+    await Api.editRow(TABLE, editedItem.value.id, {
+      name: editedItem.value.name,
+      curator_id: editedItem.value.curator.value,
+    });
   },
   remove: async (item) => {
     await Api.removeRow(TABLE, item);

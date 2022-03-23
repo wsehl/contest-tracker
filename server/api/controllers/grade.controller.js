@@ -67,3 +67,21 @@ exports.removeOne = async (req, res) => {
   await firebase.db.collection("grades").doc(gradeId).delete();
   res.status(200).send({ msg: "Класс удалён" });
 };
+
+exports.updateOne = async (req, res) => {
+  const id = req.params.id;
+
+  const { name, curator_id } = req.body;
+
+  const doc = await firebase.db.collection("grades").doc(id).get();
+
+  const newGrade = {
+    ...doc.data(),
+    name,
+    curator_id,
+  };
+
+  await firebase.db.collection("grades").doc(id).set(newGrade);
+
+  res.status(200).send({ msg: "Класс обновлён" });
+};

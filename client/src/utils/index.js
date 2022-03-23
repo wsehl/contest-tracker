@@ -15,6 +15,10 @@ export const formatDate = (date) => {
   return dayjs(date).format("MMM D, YYYY");
 };
 
+export const shortenDate = (date) => {
+  return date.substring(0, 10);
+};
+
 export const formatName = (name) => {
   return `${name?.first_name} ${name?.last_name} ${name?.middle_name}`;
 };
