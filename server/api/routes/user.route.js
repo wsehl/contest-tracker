@@ -11,6 +11,8 @@ router
   .get(isLoggedIn, isAdmin, controller.getAll)
   .post(validate(add), controller.addNew);
 
+router.route("/password").post(isLoggedIn, controller.changePassword);
+
 router
   .route("/:id")
   .get(controller.getOne)

@@ -9,18 +9,23 @@ export const useUserStore = defineStore("user", () => {
   const user = useStorage(storeVar("user"), {
     role: ROLES.GUEST,
     username: null,
+    useId: null,
   });
-  const token = useStorage(storeVar("acces_token"), "");
+  const accessToken = useStorage(storeVar("acces_token"), "");
+  const refreshToken = useStorage(storeVar("refresh_token"), "");
 
-  const isAuthenticated = computed(() => token.value);
+  const isAuthenticated = computed(() => accessToken.value);
   const isAdmin = computed(() => user.value.role === "Admin");
 
   const login = async (credentials) => {
     const response = await Api.login(credentials);
+
     user.value = {
       ...response.user,
     };
-    token.value = response.token;
+    accessToken.value = response.accessToken;
+    refreshToken.value = response.refreshToken;
+
     if (user.value.role === "Admin") {
       router.push({ name: "Dashboard" });
     } else {
@@ -31,8 +36,17 @@ export const useUserStore = defineStore("user", () => {
   async function logout() {
     await router.push({ name: "Home" });
     user.value = {};
-    token.value = "";
+    accessToken.value = "";
+    refreshToken.value = "";
   }
 
-  return { user, token, isAdmin, isAuthenticated, login, logout };
+  return {
+    user,
+    accessToken,
+    refreshToken,
+    isAdmin,
+    isAuthenticated,
+    login,
+    logout,
+  };
 });

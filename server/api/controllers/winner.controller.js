@@ -167,3 +167,23 @@ exports.removeOne = async (req, res) => {
   await firebase.db.collection("winners").doc(id).delete();
   res.status(200).send({ msg: "Результат удалён" });
 };
+
+exports.updateOne = async (req, res) => {
+  const id = req.params.id;
+
+  const { place, description, event_id, project_id } = req.body;
+
+  const doc = await firebase.db.collection("winners").doc(id).get();
+
+  const newData = {
+    ...doc.data(),
+    place,
+    description,
+    event_id,
+    project_id,
+  };
+
+  await firebase.db.collection("winners").doc(id).set(newData);
+
+  res.status(200).send({ msg: "Результат обновлён" });
+};

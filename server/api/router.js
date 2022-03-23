@@ -16,15 +16,15 @@ const router = express.Router();
 router.get("/status", (req, res) => res.send("OK"));
 
 router.use("/auth", authRoutes);
-router.use("/dashboard/users", userRoutes);
-router.use("/dashboard/winners", winnerRoutes);
-router.use("/dashboard/teachers", teacherRoutes);
-router.use("/dashboard/subjects", subjectRoutes);
-router.use("/dashboard/students", studentRoutes);
-router.use("/dashboard/projects", projectRoutes);
-router.use("/dashboard/organizations", organizationRoutes);
-router.use("/dashboard/grades", gradeRoutes);
-router.use("/dashboard/events", eventRoutes);
-router.use("/dashboard/curators", curatorRoutes);
+router.use("/users", userRoutes);
+router.use("/winners", winnerRoutes);
+router.use("/teachers", teacherRoutes);
+router.use("/subjects", subjectRoutes);
+router.use("/students", studentRoutes);
+router.use("/projects", projectRoutes);
+router.use("/organizations", organizationRoutes);
+router.use("/grades", gradeRoutes);
+router.use("/events", eventRoutes);
+router.use("/curators", curatorRoutes);
 
 module.exports = router;

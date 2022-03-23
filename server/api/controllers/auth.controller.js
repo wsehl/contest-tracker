@@ -1,7 +1,14 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const firebase = require("~config/firebase.js");
+const {
+  ACCESS_TOKEN_KEY,
+  REFRESH_TOKEN_KEY,
+  ACCESS_TOKEN_EXPIRES_IN,
+  REFRESH_TOKEN_EXPIRES_IN,
+} = require("~config/tokens.js");
 const logger = require("~services/logger");
+const { verifyRefresh } = require("~services/jwt");
 
 exports.login = async (req, res) => {
   const { username, password } = req.body;
@@ -26,17 +33,21 @@ exports.login = async (req, res) => {
     });
   }
 
-  const token = jwt.sign(
-    {
-      username: user.username,
-      userId: doc.id,
-      role: user.role,
-    },
-    process.env.SECRET_KEY,
-    {
-      expiresIn: "365d",
-    }
-  );
+  const userId = doc.id;
+
+  const jwtData = {
+    username: user.username,
+    userId,
+    role: user.role,
+  };
+
+  const accessToken = jwt.sign(jwtData, ACCESS_TOKEN_KEY, {
+    expiresIn: ACCESS_TOKEN_EXPIRES_IN,
+  });
+
+  const refreshToken = jwt.sign(jwtData, REFRESH_TOKEN_KEY, {
+    expiresIn: REFRESH_TOKEN_EXPIRES_IN,
+  });
 
   userRef.doc(doc.id).update({ last_login: new Date() });
 
@@ -48,13 +59,37 @@ exports.login = async (req, res) => {
   const userData = {
     role: user.role,
     username: user.username,
+    userId,
   };
 
   return res.status(200).send({
     msg: "Logged in successfully",
-    token,
     user: userData,
+    accessToken,
+    refreshToken,
   });
+};
+
+exports.refreshToken = async (req, res) => {
+  const { refreshToken, user } = req.body;
+
+  const isValid = verifyRefresh(user, refreshToken);
+
+  const jwtData = {
+    username: user.username,
+    userId: user.userId,
+    role: user.role,
+  };
+
+  if (!isValid) {
+    return res.status(401).send({ msg: "Invalid token, try login again" });
+  }
+
+  const accessToken = jwt.sign(jwtData, ACCESS_TOKEN_KEY, {
+    expiresIn: ACCESS_TOKEN_EXPIRES_IN,
+  });
+
+  return res.status(201).send({ accessToken });
 };
 
 exports.register = async (req, res) => {
@@ -92,6 +127,5 @@ exports.register = async (req, res) => {
 
   res.status(201).send({
     msg: "Successfully registered",
-    status: 201,
   });
 };

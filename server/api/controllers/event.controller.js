@@ -95,3 +95,22 @@ exports.removeOne = async (req, res) => {
   await firebase.db.collection("events").doc(id).delete();
   res.status(200).send({ msg: "Конкурс удален" });
 };
+
+exports.updateOne = async (req, res) => {
+  const id = req.params.id;
+
+  const { event_title, organization_id, event_description } = req.body;
+
+  const doc = await firebase.db.collection("events").doc(id).get();
+
+  const newData = {
+    ...doc.data(),
+    event_title,
+    organization_id,
+    event_description,
+  };
+
+  await firebase.db.collection("events").doc(id).set(newData);
+
+  res.status(200).send({ msg: "Конкурс обновлён" });
+};

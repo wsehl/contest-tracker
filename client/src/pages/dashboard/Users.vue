@@ -177,12 +177,12 @@
             </q-field>
             <q-field label="Последний вход" stack-label outlined dense>
               <template #control>
-                {{ shortenDate(viewedItem.last_login) }}
+                {{ formatDate(viewedItem.last_login) }}
               </template>
             </q-field>
             <q-field label="Зарегистрирован" stack-label outlined dense>
               <template #control>
-                {{ shortenDate(viewedItem.registered) }}
+                {{ formatDate(viewedItem.registered) }}
               </template>
             </q-field>
           </div>
@@ -197,7 +197,7 @@ import { ref } from "vue";
 import { Api } from "@/api";
 import { useDashboard } from "@/composable/useDashboard";
 import { TABLES } from "@/config";
-import { shortenDate } from "@/utils";
+import { formatDate } from "@/utils";
 
 const TABLE = TABLES.USERS;
 const ROLE_OPTIONS = ["Admin", "User", "Teacher", "Curator"];

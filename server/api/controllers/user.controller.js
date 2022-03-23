@@ -103,16 +103,17 @@ exports.getOne = async (req, res) => {
   const user = doc.data();
   user.registered = user.registered.toDate();
   user.last_login = user.last_login.toDate();
+  delete user.password;
 
-  let info = {};
-  if (user.teacher_id)
-    info = await firebase.db.collection("teachers").doc(user.teacher_id).get();
-  if (user.student_id)
-    info = await firebase.db.collection("students").doc(user.student_id).get();
-  if (user.curator_id)
-    info = await firebase.db.collection("curators").doc(user.curator_id).get();
+  // let info = {};
+  // if (user.teacher_id)
+  //   info = await firebase.db.collection("teachers").doc(user.teacher_id).get();
+  // if (user.student_id)
+  //   info = await firebase.db.collection("students").doc(user.student_id).get();
+  // if (user.curator_id)
+  //   info = await firebase.db.collection("curators").doc(user.curator_id).get();
 
-  user.info = info.data();
+  // user.info = info.data();
 
   return res.status(200).send({ data: user });
 };
@@ -137,17 +138,32 @@ exports.updateOne = async (req, res) => {
 
   const doc = await firebase.db.collection("users").doc(userId).get();
 
-  const hash = await bcrypt.hash(password, 10);
-
   const newUser = {
     ...doc.data(),
     username,
     email,
     role,
-    password: hash,
+    ...(password && { password: await bcrypt.hash(password, 10) }),
   };
 
   await firebase.db.collection("users").doc(userId).set(newUser);
 
   res.status(200).send({ msg: "Пользователь обновлён" });
+};
+
+exports.changePassword = async (req, res) => {
+  const userId = req.user.userId;
+
+  const { password } = req.body;
+
+  const doc = await firebase.db.collection("users").doc(userId).get();
+
+  const newData = {
+    ...doc.data(),
+    ...(password && { password: await bcrypt.hash(password, 10) }),
+  };
+
+  await firebase.db.collection("users").doc(userId).set(newData);
+
+  res.status(200).send({ msg: "Пароль обновлён" });
 };

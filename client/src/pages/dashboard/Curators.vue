@@ -10,6 +10,14 @@
           <q-input v-model="form.last_name" dense outlined label="Фамилия" />
           <q-input v-model="form.first_name" dense outlined label="Имя" />
           <q-input v-model="form.middle_name" dense outlined label="Отчество" />
+          <q-input
+            v-model="form.phone"
+            outlined
+            dense
+            label="Телефон"
+            mask="phone"
+            prefix="+7"
+          />
         </q-card-section>
         <q-card-actions class="q-px-md q-mb-md">
           <q-btn
@@ -44,6 +52,9 @@
             <q-tr :props="props">
               <q-td key="full_name" :props="props">
                 {{ formatName(props.row) }}
+              </q-td>
+              <q-td key="phone" :props="props">
+                {{ props.row.phone }}
               </q-td>
               <q-td key="actions" :props="props">
                 <q-btn
@@ -102,6 +113,14 @@
               dense
               label="Отчество"
             />
+            <q-input
+              v-model="editedItem.phone"
+              outlined
+              dense
+              label="Телефон"
+              mask="phone"
+              prefix="+7"
+            />
           </div>
         </q-card-section>
         <q-card-actions align="center">
@@ -134,6 +153,12 @@ const COLUMNS = [
     field: (row) => formatName(row),
   },
   {
+    name: "phone",
+    align: "left",
+    label: "Телефон",
+    field: "phone",
+  },
+  {
     name: "actions",
     align: "right",
     label: "Действия",
@@ -144,6 +169,7 @@ const form = ref({
   first_name: "",
   middle_name: "",
   last_name: "",
+  phone: "",
 });
 
 const {
@@ -166,6 +192,7 @@ const {
       first_name: "",
       middle_name: "",
       last_name: "",
+      phone: "",
     };
   },
   fetch: async () => {

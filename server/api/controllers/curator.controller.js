@@ -60,7 +60,7 @@ exports.removeOne = async (req, res) => {
 exports.updateOne = async (req, res) => {
   const id = req.params.id;
 
-  const { first_name, middle_name, last_name } = req.body;
+  const { first_name, middle_name, last_name, phone } = req.body;
 
   const doc = await firebase.db.collection("curators").doc(id).get();
 
@@ -69,6 +69,7 @@ exports.updateOne = async (req, res) => {
     first_name,
     middle_name,
     last_name,
+    phone,
   };
 
   await firebase.db.collection("curators").doc(id).set(newData);

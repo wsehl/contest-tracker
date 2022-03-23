@@ -104,3 +104,20 @@ exports.removeOne = async (req, res) => {
   await firebase.db.collection("organizations").doc(id).delete();
   res.status(200).send({ msg: "Организация удалена" });
 };
+
+exports.updateOne = async (req, res) => {
+  const id = req.params.id;
+
+  const { organization_name } = req.body;
+
+  const doc = await firebase.db.collection("organizations").doc(id).get();
+
+  const newData = {
+    ...doc.data(),
+    organization_name,
+  };
+
+  await firebase.db.collection("organizations").doc(id).set(newData);
+
+  res.status(200).send({ msg: "Организация обновлена" });
+};
