@@ -74,6 +74,7 @@
         class="text-grey-8"
         :rows="data"
         :columns="COLUMNS"
+        :filter="filter"
         :pagination="{
           rowsPerPage: 15,
         }"
@@ -122,24 +123,28 @@ const COLUMNS = [
     name: "name",
     align: "left",
     label: "Название",
+    field: "name",
     sortable: true,
   },
   {
     name: "teacher_name",
     align: "left",
     label: "Учитель",
+    field: (row) => formatName(row.teacher),
     sortable: true,
   },
   {
     name: "start_date",
     align: "left",
     label: "Дата начала",
+    field: "start_date",
     sortable: true,
   },
   {
     name: "end_date",
     align: "left",
     label: "Дата окончания",
+    field: "end_date",
     sortable: true,
   },
   {

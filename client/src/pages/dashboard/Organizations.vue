@@ -41,6 +41,7 @@
         class="text-grey-8"
         :rows="data"
         :columns="COLUMNS"
+        :filter="filter"
         :pagination="{
           rowsPerPage: 15,
         }"

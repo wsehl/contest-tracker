@@ -25,6 +25,7 @@
         class="text-grey-8"
         :rows="data"
         :columns="COLUMNS"
+        :filter="filter"
         :pagination="{
           rowsPerPage: 15,
         }"
@@ -63,6 +64,7 @@ const COLUMNS = [
     name: "full_name",
     align: "left",
     label: "Имя",
+    field: (row) => formatName(row),
   },
 ];
 

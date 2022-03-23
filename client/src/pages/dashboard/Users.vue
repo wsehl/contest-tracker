@@ -38,11 +38,11 @@
           class="text-grey-8"
           :rows="data"
           :columns="COLUMNS"
+          :filter="filter"
           :pagination="{
             rowsPerPage: 15,
           }"
           :loading="loading"
-          :filter="filter"
           row-key="username"
         >
           <template #top-left>
@@ -206,16 +206,19 @@ const COLUMNS = [
     name: "username",
     align: "left",
     label: "Имя пользователя",
+    field: "username",
   },
   {
     name: "email",
     align: "left",
     label: "Почта",
+    field: "email",
   },
   {
     name: "role",
     align: "left",
     label: "Роль",
+    field: "role",
     sortable: true,
   },
   {

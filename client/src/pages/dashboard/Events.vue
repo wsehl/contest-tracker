@@ -45,11 +45,12 @@
         class="text-grey-8"
         :rows="data"
         :columns="COLUMNS"
+        :filter="filter"
         :pagination="{
           rowsPerPage: 15,
         }"
         :loading="loading"
-        row-key="organization_name"
+        row-key="event_title"
       >
         <template #top-left>
           <q-input v-model="filter" outlined dense placeholder="Поиск">
@@ -60,10 +61,10 @@
         </template>
         <template #body="props">
           <q-tr :props="props">
-            <q-td key="event_title" :props="props">
+            <q-td key="event" :props="props">
               {{ props.row.event_title }}
             </q-td>
-            <q-td key="organization_name" :props="props">
+            <q-td key="organization" :props="props">
               {{ props.row.organization_name }}
             </q-td>
           </q-tr>
@@ -82,15 +83,17 @@ import { TABLES } from "@/config";
 const TABLE = TABLES.EVENTS;
 const COLUMNS = [
   {
-    name: "event_title",
+    name: "event",
     align: "left",
     label: "Название",
+    field: "event_title",
     sortable: true,
   },
   {
-    name: "organization_name",
+    name: "organization",
     align: "left",
     label: "Организация",
+    field: "organization_name",
     sortable: true,
   },
 ];

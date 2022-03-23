@@ -4,8 +4,8 @@
       :loading="loading"
       title="Конкурсы"
       color="primary"
-      :rows="data"
       :columns="COLUMNS"
+      :rows="rows"
       :filter="filter"
       :pagination="{
         rowsPerPage: 15,
@@ -55,7 +55,7 @@ const COLUMNS = [
     label: "Дата начала",
     field: "start_date",
     sortable: true,
-    format: (val, row) => `${formatDate(row.start_date)}`,
+    format: (val, row) => formatDate(row.start_date),
     align: "center",
   },
   {
@@ -63,12 +63,12 @@ const COLUMNS = [
     label: "Дата конца",
     field: "end_date",
     sortable: true,
-    format: (val, row) => `${formatDate(row.end_date)}`,
+    format: (val, row) => formatDate(row.end_date),
     align: "center",
   },
 ];
 
-const data = ref([]);
+const rows = ref([]);
 const filter = ref("");
 
 function goToEvent(event, row) {
@@ -80,7 +80,7 @@ function goToEvent(event, row) {
 
 const { run: fetchData, loading } = createAsyncProcess(async () => {
   const response = await Api.getTable(TABLES.EVENTS);
-  data.value = response.data;
+  rows.value = response.data;
 });
 
 fetchData();

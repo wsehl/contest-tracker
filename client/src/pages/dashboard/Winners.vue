@@ -58,6 +58,7 @@
         class="text-grey-8"
         :rows="data"
         :columns="COLUMNS"
+        :filter="filter"
         :pagination="{
           rowsPerPage: 15,
         }"
@@ -101,18 +102,21 @@ const COLUMNS = [
     name: "event_title",
     align: "left",
     label: "Конкурс",
+    field: (row) => row.event.event_title,
     sortable: true,
   },
   {
     name: "project_title",
     align: "left",
     label: "Проект",
+    field: (row) => row.project.name,
     sortable: true,
   },
   {
     name: "place",
     align: "left",
     label: "Место",
+    field: "place",
     sortable: true,
   },
 ];

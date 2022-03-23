@@ -47,6 +47,7 @@
         class="text-grey-8"
         :rows="data"
         :columns="COLUMNS"
+        :filter="filter"
         :pagination="{
           rowsPerPage: 15,
         }"
@@ -91,18 +92,21 @@ const COLUMNS = [
     name: "full_name",
     align: "left",
     label: "ФИО",
+    field: (row) => formatName(row),
     sortable: true,
   },
   {
     name: "study_lang",
     align: "left",
     label: "Язык обучения",
+    field: "study_lang",
     sortable: true,
   },
   {
     name: "grade_name",
     align: "left",
     label: "Класс",
+    field: (row) => row.grade.name,
     sortable: true,
   },
 ];

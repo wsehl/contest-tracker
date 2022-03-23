@@ -44,11 +44,11 @@
           class="text-grey-8"
           :rows="data"
           :columns="COLUMNS"
+          :filter="filter"
           :pagination="{
             rowsPerPage: 15,
           }"
           :loading="loading"
-          :filter="filter"
           row-key="name"
         >
           <template #top-left>
@@ -202,11 +202,13 @@ const COLUMNS = [
     name: "name",
     align: "left",
     label: "Название",
+    field: "name",
   },
   {
     name: "curator",
     align: "right",
     label: "Куратор",
+    field: (row) => formatName(row.curator),
   },
   {
     name: "actions",
