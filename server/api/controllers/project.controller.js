@@ -93,3 +93,24 @@ exports.removeOne = async (req, res) => {
   await firebase.db.collection("projects").doc(id).delete();
   res.status(200).send({ msg: "Проект удалён" });
 };
+
+exports.updateOne = async (req, res) => {
+  const id = req.params.id;
+
+  const { name, description, teacher_id, start_date, end_date } = req.body;
+
+  const doc = await firebase.db.collection("projects").doc(id).get();
+
+  const newData = {
+    ...doc.data(),
+    name,
+    description,
+    teacher_id,
+    start_date: new Date(start_date),
+    end_date: new Date(end_date),
+  };
+
+  await firebase.db.collection("projects").doc(id).set(newData);
+
+  res.status(200).send({ msg: "Проект обновлён" });
+};

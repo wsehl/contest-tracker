@@ -56,3 +56,22 @@ exports.removeOne = async (req, res) => {
   await firebase.db.collection("curators").doc(id).delete();
   res.status(200).send({ msg: "Куратор удален" });
 };
+
+exports.updateOne = async (req, res) => {
+  const id = req.params.id;
+
+  const { first_name, middle_name, last_name } = req.body;
+
+  const doc = await firebase.db.collection("curators").doc(id).get();
+
+  const newData = {
+    ...doc.data(),
+    first_name,
+    middle_name,
+    last_name,
+  };
+
+  await firebase.db.collection("curators").doc(id).set(newData);
+
+  res.status(200).send({ msg: "Куратор обновлён" });
+};

@@ -15,7 +15,8 @@
   "_moduleAliases": {
     "~root": ".",
     "~config": "./server/config",
-    "~services": "./server/services"
+    "~services": "./server/services",
+    "~shared": "./shared"
   },
   "dependencies": {
     "@firebase/app-compat": "^0.1.20",

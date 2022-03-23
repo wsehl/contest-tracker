@@ -21,13 +21,7 @@
             :options="curatorOptions"
             label="Куратор"
             input-debounce="0"
-          >
-            <template #no-option>
-              <q-item>
-                <q-item-section class="text-grey"> No results </q-item-section>
-              </q-item>
-            </template>
-          </q-select>
+          />
         </q-card-section>
         <q-card-actions class="q-px-md q-mb-md">
           <q-btn
@@ -67,13 +61,6 @@
                 {{ props.row.curator.label }}
               </q-td>
               <q-td key="actions" :props="props">
-                <q-btn
-                  icon="visibility"
-                  size="sm"
-                  no-caps
-                  unelevated
-                  @click="viewItem(props.row)"
-                />
                 <q-btn
                   icon="edit"
                   size="sm"
@@ -126,15 +113,7 @@
               :options="curatorOptions"
               label="Куратор"
               input-debounce="0"
-            >
-              <template #no-option>
-                <q-item>
-                  <q-item-section class="text-grey">
-                    No results
-                  </q-item-section>
-                </q-item>
-              </template>
-            </q-select>
+            />
           </div>
         </q-card-section>
         <q-card-actions align="center">
@@ -146,44 +125,6 @@
             @click="editRow"
           />
         </q-card-actions>
-      </q-card>
-    </q-dialog>
-    <q-dialog v-model="showViewDialog">
-      <q-card style="min-width: 350px">
-        <q-card-section>
-          <div class="text-h6">
-            Просмотр
-            <q-btn
-              v-close-popup
-              round
-              flat
-              dense
-              icon="close"
-              class="float-right"
-              color="grey-8"
-            />
-          </div>
-        </q-card-section>
-        <q-card-section>
-          <div class="q-gutter-md">
-            <q-input
-              v-model="viewedItem.name"
-              :mask="MASK"
-              readonly
-              dense
-              outlined
-              label="Класс"
-            />
-            <q-select
-              v-model="viewedItem.curator"
-              dense
-              outlined
-              :options="curatorOptions"
-              label="Куратор"
-              readonly
-            />
-          </div>
-        </q-card-section>
       </q-card>
     </q-dialog>
   </div>
@@ -229,15 +170,12 @@ const {
   loading,
   filter,
   showEditDialog,
-  showViewDialog,
   editedItem,
-  viewedItem,
   onSubmit,
   fetchData,
   editRow,
   removeRow,
   editItem,
-  viewItem,
 } = useDashboard({
   submit: async () => {
     await Api.insertToTable(TABLE, {

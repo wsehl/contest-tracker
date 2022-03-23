@@ -45,11 +45,15 @@ exports.login = async (req, res) => {
 
   logger.info(`Logged in user: [${user.username}] with role: [${user.role}]`);
 
-  delete user.password;
+  const userData = {
+    role: user.role,
+    username: user.username,
+  };
+
   return res.status(200).send({
     msg: "Logged in successfully",
     token,
-    user,
+    user: userData,
   });
 };
 

@@ -14,13 +14,7 @@
           :options="organizationOptions"
           label="Организация"
           input-debounce="0"
-        >
-          <template #no-option>
-            <q-item>
-              <q-item-section class="text-grey"> No results </q-item-section>
-            </q-item>
-          </template>
-        </q-select>
+        />
         <q-input
           v-model="form.event_description"
           dense

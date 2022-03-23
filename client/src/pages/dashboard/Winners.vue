@@ -14,13 +14,7 @@
           :options="projectOptions"
           label="Проект"
           input-debounce="0"
-        >
-          <template #no-option>
-            <q-item>
-              <q-item-section class="text-grey"> No results </q-item-section>
-            </q-item>
-          </template>
-        </q-select>
+        />
         <q-select
           v-model="form.event"
           dense
@@ -28,13 +22,7 @@
           :options="eventOptions"
           label="Конкурс"
           input-debounce="0"
-        >
-          <template #no-option>
-            <q-item>
-              <q-item-section class="text-grey"> No results </q-item-section>
-            </q-item>
-          </template>
-        </q-select>
+        />
         <q-input
           v-model="form.description"
           dense

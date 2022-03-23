@@ -20,5 +20,5 @@ export const shortenDate = (date) => {
 };
 
 export const formatName = (name) => {
-  return `${name?.first_name} ${name?.last_name} ${name?.middle_name}`;
+  return `${name?.last_name} ${name?.first_name} ${name?.middle_name}`;
 };
