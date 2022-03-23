@@ -61,3 +61,9 @@ exports.getOne = async (req, res) => {
 
   return res.status(200).send({ data: grade });
 };
+
+exports.removeOne = async (req, res) => {
+  const gradeId = req.params.id;
+  await firebase.db.collection("grades").doc(gradeId).delete();
+  res.status(200).send({ msg: "Класс удалён" });
+};

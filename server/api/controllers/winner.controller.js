@@ -161,3 +161,9 @@ exports.getOne = async (req, res) => {
 
   return res.status(200).send({ data: winner });
 };
+
+exports.removeOne = async (req, res) => {
+  const id = req.params.id;
+  await firebase.db.collection("winners").doc(id).delete();
+  res.status(200).send({ msg: "Результат удалён" });
+};

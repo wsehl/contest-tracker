@@ -51,7 +51,7 @@
           rowsPerPage: 15,
         }"
         :loading="loading"
-        row-key="organization_name"
+        row-key="grade_name"
       >
         <template #top-left>
           <q-input v-model="filter" outlined dense placeholder="Поиск">
@@ -59,6 +59,19 @@
               <q-icon name="search" />
             </template>
           </q-input>
+        </template>
+        <template #body="props">
+          <q-tr :props="props">
+            <q-td key="full_name" :props="props">
+              {{ formatName(props.row) }}
+            </q-td>
+            <q-td key="study_lang" :props="props">
+              {{ props.row.study_lang }}
+            </q-td>
+            <q-td key="grade_name" :props="props">
+              {{ props.row.grade.name }}
+            </q-td>
+          </q-tr>
         </template>
       </q-table>
     </template>
@@ -68,7 +81,7 @@
 <script setup>
 import { ref } from "vue";
 import { Api } from "@/api";
-import { renameObjectKey } from "@/utils";
+import { formatName } from "@/utils";
 import { useDashboard } from "@/composable/useDashboard";
 import { TABLES } from "@/config";
 
@@ -79,24 +92,17 @@ const COLUMNS = [
     align: "left",
     label: "ФИО",
     sortable: true,
-    field: (row) => {
-      return `${row.last_name} ${row.first_name} ${row.middle_name}`;
-    },
   },
   {
     name: "study_lang",
     align: "left",
     label: "Язык обучения",
-    field: "study_lang",
     sortable: true,
   },
   {
     name: "grade_name",
     align: "left",
     label: "Класс",
-    field: (row) => {
-      return row.grade?.name;
-    },
     sortable: true,
   },
 ];
@@ -106,8 +112,8 @@ const form = ref({
   first_name: "",
   middle_name: "",
   last_name: "",
-  grade: null,
   study_lang: "",
+  grade: null,
 });
 const gradeOptions = ref([]);
 
@@ -141,8 +147,8 @@ const {
       first_name: "",
       middle_name: "",
       last_name: "",
-      grade: null,
       study_lang: "",
+      grade: null,
     };
   },
   fetch: async () => {
@@ -159,21 +165,12 @@ const {
 
 const fetchGrades = async () => {
   const response = await Api.getTable(TABLES.GRADES);
-  response.data.forEach((obj) =>
-    renameObjectKey({
-      obj,
-      old_key: "name",
-      new_key: "label",
-    })
-  );
-  response.data.forEach((obj) =>
-    renameObjectKey({
-      obj,
-      old_key: "curator_id",
-      new_key: "value",
-    })
-  );
-  gradeOptions.value = response.data;
+  gradeOptions.value = response.data.map((item) => {
+    return {
+      label: item.name,
+      value: item.id,
+    };
+  });
 };
 
 Promise.all([fetchGrades(), fetchData()]);

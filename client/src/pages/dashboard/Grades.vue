@@ -192,7 +192,7 @@
 <script setup>
 import { ref } from "vue";
 import { Api } from "@/api";
-import { renameObjectKey } from "@/utils";
+import { formatName } from "@/utils";
 import { useDashboard } from "@/composable/useDashboard";
 import { TABLES } from "@/config";
 
@@ -202,21 +202,18 @@ const COLUMNS = [
     name: "name",
     align: "left",
     label: "Название",
-    field: "name",
     sortable: true,
   },
   {
     name: "curator",
     align: "right",
     label: "Куратор",
-    field: "label",
     sortable: true,
   },
   {
     name: "actions",
     align: "right",
     label: "Действия",
-    field: "actions",
   },
 ];
 const MASK = "##A";
@@ -245,16 +242,13 @@ const {
   submit: async () => {
     await Api.insertToTable(TABLE, {
       name: form.value.name,
-      curator_id: form.value.curator.id,
+      curator_id: form.value.curator.value,
     });
   },
   reset: () => {
     form.value = {
       name: "",
-      curator: {
-        label: "",
-        value: "",
-      },
+      curator: null,
     };
   },
   fetch: async () => {
@@ -275,17 +269,12 @@ const {
 
 const fetchCurators = async () => {
   const curators = await Api.getTable(TABLES.CURATORS);
-  curators.data.forEach((row) => {
-    row.full_name = `${row.last_name} ${row.first_name} ${row.middle_name}`;
+  curatorOptions.value = curators.data.map((curator) => {
+    return {
+      label: formatName(curator),
+      value: curator.id,
+    };
   });
-  curators.data.forEach((obj) =>
-    renameObjectKey({
-      obj,
-      old_key: "full_name",
-      new_key: "label",
-    })
-  );
-  curatorOptions.value = curators.data;
 };
 
 Promise.all([fetchCurators(), fetchData()]);

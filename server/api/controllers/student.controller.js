@@ -73,3 +73,9 @@ exports.getOne = async (req, res) => {
 
   return res.status(200).send({ data: student });
 };
+
+exports.removeOne = async (req, res) => {
+  const id = req.params.id;
+  await firebase.db.collection("students").doc(id).delete();
+  res.status(200).send({ msg: "Ученик удалён" });
+};

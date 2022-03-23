@@ -38,6 +38,13 @@
             </template>
           </q-input>
         </template>
+        <template #body="props">
+          <q-tr :props="props">
+            <q-td key="full_name" :props="props">
+              {{ formatName(props.row) }}
+            </q-td>
+          </q-tr>
+        </template>
       </q-table>
     </template>
   </dashboard-template>
@@ -47,6 +54,7 @@
 import { ref } from "vue";
 import { Api } from "@/api";
 import { useDashboard } from "@/composable/useDashboard";
+import { formatName } from "@/utils";
 import { TABLES } from "@/config";
 
 const TABLE = TABLES.CURATORS;
@@ -55,7 +63,6 @@ const COLUMNS = [
     name: "full_name",
     align: "left",
     label: "Имя",
-    field: "full_name",
   },
 ];
 
@@ -92,9 +99,6 @@ const {
   },
   fetch: async () => {
     const response = await Api.getTable(TABLE);
-    response.data.forEach((row) => {
-      row.full_name = `${row.last_name} ${row.first_name} ${row.middle_name}`;
-    });
     data.value = response.data;
   },
   edit: async () => {

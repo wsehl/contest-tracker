@@ -93,9 +93,7 @@
               {{ props.row.name }}
             </q-td>
             <q-td key="teacher_name" :props="props">
-              {{
-                `${props.row.teacher.middle_name} ${props.row.teacher.first_name} ${props.row.teacher.last_name}`
-              }}
+              {{ formatName(props.row.teacher) }}
             </q-td>
             <q-td key="start_date" :props="props">
               {{ formatDate(props.row.start_date) }}
@@ -115,7 +113,7 @@
 import { ref } from "vue";
 import { Api } from "@/api";
 import { useDashboard } from "@/composable/useDashboard";
-import { renameObjectKey, formatDate } from "@/utils";
+import { formatDate, formatName } from "@/utils";
 import { TABLES } from "@/config";
 
 const TABLE = TABLES.PROJECTS;
@@ -124,35 +122,30 @@ const COLUMNS = [
     name: "name",
     align: "left",
     label: "Название",
-    field: "name",
     sortable: true,
   },
   {
     name: "teacher_name",
     align: "left",
     label: "Учитель",
-    field: (row) => row.teacher.first_name,
     sortable: true,
   },
   {
     name: "start_date",
     align: "left",
     label: "Дата начала",
-    field: "start_date",
     sortable: true,
   },
   {
     name: "end_date",
     align: "left",
     label: "Дата окончания",
-    field: "end_date",
     sortable: true,
   },
   {
     name: "actions",
     align: "right",
     label: "Действия",
-    field: "actions",
   },
 ];
 
@@ -181,14 +174,13 @@ const {
   viewItem,
 } = useDashboard({
   submit: async () => {
-    const userIds = form.value.students.map((student) => student.value);
     await Api.insertToTable(TABLE, {
       name: form.value.name,
       description: form.value.description,
       start_date: form.value.range.from,
       end_date: form.value.range.to,
       teacher_id: form.value.teacher.value,
-      students_ids: userIds,
+      students_ids: form.value.students.map((student) => student.value),
       subject_id: form.value.subject.value,
     });
   },
@@ -222,7 +214,7 @@ const fetchSubjects = async () => {
 const fetchTeachers = async () => {
   const teachers = await Api.getTable(TABLES.TEACHERS);
   teacherOptions.value = teachers.data.map((teacher) => ({
-    label: `${teacher.last_name} ${teacher.first_name} ${teacher.middle_name}`,
+    label: formatName(teacher),
     value: teacher.id,
   }));
 };
@@ -230,7 +222,7 @@ const fetchTeachers = async () => {
 const fetchStudents = async () => {
   const students = await Api.getTable(TABLES.STUDENTS);
   studentOptions.value = students.data.map((student) => ({
-    label: `${student.last_name} ${student.first_name} ${student.middle_name}`,
+    label: formatName(student),
     value: student.id,
   }));
 };

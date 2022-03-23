@@ -77,7 +77,6 @@
 import { ref } from "vue";
 import { Api } from "@/api";
 import { useDashboard } from "@/composable/useDashboard";
-import { renameObjectKey } from "@/utils";
 import { TABLES } from "@/config";
 
 const TABLE = TABLES.EVENTS;
@@ -86,26 +85,23 @@ const COLUMNS = [
     name: "event_title",
     align: "left",
     label: "Название",
-    field: "event_title",
     sortable: true,
   },
   {
     name: "organization_name",
     align: "left",
     label: "Организация",
-    field: "organization_name",
     sortable: true,
   },
 ];
 
-const organizationOptions = ref([]);
-
 const form = ref({
   event_title: "",
-  event_organization: "",
+  event_organization: null,
   event_description: "",
   event_range: { from: "", to: "" },
 });
+const organizationOptions = ref([]);
 
 const {
   data,
@@ -135,7 +131,7 @@ const {
   reset: () => {
     form.value = {
       event_title: "",
-      event_organization: "",
+      event_organization: null,
       event_description: "",
       event_range: { from: "", to: "" },
     };
@@ -154,19 +150,12 @@ const {
 
 const fetchOrganizations = async () => {
   const response = await Api.getTable(TABLES.ORGANIZATIONS);
-  response.data.forEach((obj) => {
-    renameObjectKey({
-      obj,
-      old_key: "organization_name",
-      new_key: "label",
-    });
-    renameObjectKey({
-      obj,
-      old_key: "id",
-      new_key: "value",
-    });
+  organizationOptions.value = response.data.map((item) => {
+    return {
+      label: item.organization_name,
+      value: item.id,
+    };
   });
-  organizationOptions.value = response.data;
 };
 
 Promise.all([fetchOrganizations(), fetchData()]);

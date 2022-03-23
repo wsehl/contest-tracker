@@ -89,3 +89,9 @@ exports.getOne = async (req, res) => {
     data: [{ ...event, ...org.data(), organization_image: file.data().name }],
   });
 };
+
+exports.removeOne = async (req, res) => {
+  const id = req.params.id;
+  await firebase.db.collection("events").doc(id).delete();
+  res.status(200).send({ msg: "Конкурс удален" });
+};

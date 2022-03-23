@@ -29,3 +29,9 @@ exports.getAll = async (req, res) => {
 
   res.status(200).send({ data: subjects });
 };
+
+exports.removeOne = async (req, res) => {
+  const id = req.params.id;
+  await firebase.db.collection("subjects").doc(id).delete();
+  res.status(200).send({ msg: "Предмет удалён" });
+};

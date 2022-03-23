@@ -87,3 +87,9 @@ exports.getOne = async (req, res) => {
 
   return res.status(200).send({ data: project });
 };
+
+exports.removeOne = async (req, res) => {
+  const id = req.params.id;
+  await firebase.db.collection("projects").doc(id).delete();
+  res.status(200).send({ msg: "Проект удалён" });
+};

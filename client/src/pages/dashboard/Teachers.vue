@@ -6,7 +6,24 @@
       </q-card-section>
       <q-separator inset></q-separator>
       <q-card-section class="q-gutter-md">
-        <q-input v-model="form.name" dense outlined label="Имя" />
+        <q-input v-model="form.last_name" dense outlined label="Фамилия" />
+        <q-input v-model="form.first_name" dense outlined label="Имя" />
+        <q-input v-model="form.middle_name" dense outlined label="Отчество" />
+        <q-input v-model="form.phone" dense outlined label="Телефон" />
+        <q-select
+          v-model="form.subject"
+          dense
+          outlined
+          :options="subjectOptions"
+          label="Предмет"
+          input-debounce="0"
+        >
+          <template #no-option>
+            <q-item>
+              <q-item-section class="text-grey"> No results </q-item-section>
+            </q-item>
+          </template>
+        </q-select>
       </q-card-section>
       <q-card-actions class="q-px-md q-mb-md">
         <q-btn
@@ -36,6 +53,13 @@
             </template>
           </q-input>
         </template>
+        <template #body="props">
+          <q-tr :props="props">
+            <q-td key="full_name" :props="props">
+              {{ formatName(props.row) }}
+            </q-td>
+          </q-tr>
+        </template>
       </q-table>
     </template>
   </dashboard-template>
@@ -45,7 +69,7 @@
 import { ref } from "vue";
 import { Api } from "@/api";
 import { useDashboard } from "@/composable/useDashboard";
-import { renameObjectKey } from "@/utils";
+import { formatName } from "@/utils";
 import { TABLES } from "@/config";
 
 const TABLE = TABLES.TEACHERS;
@@ -54,14 +78,14 @@ const COLUMNS = [
     name: "full_name",
     align: "left",
     label: "Имя",
-    field: "full_name",
   },
 ];
 
 const form = ref({
   first_name: "",
   middle_name: "",
-  subject_id: "",
+  last_name: "",
+  subject: null,
   phone: "",
 });
 const subjectOptions = ref([]);
@@ -83,22 +107,24 @@ const {
 } = useDashboard({
   submit: async () => {
     await Api.insertToTable(TABLE, {
-      name: form.value.name,
+      first_name: form.value.first_name,
+      middle_name: form.value.middle_name,
+      last_name: form.value.last_name,
+      subject_id: form.value.subject.value,
+      phone: form.value.phone,
     });
   },
   reset: () => {
     form.value = {
       first_name: "",
       middle_name: "",
-      subject_id: "",
+      last_name: "",
+      subject: null,
       phone: "",
     };
   },
   fetch: async () => {
     const response = await Api.getTable(TABLE);
-    response.data.forEach((row) => {
-      row.full_name = `${row.last_name} ${row.first_name} ${row.middle_name}`;
-    });
     data.value = response.data;
   },
   edit: async () => {
@@ -111,19 +137,10 @@ const {
 
 const fetchSubjects = async () => {
   const subjects = await Api.getTable("subjects");
-  subjects.data.forEach((obj) => {
-    renameObjectKey({
-      obj,
-      old_key: "id",
-      new_key: "value",
-    });
-    renameObjectKey({
-      obj,
-      old_key: "name",
-      new_key: "label",
-    });
-  });
-  subjectOptions.value = subjects.data;
+  subjectOptions.value = subjects.data.map((subject) => ({
+    label: subject.name,
+    value: subject.id,
+  }));
 };
 
 Promise.all([fetchSubjects(), fetchData()]);

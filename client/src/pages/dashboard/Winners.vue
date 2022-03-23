@@ -93,7 +93,6 @@
 import { ref } from "vue";
 import { Api } from "@/api";
 import { useDashboard } from "@/composable/useDashboard";
-import { renameObjectKey } from "@/utils";
 import { TABLES } from "@/config";
 
 const TABLE = TABLES.WINNERS;
@@ -102,21 +101,18 @@ const COLUMNS = [
     name: "event_title",
     align: "left",
     label: "Конкурс",
-    field: "event_title",
     sortable: true,
   },
   {
     name: "project_title",
     align: "left",
     label: "Проект",
-    field: "project_title",
     sortable: true,
   },
   {
     name: "place",
     align: "left",
     label: "Место",
-    field: "place",
     sortable: true,
   },
 ];
@@ -124,14 +120,8 @@ const COLUMNS = [
 const form = ref({
   place: "",
   description: "",
-  project: {
-    label: "",
-    value: "",
-  },
-  event: {
-    label: "",
-    value: "",
-  },
+  project: null,
+  event: null,
 });
 const projectOptions = ref([]);
 const eventOptions = ref([]);
@@ -163,14 +153,8 @@ const {
     form.value = {
       place: "",
       description: "",
-      project: {
-        label: "",
-        value: "",
-      },
-      event: {
-        label: "",
-        value: "",
-      },
+      project: null,
+      event: null,
     };
   },
   fetch: async () => {
@@ -187,36 +171,18 @@ const {
 
 const fetchProjects = async () => {
   const projects = await Api.getTable(TABLES.PROJECTS);
-  projects.data.forEach((obj) => {
-    renameObjectKey({
-      obj,
-      old_key: "id",
-      new_key: "value",
-    });
-    renameObjectKey({
-      obj,
-      old_key: "name",
-      new_key: "label",
-    });
-  });
-  projectOptions.value = projects.data;
+  projectOptions.value = projects.data.map((item) => ({
+    label: item.name,
+    value: item.id,
+  }));
 };
 
 const fetchEvents = async () => {
   const events = await Api.getTable(TABLES.EVENTS);
-  events.data.forEach((obj) => {
-    renameObjectKey({
-      obj,
-      old_key: "id",
-      new_key: "value",
-    });
-    renameObjectKey({
-      obj,
-      old_key: "event_title",
-      new_key: "label",
-    });
-  });
-  eventOptions.value = events.data;
+  eventOptions.value = events.data.map((item) => ({
+    label: item.event_title,
+    value: item.id,
+  }));
 };
 
 Promise.all([fetchProjects(), fetchEvents(), fetchData()]);
