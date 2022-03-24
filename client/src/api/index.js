@@ -31,7 +31,7 @@ api.interceptors.response.use(
     }
     return response.data;
   },
-  (error) => {
+  async (error) => {
     if (error?.response?.data?.msg) {
       Notify.create({
         color: "negative",
@@ -43,31 +43,32 @@ api.interceptors.response.use(
     }
 
     const originalRequest = error.config;
+    const REFRESH_ENDPOINT = `${API_URL}/auth/refresh-token`;
 
     const userStore = useUserStore();
+
     const refreshToken = userStore.refreshToken;
-    const user = userStore.user;
+    const userData = userStore.user;
 
     if (
       error.response.status === 401 &&
-      originalRequest.url === `${API_URL}/auth/refresh-token`
+      originalRequest.url === REFRESH_ENDPOINT
     ) {
       return Promise.reject(error);
     }
 
     if (error.response.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
-      return axios
-        .post(`${API_URL}/auth/refresh-token`, {
-          user,
-          refreshToken,
-        })
-        .then((res) => {
-          if (res.status === 201) {
-            userStore.accessToken = res.data.accessToken;
-            return api(originalRequest);
-          }
-        });
+
+      const response = await axios.post(REFRESH_ENDPOINT, {
+        user: userData,
+        refreshToken,
+      });
+      if (response.status === 201) {
+        userStore.accessToken = response.data.accessToken;
+        userStore.refreshToken = response.data.refreshToken;
+        return api(originalRequest);
+      }
     }
   }
 );

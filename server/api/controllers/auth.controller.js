@@ -85,11 +85,17 @@ exports.refreshToken = async (req, res) => {
     return res.status(401).send({ msg: "Invalid token, try login again" });
   }
 
-  const accessToken = jwt.sign(jwtData, ACCESS_TOKEN_KEY, {
+  const newAccessToken = jwt.sign(jwtData, ACCESS_TOKEN_KEY, {
     expiresIn: ACCESS_TOKEN_EXPIRES_IN,
   });
 
-  return res.status(201).send({ accessToken });
+  const newRefreshToken = jwt.sign(jwtData, REFRESH_TOKEN_KEY, {
+    expiresIn: REFRESH_TOKEN_EXPIRES_IN,
+  });
+
+  return res
+    .status(201)
+    .send({ accessToken: newAccessToken, refreshToken: newRefreshToken });
 };
 
 exports.register = async (req, res) => {
