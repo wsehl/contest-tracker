@@ -108,8 +108,26 @@ exports.getOne = async (req, res) => {
   // let info = {};
   // if (user.teacher_id)
   //   info = await firebase.db.collection("teachers").doc(user.teacher_id).get();
-  // if (user.student_id)
-  //   info = await firebase.db.collection("students").doc(user.student_id).get();
+  if (user.student_id) {
+    const student = user.student_id;
+
+    const [info, projects] = await Promise.all([
+      firebase.db.collection("students").doc(student).get(),
+      firebase.db
+        .collection("projects")
+        .where("students_ids", "array-contains", student)
+        .get(),
+    ]);
+
+    user.info = info.data();
+
+    user.projects = projects.docs.map((doc) => {
+      const project = doc.data();
+      project.start_date = project.start_date.toDate();
+      project.end_date = project.end_date.toDate();
+      return project;
+    });
+  }
   // if (user.curator_id)
   //   info = await firebase.db.collection("curators").doc(user.curator_id).get();
 

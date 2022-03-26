@@ -53,11 +53,13 @@ exports.getOne = async (req, res) => {
     });
   }
   const grade = doc.data();
-  const curator = await firebase.db
-    .collection("curators")
-    .doc(grade.curator_id)
-    .get();
+  const [curator, students] = await Promise.all([
+    firebase.db.collection("curators").doc(grade.curator_id).get(),
+    firebase.db.collection("students").where("grade_id", "==", gradeId).get(),
+  ]);
+
   grade.curator = curator.data();
+  grade.students = students.docs.map((doc) => doc.data());
 
   return res.status(200).send({ data: grade });
 };
