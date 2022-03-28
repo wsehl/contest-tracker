@@ -95,6 +95,16 @@ exports.getOne = async (req, res) => {
       project.start_date = project.start_date.toDate();
       project.end_date = project.end_date.toDate();
 
+      const students = await Promise.all(
+        project.students_ids.map((id) =>
+          db.collection("students").doc(id).get()
+        )
+      );
+
+      project.students = students
+        .map((student) => student.data())
+        .filter((el) => el);
+
       winner.project = project;
       winners.push(winner);
     })
