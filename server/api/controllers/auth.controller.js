@@ -15,14 +15,14 @@ exports.login = async (req, res) => {
 
   const userRef = firebase.db.collection("users");
 
-  const doc = await userRef.doc(username).get();
+  const snapshot = await userRef.where("username", "==", username).get();
 
-  if (!doc.exists) {
+  if (snapshot.empty) {
     return res.status(401).send({
       msg: "Неверное имя пользователя или пароль!", // Account not found
     });
   }
-
+  const doc = snapshot.docs[0];
   const user = doc.data();
 
   const match = await bcrypt.compare(password, user.password);
@@ -49,7 +49,7 @@ exports.login = async (req, res) => {
     expiresIn: REFRESH_TOKEN_EXPIRES_IN,
   });
 
-  userRef.doc(doc.id).update({ last_login: new Date() });
+  userRef.doc(userId).update({ last_login: new Date() });
 
   user.last_login = user.last_login.toDate();
   user.registered = user.registered.toDate();
@@ -125,7 +125,7 @@ exports.register = async (req, res) => {
     email,
   };
 
-  await userRef.doc(username).set(newUser);
+  await userRef.add(newUser);
 
   logger.info(
     `Registered user: [${newUser.username}] with role: [${newUser.role}] `

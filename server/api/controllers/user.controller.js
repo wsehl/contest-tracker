@@ -90,17 +90,20 @@ exports.getAll = async (req, res) => {
 };
 
 exports.getOne = async (req, res) => {
-  const userId = req.params.id;
-  const doc = await firebase.db.collection("users").doc(userId).get();
+  const username = req.params.id;
 
-  if (!doc.exists) {
-    return res.status(404).send({
-      msg: "Не найден пользователь с таким id",
-      status: 404,
+  const userRef = firebase.db.collection("users");
+
+  const snapshot = await userRef.where("username", "==", username).get();
+
+  if (snapshot.empty) {
+    return res.status(401).send({
+      msg: "Неверное имя пользователя или пароль!", // Account not found
     });
   }
-
+  const doc = snapshot.docs[0];
   const user = doc.data();
+
   user.registered = user.registered.toDate();
   user.last_login = user.last_login.toDate();
   delete user.password;
