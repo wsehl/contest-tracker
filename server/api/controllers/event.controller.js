@@ -1,5 +1,5 @@
 const logger = require("~services/logger");
-const firebase = require("~config/firebase.js");
+const { db } = require("~config/firebase.js");
 
 exports.addNew = async (req, res) => {
   const {
@@ -18,7 +18,7 @@ exports.addNew = async (req, res) => {
     end_date: new Date(event_end_date),
   };
 
-  await firebase.db.collection("events").add(newEvent);
+  await db.collection("events").add(newEvent);
 
   logger.info(`Added event: [${newEvent.event_title}]`);
 
@@ -30,26 +30,27 @@ exports.addNew = async (req, res) => {
 
 exports.getAll = async (req, res) => {
   const events = [];
-  const snapshot = await firebase.db.collection("events").get();
+  const snapshot = await db.collection("events").get();
 
   snapshot.forEach(async (doc) => {
     const event = doc.data();
     event.start_date = event.start_date.toDate();
     event.end_date = event.end_date.toDate();
     event.id = doc.id;
+
     events.push(event);
   });
 
   await Promise.all(
     events.map((event) =>
-      firebase.db
+      db
         .collection("organizations")
         .doc(event.organization_id)
         .get()
         .then((org_doc) => {
           const org = org_doc.data();
           event.organization_name = org.organization_name;
-          return firebase.db.collection("files").doc(org.file_id).get();
+          return db.collection("files").doc(org.file_id).get();
         })
         .then((file) => {
           const image = file.data().name;
@@ -63,7 +64,7 @@ exports.getAll = async (req, res) => {
 
 exports.getOne = async (req, res) => {
   const eventId = req.params.id;
-  const doc = await firebase.db.collection("events").doc(eventId).get();
+  const doc = await db.collection("events").doc(eventId).get();
 
   if (!doc.exists) {
     return res.status(404).send({
@@ -71,19 +72,37 @@ exports.getOne = async (req, res) => {
       status: 404,
     });
   }
+
   const event = doc.data();
   event.start_date = event.start_date.toDate();
   event.end_date = event.end_date.toDate();
 
-  const org = await firebase.db
-    .collection("organizations")
-    .doc(event.organization_id)
-    .get();
+  const [org, winners_docs] = await Promise.all([
+    db.collection("organizations").doc(event.organization_id).get(),
+    db.collection("winners").where("event_id", "==", eventId).get(),
+  ]);
 
-  const file = await firebase.db
-    .collection("files")
-    .doc(org.data().file_id)
-    .get();
+  const winners = [];
+  await Promise.all(
+    winners_docs.docs.map(async (winner_doc) => {
+      const winner = winner_doc.data();
+      const project_doc = await db
+        .collection("projects")
+        .doc(winner.project_id)
+        .get();
+
+      const project = project_doc.data();
+      project.start_date = project.start_date.toDate();
+      project.end_date = project.end_date.toDate();
+
+      winner.project = project;
+      winners.push(winner);
+    })
+  );
+
+  event.winners = winners;
+
+  const file = await db.collection("files").doc(org.data().file_id).get();
 
   return res.send({
     data: [{ ...event, ...org.data(), organization_image: file.data().name }],
@@ -92,7 +111,7 @@ exports.getOne = async (req, res) => {
 
 exports.removeOne = async (req, res) => {
   const id = req.params.id;
-  await firebase.db.collection("events").doc(id).delete();
+  await db.collection("events").doc(id).delete();
   res.status(200).send({ msg: "Конкурс удален" });
 };
 
@@ -101,7 +120,7 @@ exports.updateOne = async (req, res) => {
 
   const { event_title, organization_id, event_description } = req.body;
 
-  const doc = await firebase.db.collection("events").doc(id).get();
+  const doc = await db.collection("events").doc(id).get();
 
   const newData = {
     ...doc.data(),
@@ -110,7 +129,7 @@ exports.updateOne = async (req, res) => {
     event_description,
   };
 
-  await firebase.db.collection("events").doc(id).set(newData);
+  await db.collection("events").doc(id).set(newData);
 
   res.status(200).send({ msg: "Конкурс обновлён" });
 };
