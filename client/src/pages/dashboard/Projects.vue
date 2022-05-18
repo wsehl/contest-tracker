@@ -166,7 +166,10 @@
         </q-card-actions>
       </q-card>
     </q-dialog>
-    <q-dialog v-model="showViewDialog">
+    <q-dialog
+      v-model="showViewDialog"
+      @hide="router.push('/dashboard/projects')"
+    >
       <q-card style="min-width: 350px">
         <q-card-section>
           <div class="text-h6">
@@ -189,8 +192,59 @@
                 {{ viewedItem.name }}
               </template>
             </q-field>
+            <q-field label="Описание" stack-label outlined dense>
+              <template #control>
+                {{ viewedItem.description }}
+              </template>
+            </q-field>
+            <q-field
+              label="Дата начала работы над проектом"
+              stack-label
+              outlined
+              dense
+            >
+              <template #control>
+                {{ formatDate(viewedItem.start_date) }}
+              </template>
+            </q-field>
+            <q-field
+              label="Дата завершения работы над проектом"
+              stack-label
+              outlined
+              dense
+            >
+              <template #control>
+                {{ formatDate(viewedItem.end_date) }}
+              </template>
+            </q-field>
+            <q-field label="Предмет" stack-label outlined dense>
+              <template #control>
+                {{ viewedItem.subject.name }}
+              </template>
+            </q-field>
+            <q-field label="Научный руководитель" stack-label outlined dense>
+              <template #control>
+                {{ formatName(viewedItem.teacher) }}
+              </template>
+            </q-field>
           </div>
         </q-card-section>
+        <q-item>
+          <q-item-section>
+            <q-item-label caption class="q-mb-sm">Ученики</q-item-label>
+            <q-list bordered>
+              <q-item
+                clickable
+                v-for="student in viewedItem.students"
+                :key="student.id"
+              >
+                <q-item-section>
+                  <q-item-label>{{ formatName(student) }}</q-item-label>
+                </q-item-section>
+              </q-item>
+            </q-list>
+          </q-item-section>
+        </q-item>
       </q-card>
     </q-dialog>
   </div>
@@ -202,6 +256,10 @@ import { Api } from "@/api";
 import { useDashboard } from "@/composable/useDashboard";
 import { formatDate, formatName } from "@/utils";
 import { TABLES } from "@/config";
+import { useRoute, useRouter } from "vue-router";
+
+const route = useRoute();
+const router = useRouter();
 
 const TABLE = TABLES.PROJECTS;
 const COLUMNS = [
@@ -331,5 +389,24 @@ const fetchStudents = async () => {
   }));
 };
 
-Promise.all([fetchSubjects(), fetchTeachers(), fetchStudents(), fetchData()]);
+const openProjectFromRoute = async () => {
+  const id = route.query?.id;
+
+  if (!id) return;
+
+  const response = await Api.getRow(TABLE, id);
+
+  viewedItem.value = {
+    ...response.data,
+  };
+  showViewDialog.value = true;
+};
+
+Promise.all([
+  fetchSubjects(),
+  fetchTeachers(),
+  fetchStudents(),
+  fetchData(),
+  openProjectFromRoute(),
+]);
 </script>

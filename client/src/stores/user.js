@@ -2,17 +2,18 @@ import { defineStore } from "pinia";
 import { computed } from "vue";
 import { useStorage } from "@vueuse/core";
 import { Api } from "@/api";
-import { storeVar, ROLES } from "@/config";
+import { ROLES } from "@/config";
 import router from "@/router";
 
 export const useUserStore = defineStore("user", () => {
-  const user = useStorage(storeVar("user"), {
+  const user = useStorage("ct_user", {
     role: ROLES.GUEST,
     username: null,
     useId: null,
   });
-  const accessToken = useStorage(storeVar("acces_token"), "");
-  const refreshToken = useStorage(storeVar("refresh_token"), "");
+
+  const accessToken = useStorage("ct_access_token", "");
+  const refreshToken = useStorage("ct_refresh_token", "");
 
   const isAuthenticated = computed(() => accessToken.value);
   const isAdmin = computed(() => user.value.role === "Admin");

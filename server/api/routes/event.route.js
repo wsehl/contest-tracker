@@ -13,7 +13,7 @@ router
 
 router
   .route("/:id")
-  .get(isLoggedIn, isAdmin, controller.getOne)
+  .get(controller.getOne)
   .put(isLoggedIn, isAdmin, controller.updateOne)
   .delete(isLoggedIn, isAdmin, controller.removeOne);
 

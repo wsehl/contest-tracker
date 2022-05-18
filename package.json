@@ -3,11 +3,11 @@
   "version": "1.0.0",
   "license": "MIT",
   "scripts": {
-    "serve": "vite --port 3001",
+    "dev:client": "vite",
     "build": "vite build",
-    "preview": "vite preview --port 3001",
-    "server": "nodemon server/index.js",
-    "dev": "concurrently \"npm run server\" \"npm run serve\"",
+    "preview": "vite preview",
+    "dev:server": "nodemon server/index.js",
+    "dev": "concurrently \"npm run dev:server\" \"npm run dev:client\"",
     "heroku-postbuild": "echo Skip builds on Heroku",
     "lint": "eslint --ext .js,.vue --ignore-path .gitignore --fix .",
     "format": "prettier --write ."

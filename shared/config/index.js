@@ -13,10 +13,9 @@ export const TABLES = {
 };
 
 export const ROLES = {
-  GUEST: "Guest",
-  USER: "User",
-  MODERATOR: "Moderator",
   ADMIN: "Admin",
+  USER: "User",
+  GUEST: "Guest",
 };
 
 export const USER_TYPES = {

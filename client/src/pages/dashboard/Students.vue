@@ -18,14 +18,6 @@
             label="Класс"
             input-debounce="0"
           />
-          <q-select
-            v-model="form.study_lang"
-            dense
-            outlined
-            :options="langOptions"
-            label="Язык обучения"
-            input-debounce="0"
-          />
         </q-card-section>
         <q-card-actions class="q-px-md q-mb-md">
           <q-btn
@@ -60,9 +52,6 @@
             <q-tr :props="props">
               <q-td key="full_name" :props="props">
                 {{ formatName(props.row) }}
-              </q-td>
-              <q-td key="study_lang" :props="props">
-                {{ props.row.study_lang }}
               </q-td>
               <q-td key="grade_name" :props="props">
                 {{ props.row.grade.label }}
@@ -132,14 +121,6 @@
               label="Класс"
               input-debounce="0"
             />
-            <q-select
-              v-model="editedItem.study_lang"
-              dense
-              outlined
-              :options="langOptions"
-              label="Язык обучения"
-              input-debounce="0"
-            />
           </div>
         </q-card-section>
         <q-card-actions align="center">
@@ -173,13 +154,6 @@ const COLUMNS = [
     sortable: true,
   },
   {
-    name: "study_lang",
-    align: "left",
-    label: "Язык обучения",
-    field: "study_lang",
-    sortable: true,
-  },
-  {
     name: "grade_name",
     align: "left",
     label: "Класс",
@@ -194,13 +168,11 @@ const COLUMNS = [
     label: "Действия",
   },
 ];
-const langOptions = ["ru", "kz", "en"];
 
 const form = ref({
   first_name: "",
   middle_name: "",
   last_name: "",
-  study_lang: "",
   grade: null,
 });
 const gradeOptions = ref([]);
@@ -224,7 +196,6 @@ const {
       first_name: form.value.first_name,
       middle_name: form.value.middle_name,
       last_name: form.value.last_name,
-      study_lang: form.value.study_lang,
     });
   },
   reset: () => {
@@ -232,7 +203,6 @@ const {
       first_name: "",
       middle_name: "",
       last_name: "",
-      study_lang: "",
       grade: null,
     };
   },

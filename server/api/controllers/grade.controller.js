@@ -2,9 +2,9 @@ const logger = require("~services/logger");
 const firebase = require("~config/firebase.js");
 
 exports.addNew = async (req, res) => {
-  const { name, curator_id } = req.body;
+  const { name, curator_id, study_lang } = req.body;
 
-  const newGrade = { name, curator_id };
+  const newGrade = { name, curator_id, study_lang };
 
   await firebase.db.collection("grades").add(newGrade);
 
@@ -73,7 +73,7 @@ exports.removeOne = async (req, res) => {
 exports.updateOne = async (req, res) => {
   const id = req.params.id;
 
-  const { name, curator_id } = req.body;
+  const { name, curator_id, study_lang } = req.body;
 
   const doc = await firebase.db.collection("grades").doc(id).get();
 
@@ -81,6 +81,7 @@ exports.updateOne = async (req, res) => {
     ...doc.data(),
     name,
     curator_id,
+    study_lang,
   };
 
   await firebase.db.collection("grades").doc(id).set(newGrade);

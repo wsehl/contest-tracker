@@ -3,7 +3,7 @@
     <dashboard-template>
       <template #form>
         <q-card-section>
-          <div class="text-h6">Добавить событие</div>
+          <div class="text-h6">Добавить конкурс</div>
         </q-card-section>
         <q-separator inset></q-separator>
         <q-card-section class="q-gutter-md">
@@ -142,8 +142,8 @@
         </q-card-actions>
       </q-card>
     </q-dialog>
-    <q-dialog v-model="showViewDialog">
-      <q-card style="min-width: 350px">
+    <q-dialog v-model="showViewDialog" @hide="details = null">
+      <q-card style="width: 700px; max-width: 80vw">
         <q-card-section>
           <div class="text-h6">
             Данные
@@ -160,33 +160,77 @@
         </q-card-section>
         <q-card-section>
           <div class="q-gutter-md">
-            <q-field label="Название" stack-label outlined dense>
+            <q-field label="Название" stack-label dense>
               <template #control>
                 {{ viewedItem.event_title }}
               </template>
             </q-field>
-            <q-field label="Описание" stack-label outlined dense>
+            <q-field label="Описание" stack-label dense>
               <template #control>
                 {{ viewedItem.event_description }}
               </template>
             </q-field>
-            <q-field label="Организация" stack-label outlined dense>
+            <q-field label="Организация" stack-label dense>
               <template #control>
                 {{ viewedItem.organization.label }}
               </template>
             </q-field>
-            <q-field label="Дата начала" stack-label outlined dense>
+            <q-field label="Дата начала" stack-label dense>
               <template #control>
                 {{ formatDate(viewedItem.start_date) }}
               </template>
             </q-field>
-            <q-field label="Дата окончания" stack-label outlined dense>
+            <q-field label="Дата окончания" stack-label dense>
               <template #control>
                 {{ formatDate(viewedItem.end_date) }}
               </template>
             </q-field>
           </div>
         </q-card-section>
+        <q-card-section v-if="details?.winners.length">
+          <div class="text-h6 q-mb-sm">Достижения</div>
+          <q-list bordered separator>
+            <q-item v-for="(winner, index) in details.winners" :key="index">
+              <q-item-section>
+                <q-item-label>
+                  {{ winner.project.name }}
+                </q-item-label>
+                <q-item-label caption> Место: {{ winner.place }} </q-item-label>
+                <!-- <q-item-label caption class="q-mb-sm">Ученики</q-item-label>
+                <q-list bordered>
+                  <q-item
+                    clickable
+                    v-for="student in winner.project.students"
+                    :key="student.id"
+                  >
+                    <q-item-section>
+                      <q-item-label>{{ formatName(student) }}</q-item-label>
+                      <q-item-label caption>
+                        {{ student.study_lang }}
+                      </q-item-label>
+                    </q-item-section>
+                  </q-item>
+                </q-list> -->
+              </q-item-section>
+              <q-item-section side top>
+                <q-badge
+                  @click="
+                    router.push('/dashboard/projects?id=' + winner.project_id)
+                  "
+                  label="Открыть страницу проекта"
+                />
+              </q-item-section>
+            </q-item>
+          </q-list>
+        </q-card-section>
+        <q-separator />
+        <q-card-actions>
+          <q-btn
+            flat
+            label="Открыть страницу конкурса"
+            @click="openRow('Event', viewedItem.id)"
+          />
+        </q-card-actions>
       </q-card>
     </q-dialog>
   </div>
@@ -195,9 +239,12 @@
 <script setup>
 import { ref } from "vue";
 import { Api } from "@/api";
-import { formatDate } from "@/utils";
+import { formatDate, formatName } from "@/utils";
 import { useDashboard } from "@/composable/useDashboard";
 import { TABLES } from "@/config";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
 
 const TABLE = TABLES.EVENTS;
 const COLUMNS = [
@@ -229,6 +276,14 @@ const form = ref({
   event_range: { from: "", to: "" },
 });
 const organizationOptions = ref([]);
+const details = ref(null);
+
+function openRow(route, id) {
+  router.push({
+    name: route,
+    params: { id },
+  });
+}
 
 const {
   data,
@@ -283,6 +338,10 @@ const {
   },
   remove: async (item) => {
     await Api.removeRow(TABLE, item);
+  },
+  view: async (item) => {
+    const response = await Api.getRow(TABLE, item.id);
+    details.value = response.data[0];
   },
 });
 

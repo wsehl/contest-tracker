@@ -10,7 +10,14 @@
           <q-input v-model="form.last_name" dense outlined label="Фамилия" />
           <q-input v-model="form.first_name" dense outlined label="Имя" />
           <q-input v-model="form.middle_name" dense outlined label="Отчество" />
-          <q-input v-model="form.phone" dense outlined label="Телефон" />
+          <q-input
+            v-model="form.phone"
+            outlined
+            dense
+            label="Телефон"
+            mask="phone"
+            prefix="+7"
+          />
           <q-select
             v-model="form.subject"
             dense
@@ -204,7 +211,7 @@ const {
 });
 
 const fetchSubjects = async () => {
-  const subjects = await Api.getTable("subjects");
+  const subjects = await Api.getTable(TABLES.SUBJECTS);
   subjectOptions.value = subjects.data.map((subject) => ({
     label: subject.name,
     value: subject.id,

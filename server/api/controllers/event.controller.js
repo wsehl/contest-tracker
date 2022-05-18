@@ -105,6 +105,10 @@ exports.getOne = async (req, res) => {
         .map((student) => student.data())
         .filter((el) => el);
 
+      project.students_ids.forEach((id, index) => {
+        project.students[index].id = id;
+      });
+
       winner.project = project;
       winners.push(winner);
     })

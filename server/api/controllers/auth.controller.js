@@ -14,20 +14,19 @@ exports.login = async (req, res) => {
   const { username, password } = req.body;
 
   const userRef = firebase.db.collection("users");
-
   const snapshot = await userRef.where("username", "==", username).get();
 
   if (snapshot.empty) {
     return res.status(401).send({
-      msg: "Неверное имя пользователя или пароль!", // Account not found
+      msg: "Неверное имя пользователя или пароль!",
     });
   }
+
   const doc = snapshot.docs[0];
   const user = doc.data();
 
-  const match = await bcrypt.compare(password, user.password);
-
-  if (!match) {
+  const isMatch = await bcrypt.compare(password, user.password);
+  if (!isMatch) {
     return res.status(401).send({
       msg: "Неверное имя пользователя или пароль!", // Bcrypt error
     });
@@ -35,21 +34,18 @@ exports.login = async (req, res) => {
 
   const userId = doc.id;
 
-  const jwtData = {
-    username: user.username,
-    userId,
-    role: user.role,
-  };
+  const jwtData = { username: user.username, userId, role: user.role };
 
   const accessToken = jwt.sign(jwtData, ACCESS_TOKEN_KEY, {
     expiresIn: ACCESS_TOKEN_EXPIRES_IN,
   });
-
   const refreshToken = jwt.sign(jwtData, REFRESH_TOKEN_KEY, {
     expiresIn: REFRESH_TOKEN_EXPIRES_IN,
   });
 
-  userRef.doc(userId).update({ last_login: new Date() });
+  userRef
+    .doc(userId)
+    .update({ last_login: new Date(), accessToken, refreshToken });
 
   user.last_login = user.last_login.toDate();
   user.registered = user.registered.toDate();
@@ -88,7 +84,6 @@ exports.refreshToken = async (req, res) => {
   const newAccessToken = jwt.sign(jwtData, ACCESS_TOKEN_KEY, {
     expiresIn: ACCESS_TOKEN_EXPIRES_IN,
   });
-
   const newRefreshToken = jwt.sign(jwtData, REFRESH_TOKEN_KEY, {
     expiresIn: REFRESH_TOKEN_EXPIRES_IN,
   });

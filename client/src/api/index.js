@@ -69,6 +69,8 @@ api.interceptors.response.use(
         userStore.refreshToken = response.data.refreshToken;
         return api(originalRequest);
       }
+    } else {
+      userStore.logout();
     }
   }
 );

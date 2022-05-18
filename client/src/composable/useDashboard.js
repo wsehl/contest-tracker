@@ -1,7 +1,18 @@
 import { ref } from "vue";
 import { createAsyncProcess } from "@/composable/useAsync";
 
-export const useDashboard = ({ submit, reset, fetch, edit, remove }) => {
+const noop = () => {
+  /* noop */
+};
+
+export const useDashboard = ({
+  submit,
+  reset,
+  fetch,
+  edit,
+  remove,
+  view = noop,
+}) => {
   const filter = ref("");
   const data = ref([]);
 
@@ -21,6 +32,7 @@ export const useDashboard = ({ submit, reset, fetch, edit, remove }) => {
   const viewItem = (item) => {
     viewedItem.value = item;
     showViewDialog.value = true;
+    view(item);
   };
 
   const onReset = () => {

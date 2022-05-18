@@ -85,6 +85,10 @@ exports.getOne = async (req, res) => {
   project.subject = subject.data();
   project.students = students.map((student) => student.data());
 
+  project.students_ids.forEach((id, index) => {
+    project.students[index].id = id;
+  });
+
   return res.status(200).send({ data: project });
 };
 

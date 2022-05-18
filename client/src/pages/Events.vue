@@ -12,7 +12,7 @@
       }"
       flat
       bordered
-      @row-click="goToEvent"
+      @row-click="openRow"
     >
       <template #top-left>
         <q-input v-model="filter" outlined dense placeholder="Поиск">
@@ -71,7 +71,7 @@ const COLUMNS = [
 const rows = ref([]);
 const filter = ref("");
 
-function goToEvent(event, row) {
+function openRow(event, row) {
   router.push({
     name: "Event",
     params: { id: row.id },

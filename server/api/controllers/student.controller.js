@@ -2,14 +2,13 @@ const logger = require("~services/logger");
 const firebase = require("~config/firebase.js");
 
 exports.addNew = async (req, res) => {
-  const { grade_id, first_name, middle_name, last_name, study_lang } = req.body;
+  const { grade_id, first_name, middle_name, last_name } = req.body;
 
   const newStudent = {
     grade_id,
     first_name,
     middle_name,
     last_name,
-    study_lang,
   };
 
   await firebase.db.collection("students").add(newStudent);
@@ -83,7 +82,7 @@ exports.removeOne = async (req, res) => {
 exports.updateOne = async (req, res) => {
   const id = req.params.id;
 
-  const { first_name, middle_name, last_name, grade_id, study_lang } = req.body;
+  const { first_name, middle_name, last_name, grade_id } = req.body;
 
   const doc = await firebase.db.collection("students").doc(id).get();
 
@@ -93,7 +92,6 @@ exports.updateOne = async (req, res) => {
     middle_name,
     last_name,
     grade_id,
-    study_lang,
   };
 
   await firebase.db.collection("students").doc(id).set(newData);

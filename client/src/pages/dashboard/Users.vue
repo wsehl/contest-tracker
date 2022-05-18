@@ -14,6 +14,7 @@
             label="Имя пользователя"
           />
           <q-input v-model="form.email" dense outlined label="Почта" />
+          <q-input v-model="form.password" dense outlined label="Пароль" />
           <q-select
             v-model="form.role"
             dense
@@ -21,8 +22,59 @@
             :options="ROLE_OPTIONS"
             label="Роль"
           />
-          <q-input v-model="form.password" dense outlined label="Пароль" />
         </q-card-section>
+        <template v-if="form.role === 'User'">
+          <div class="q-px-lg">
+            <q-option-group
+              dense
+              v-model="tab"
+              inline
+              :options="[
+                { label: 'Ученик', value: 'student' },
+                { label: 'Учитель', value: 'teacher' },
+                { label: 'Куратор', value: 'curator' },
+              ]"
+            />
+          </div>
+          <q-tab-panels
+            v-model="tab"
+            animated
+            dense
+            swipeable
+            @before-transition="form.user_type = null"
+          >
+            <q-tab-panel name="student">
+              <q-select
+                v-model="form.user_type"
+                dense
+                outlined
+                :options="studentOptions"
+                label="Ученик"
+                input-debounce="0"
+              />
+            </q-tab-panel>
+            <q-tab-panel name="teacher">
+              <q-select
+                v-model="form.user_type"
+                dense
+                outlined
+                :options="teacherOptions"
+                label="Учитель"
+                input-debounce="0"
+              />
+            </q-tab-panel>
+            <q-tab-panel name="curator">
+              <q-select
+                v-model="form.user_type"
+                dense
+                outlined
+                :options="curatorOptions"
+                label="Куратор"
+                input-debounce="0"
+              />
+            </q-tab-panel>
+          </q-tab-panels>
+        </template>
         <q-card-actions class="q-px-md q-mb-md">
           <q-btn
             color="primary"
@@ -197,10 +249,10 @@ import { ref } from "vue";
 import { Api } from "@/api";
 import { useDashboard } from "@/composable/useDashboard";
 import { TABLES } from "@/config";
-import { formatDate } from "@/utils";
+import { formatDate, formatName } from "@/utils";
 
 const TABLE = TABLES.USERS;
-const ROLE_OPTIONS = ["Admin", "User", "Teacher", "Curator"];
+const ROLE_OPTIONS = ["Admin", "User"];
 const COLUMNS = [
   {
     name: "username",
@@ -234,6 +286,10 @@ const form = ref({
   password: "",
   role: "User",
 });
+const studentOptions = ref(null);
+const teacherOptions = ref(null);
+const curatorOptions = ref(null);
+const tab = ref("student");
 
 const {
   data,
@@ -250,7 +306,24 @@ const {
   editItem,
   viewItem,
 } = useDashboard({
-  submit: async () => await Api.insertToTable(TABLE, form.value),
+  submit: async () =>
+    await Api.insertToTable(TABLE, {
+      email: form.value.email,
+      password: form.value.password,
+      role: form.value.role,
+      username: form.value.username,
+      ...(form.value.role === "User" && {
+        ...(tab.value === "student" && {
+          student_id: form.value.user_type.value,
+        }),
+        ...(tab.value === "teacher" && {
+          teacher_id: form.value.user_type.value,
+        }),
+        ...(tab.value === "curator" && {
+          curator_id: form.value.user_type.value,
+        }),
+      }),
+    }),
   reset: () => {
     form.value = {
       username: "",
@@ -271,5 +344,29 @@ const {
   },
 });
 
-fetchData();
+const fetchStudents = async () => {
+  const students = await Api.getTable(TABLES.STUDENTS);
+  studentOptions.value = students.data.map((student) => ({
+    label: formatName(student),
+    value: student.id,
+  }));
+};
+
+const fetchTeachers = async () => {
+  const teachers = await Api.getTable(TABLES.TEACHERS);
+  teacherOptions.value = teachers.data.map((teacher) => ({
+    label: formatName(teacher),
+    value: teacher.id,
+  }));
+};
+
+const fetchCurators = async () => {
+  const curators = await Api.getTable(TABLES.CURATORS);
+  curatorOptions.value = curators.data.map((curator) => ({
+    label: formatName(curator),
+    value: curator.id,
+  }));
+};
+
+Promise.all[(fetchStudents(), fetchTeachers(), fetchCurators(), fetchData())];
 </script>

@@ -9,8 +9,8 @@ const compression = require("compression");
 const router = require("./api/router");
 const logger = require("~services/logger");
 
-const PORT = process.env.PORT || 8889;
-const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:3001";
+const PORT = process.env.PORT || 8888;
+const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:3000";
 const URL_WHITELIST = [FRONTEND_URL];
 
 const app = express();

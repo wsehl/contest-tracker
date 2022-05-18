@@ -7,44 +7,15 @@
     <q-card flat bordered>
       <q-list bordered>
         <q-expansion-item
+          v-for="{ question, answer } in FAQ"
           expand-separator
           icon="help"
-          label="Для чего нужен Сontest Tracker?"
+          :label="question"
+          :key="question"
         >
           <q-card>
             <q-card-section>
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quidem,
-              eius reprehenderit eos corrupti commodi magni quaerat ex numquam,
-              dolorum officiis modi facere maiores architecto suscipit iste
-              eveniet doloribus ullam aliquid.
-            </q-card-section>
-          </q-card>
-        </q-expansion-item>
-        <q-expansion-item
-          expand-separator
-          icon="lock"
-          label="Как я могу изменить или сбросить свой пароль?"
-        >
-          <q-card>
-            <q-card-section>
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quidem,
-              eius reprehenderit eos corrupti commodi magni quaerat ex numquam,
-              dolorum officiis modi facere maiores architecto suscipit iste
-              eveniet doloribus ullam aliquid.
-            </q-card-section>
-          </q-card>
-        </q-expansion-item>
-        <q-expansion-item
-          expand-separator
-          icon="email"
-          label="Можно ли получать уведомления о новых событиях по почте?"
-        >
-          <q-card>
-            <q-card-section>
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quidem,
-              eius reprehenderit eos corrupti commodi magni quaerat ex numquam,
-              dolorum officiis modi facere maiores architecto suscipit iste
-              eveniet doloribus ullam aliquid.
+              {{ answer }}
             </q-card-section>
           </q-card>
         </q-expansion-item>
@@ -54,12 +25,15 @@
 </template>
 
 <script setup>
-import { Api } from "@/api";
-import { ref } from "vue";
-
-const question = ref("");
-
-const submitQuestion = async () => {
-  await Api.askQuestion(question.value);
-};
+const FAQ = [
+  {
+    question: "Что такое Сontest Tracker?",
+    answer:
+      "Contest Tracker это единая платформа для учителей и учеников посвящённая проектной деятельности в НИШ Павлодар",
+  },
+  {
+    question: "Можно ли получать уведомления о новых событиях по почте?",
+    answer: "Нет",
+  },
+];
 </script>

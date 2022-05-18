@@ -22,6 +22,14 @@
             label="Куратор"
             input-debounce="0"
           />
+          <q-select
+            v-model="form.study_lang"
+            dense
+            outlined
+            :options="LANG_OPTIONS"
+            label="Язык обучения"
+            input-debounce="0"
+          />
         </q-card-section>
         <q-card-actions class="q-px-md q-mb-md">
           <q-btn
@@ -43,7 +51,6 @@
             rowsPerPage: 15,
           }"
           :loading="loading"
-          row-key="name"
         >
           <template #top-left>
             <q-input v-model="filter" outlined dense placeholder="Поиск">
@@ -60,7 +67,17 @@
               <q-td key="curator" :props="props">
                 {{ props.row.curator.label }}
               </q-td>
+              <q-td key="study_lang" :props="props">
+                {{ props.row.study_lang }}
+              </q-td>
               <q-td key="actions" :props="props">
+                <q-btn
+                  icon="visibility"
+                  size="sm"
+                  no-caps
+                  unelevated
+                  @click="openRow(props.row)"
+                />
                 <q-btn
                   icon="edit"
                   size="sm"
@@ -114,6 +131,14 @@
               label="Куратор"
               input-debounce="0"
             />
+            <q-select
+              v-model="editedItem.study_lang"
+              dense
+              outlined
+              :options="LANG_OPTIONS"
+              label="Язык обучения"
+              input-debounce="0"
+            />
           </div>
         </q-card-section>
         <q-card-actions align="center">
@@ -136,6 +161,11 @@ import { Api } from "@/api";
 import { formatName } from "@/utils";
 import { useDashboard } from "@/composable/useDashboard";
 import { TABLES } from "@/config";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
+
+const LANG_OPTIONS = ["ru", "kz", "en"];
 
 const TABLE = TABLES.GRADES;
 const COLUMNS = [
@@ -152,6 +182,13 @@ const COLUMNS = [
     field: (row) => formatName(row.curator),
   },
   {
+    name: "study_lang",
+    align: "left",
+    label: "Язык обучения",
+    field: "study_lang",
+    sortable: true,
+  },
+  {
     name: "actions",
     align: "right",
     label: "Действия",
@@ -159,9 +196,17 @@ const COLUMNS = [
 ];
 const MASK = "##A";
 
+function openRow(row) {
+  router.push({
+    name: "Grade",
+    params: { id: row.id },
+  });
+}
+
 const form = ref({
   name: "",
   curator: null,
+  study_lang: "",
 });
 const curatorOptions = ref([]);
 
@@ -181,12 +226,14 @@ const {
     await Api.insertToTable(TABLE, {
       name: form.value.name,
       curator_id: form.value.curator.value,
+      study_lang: form.value.study_lang,
     });
   },
   reset: () => {
     form.value = {
       name: "",
       curator: null,
+      study_lang: "",
     };
   },
   fetch: async () => {
